@@ -1,0 +1,124 @@
+/* General Styling */
+body {
+  background:#448;
+	color:#000;
+}
+#wrapper {
+  color:#000;
+	background:#fff;
+	margin:0 auto;
+	padding:1em;
+	min-width:800px;
+	max-width:1000px;
+}
+h1 {
+  color:#008;
+}
+
+/* Log In Styling */
+#login {
+  background:#ddd;
+	padding:4px; 
+}
+#login form {
+  width:500px;
+	margin:0 auto;
+}
+#login input[type="submit"] {
+  margin-left:0px;
+}
+
+/* Header Styling */
+#header {
+	text-align:center;
+	font-size:2em;
+	padding:0.5em;
+	background:#eef;
+}
+#header h1 {
+	margin:0;
+}
+
+/* Navagation Styling */
+#nav {
+  float:right;
+}
+#nav ul>li {
+  float:left;
+	width:6em;
+}
+#nav ul {  
+  list-style-type:none;
+  margin:0; 
+  padding:0;
+}
+#nav ul a {          
+  background:#008;
+	border:solid thin #840;
+	color:#fff;
+	display:block;
+  padding:0.25em 0 0.25em 0;
+	width:6em;
+	text-align:center;
+  text-decoration:none;  
+}
+#nav ul a:hover {
+  background:#77f;
+	color:#321;
+}
+
+/* Sidebar Styling */
+#sidebar {
+  float:left;
+	background:#eee;
+	padding:1em;
+}
+#sidebar ul {
+  list-style-type:none;
+  margin:0;
+  padding:0;
+  width:8em;
+}
+#sidebar ul a{
+  background:#008;
+	border:solid thin #840;
+	color:#fff;
+	display:block;
+	padding:0.25em 0 0.25em 0;
+  text-align:center;
+  text-decoration:none;
+  width:8em;
+}  
+#sidebar ul a:hover{
+  background:#77f;
+	color:#321;
+} 
+
+/* Content Styling */
+#content {
+  background:#ddd;
+	margin-left:11em;
+	padding:4px; 
+}
+
+/* Footer Styling */	
+#footer {
+  color:#004;
+	font-size:smaller;
+	text-align:center;
+  clear:both; 
+	padding:1em;
+}
+
+/* Link Styling */
+a:link, a:visited {
+  color:#008;
+	text-decoration:none;
+}
+a:hover {
+  color:#f70;
+	text-decoration:underline;
+	}
+a:active {
+  color:#800;
+}
