@@ -29,6 +29,10 @@ class logmein {
 	var $facility_table = 'facility';
 	var $facility_id = 'id';
 	var $facility_name = 'name';
+	
+	var $level_table = 'level';
+	var $level_id = 'id';
+	var $level_type = 'type';
  
   //encryption
   var $encrypt = false;       //set to true to use md5 encryption for the password
@@ -138,11 +142,15 @@ class logmein {
 	  //conect to DB
     $this->dbconnect();
 		//if both passwords match
-		echo "New User: ";
 		if ($password1 == $password2) {
-		  $result = $this->qry("INSERT INTO ".$this->user_table." (".$this->user_column.",".$this->pass_column.",".$this->user_level.",".$this->facility.",".$this->l_name.") VALUES ('?', '?', '?', '?', '?');", $username, $password1, $level, $facility_option, $lname);
-			echo $result;
-      $result = mysql_query($qry) or die(mysql_error());
+		  $password1 = md5($password1); // Encrypt Password
+		  // Insert New User into Users table
+			$qry = $this->qry("INSERT INTO ".$this->user_table." (".$this->user_column.",".$this->pass_column.",".$this->user_level.",".$this->facility.",".$this->l_name.") VALUES ('?', '?', '?', '?', '?');", $username, $password1, $level, $facility_option, $lname);
+			// Get the associated user type from the id			
+			$result = $this->qry("SELECT ".$this->level_type." FROM ".$this->level_table." WHERE ".$this->level_id." = '?';", $level);
+			$row=mysql_fetch_assoc($result);
+			if(row != "Error") { $type = "".$row[$this->level_type]; }
+			echo "New User: ".$username."(".$type.") was created!";
 		} else {
 		  echo "Passwords failed to match";
 		}
@@ -232,6 +240,8 @@ class logmein {
     $this->dbconnect();
     echo'
 <form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
+<fieldset>
+<legend>Log In</legend>
 <div><label for="username">Username</label>
 <input name="username" id="username" type="text"></div>
 <div><label for="password">Password</label>
@@ -239,6 +249,7 @@ class logmein {
 <input name="action_login" id="action" value="login" type="hidden">
 <div>
 <input name="submit" id="submit" value="Login" type="submit"></div>
+</fieldset>
 </form>
 ';
   }
@@ -249,11 +260,14 @@ class logmein {
     $this->dbconnect();
     echo'
 <form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
+<fieldset>
+<legend>Reset Password</legend>
 <div><label for="username">Username</label>
 <input name="username" id="username" type="text"></div>
 <input name="action_resetpassword" id="action" value="resetlogin" type="hidden">
 <div>
 <input name="submit" id="submit" value="Reset Password" type="submit"></div>
+</fieldset>
 </form>
 ';
   }
@@ -264,20 +278,23 @@ class logmein {
     $this->dbconnect();
     echo'
 <form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
+<fieldset>
+<legend>Create User</legend>
 <div><label for="username">Choose A Username</label>
 <input name="username" id="username" type="text"></div>
 <div><label for="password1">Choose Your Password</label>
 <input name="password1" id="password1" type="password"></div>
 <div><label for="password2">Re-Enter Your Password</label>
 <input name="password2" id="password2" type="password"></div>';
-$this->dropdown('Choose User Level','level', 'level', 'type');
-$this->dropdown('Choose Facility', 'facility', 'id', 'name');
+$this->dropdown('Choose User Level',$this->facility_table, $this->facility_id, $this->facility_name);
+$this->dropdown('Choose Facility', $this->level_table, $this->level_id, $this->level_type);
     echo'
 <div><label for="lname">Enter Your Last Name</label>
 <input name="lname" id="lname" type="text"></div>
 <input name="action_newuser" id="action" value="register" type="hidden">
 <div>
 <input name="submit" id="submit" value="Register" type="submit"></div>
+</fieldset>
 </form>
 ';
   }

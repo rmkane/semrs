@@ -28,6 +28,10 @@ h1 {
   margin-left:0px;
 }
 
+#login legend {
+  font-weight:bold;
+}
+
 /* Header Styling */
 #header {
 	text-align:center;

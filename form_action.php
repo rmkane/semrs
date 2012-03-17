@@ -8,7 +8,7 @@ if($_REQUEST['action_login'] == "login"){
     if($log->login("logon", $_REQUEST['username'], $_REQUEST['password']) == true){
         //do something on successful login
 				// CHECK USER LEVELS AND REDIRECT TO APPROPRIATE FILES
-				echo "Successful Login: ".$log->$name()."! You are now being redirected.";
+				echo "Successful Login: ! You are now being redirected.";
 				
 				switch($userlevel) {
 				  case 0: // Admin
@@ -47,9 +47,9 @@ if($_REQUEST['action_newuser'] == "register"){
     if($log->newuser($_REQUEST['username'], $_REQUEST['password1'], $_REQUEST['password2'], $_REQUEST['level'], $_REQUEST['facility'], $_REQUEST['lname']) == true){
         //do something on successful password reset
 				echo "Created New User!";
-    }else{
+    } else{
         //do something on failed password reset
-				echo "Failed Password Reset";
+				echo "Failed to Create User";
     }
 }
 ?>
