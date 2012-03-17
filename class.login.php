@@ -17,14 +17,13 @@ class logmein {
   //table fields
   var $user_table = 'users';          //Users table name
 	var $user_id = 'id';
-  var $user_column = 'useremail';     //USERNAME column (value MUST be valid email)
-  var $pass_column = 'password';      //PASSWORD column
+  var $user_email = 'email';     //USERNAME column (value MUST be valid email)
+  var $user_password = 'password';      //PASSWORD column
   var $user_level = 'userlevel';      //(optional) userlevel column
-	var $f_name = 'fname';
-	var $m_name = 'mname';
-	var $l_name = 'lname';
-	var $facility = 'facility_id';
-	var $name = 'Roger';
+	var $user_fname = 'fname';
+	var $user_mname = 'mname';
+	var $user_lname = 'lname';
+	var $user_facility_id = 'facility_id';
 	
 	var $facility_table = 'facility';
 	var $facility_id = 'id';
@@ -33,6 +32,9 @@ class logmein {
 	var $level_table = 'level';
 	var $level_id = 'id';
 	var $level_type = 'type';
+	
+	var $session_user_name;
+	var $session_user_level;
  
   //encryption
   var $encrypt = false;       //set to true to use md5 encryption for the password
@@ -57,25 +59,15 @@ class logmein {
       $password = md5($password);
     }
     //execute login via qry function that prevents MySQL injections
-    $result = $this->qry("SELECT * FROM ".$this->user_table." WHERE ".$this->user_column."='?' AND ".$this->pass_column." = '?';" , $username, $password);
+    $result = $this->qry("SELECT * FROM ".$this->user_table." WHERE ".$this->user_email."='?' AND ".$this->user_password." = '?';" , $username, $password);
     $row=mysql_fetch_assoc($result);
     if($row != "Error"){
-      if($row[$this->user_column] !="" && $row[$this->pass_column] !=""){
+      if($row[$this->user_email] !="" && $row[$this->user_password] !=""){
         //register sessions you can add additional sessions here if needed
-        $_SESSION['loggedin'] = $row[$this->pass_column];
-        //userlevel session is optional. Use it if you have different user levels
+        $_SESSION['useremail'] = $row[$this->user_email];
+				$_SESSION['userfullname'] = $row[$this->user_fname]." ".$row[$this->user_mname]." ".$row[$this->user_lname];
+				$_SESSION['loggedin'] = $row[$this->user_password];
         $_SESSION['userlevel'] = $row[$this->user_level];
-				
-				//////////////////////////////
-				// Get Other User Information:
-				$userid = $row[$this->user_id];
-				
-				$result = $this->qry("SELECT ".$this->f_name.",".$this->m_name.",".$this->l_name." FROM ".$this->user_table." WHERE ".$this->user_id." = '?';", $userid);
-				$row=mysql_fetch_assoc($result);
-				if(row != "Error") {
-				  $name = "".$row[$this->f_name]." ".$row[$this->m_name]." ".$row[$this->l_name];
-					echo $name;
-				}
         return true;
       } else {
         session_destroy();
@@ -85,6 +77,9 @@ class logmein {
       return false;
     }
   }
+	
+	function getName() {echo $this->session_user_name;}
+	function getLevel() {echo $this->session_user_level;}
  
   //prevent injection
   function qry($query) {
@@ -111,21 +106,21 @@ class logmein {
   }
  
   //check if loggedin
-  function logincheck($logincode, $user_table, $pass_column, $user_column){
+  function logincheck($logincode, $user_table, $user_password, $user_email){
     //conect to DB
     $this->dbconnect();
     //make sure password column and table are set
-    if($this->pass_column == ""){
-      $this->pass_column = $pass_column;
+    if($this->user_password == ""){
+      $this->user_password = $user_password;
     }
-    if($this->user_column == ""){
-      $this->user_column = $user_column;
+    if($this->user_email == ""){
+      $this->user_email = $user_email;
     }
     if($this->user_table == ""){
       $this->user_table = $user_table;
     }
     //exectue query
-    $result = $this->qry("SELECT * FROM ".$this->user_table." WHERE ".$this->pass_column." = '?';" , $logincode);
+    $result = $this->qry("SELECT * FROM ".$this->user_table." WHERE ".$this->user_password." = '?';" , $logincode);
     $rownum = mysql_num_rows($result);
     //return true if logged in and false if not
     if($row != "Error"){
@@ -145,7 +140,7 @@ class logmein {
 		if ($password1 == $password2) {
 		  $password1 = md5($password1); // Encrypt Password
 		  // Insert New User into Users table
-			$qry = $this->qry("INSERT INTO ".$this->user_table." (".$this->user_column.",".$this->pass_column.",".$this->user_level.",".$this->facility.",".$this->l_name.") VALUES ('?', '?', '?', '?', '?');", $username, $password1, $level, $facility_option, $lname);
+			$qry = $this->qry("INSERT INTO ".$this->user_table." (".$this->user_email.",".$this->user_password.",".$this->user_level.",".$this->user_facility_id.",".$this->user_lname.") VALUES ('?', '?', '?', '?', '?');", $username, $password1, $level, $facility_option, $lname);
 			// Get the associated user type from the id			
 			$result = $this->qry("SELECT ".$this->level_type." FROM ".$this->level_table." WHERE ".$this->level_id." = '?';", $level);
 			$row=mysql_fetch_assoc($result);
@@ -169,11 +164,11 @@ class logmein {
 		echo "<p>New Password: ".$newpassword."</p>"; // ADDED THIS
  
     //make sure password column and table are set
-    if($this->pass_column == ""){
-      $this->pass_column = $pass_column;
+    if($this->user_password == ""){
+      $this->user_password = $user_password;
     }
-    if($this->user_column == ""){
-      $this->user_column = $user_column;
+    if($this->user_email == ""){
+      $this->user_email = $user_email;
     }
     if($this->user_table == ""){
       $this->user_table = $user_table;
@@ -186,7 +181,7 @@ class logmein {
     }
  
     //update database with new password
-    $qry = "UPDATE ".$this->user_table." SET ".$this->pass_column."='".$newpassword_db."' WHERE ".$this->user_column."='".stripslashes($username)."'";
+    $qry = "UPDATE ".$this->user_table." SET ".$this->user_password."='".$newpassword_db."' WHERE ".$this->user_email."='".stripslashes($username)."'";
     $result = mysql_query($qry) or die(mysql_error());
  
     $to = stripslashes($username);
@@ -311,7 +306,7 @@ $this->dropdown('Choose Facility', $this->level_table, $this->level_id, $this->l
 	}
 	
 	//function to install logon table
-  function cratetable($tablename){
+  function cratetable($users_table){
     //conect to DB
     $this->dbconnect();
 		// Update this to reflect current table structure

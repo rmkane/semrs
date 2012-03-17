@@ -8,9 +8,9 @@ if($_REQUEST['action_login'] == "login"){
     if($log->login("logon", $_REQUEST['username'], $_REQUEST['password']) == true){
         //do something on successful login
 				// CHECK USER LEVELS AND REDIRECT TO APPROPRIATE FILES
-				echo "Successful Login: ! You are now being redirected.";
+				echo "Successful Login: ".$_SESSION['userfullname']."! You are now being redirected.";
 				
-				switch($userlevel) {
+				switch($_SESSION['userlevel']) {
 				  case 0: // Admin
 					  echo "<br />Administrator";
 						break;
