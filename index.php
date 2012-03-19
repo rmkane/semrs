@@ -28,9 +28,11 @@
 					
 					$log->loginform("loginformname", "loginformid", "form_action.php");
 					
-					$log->resetform("resetformname", "resetformid", "form_action.php");
-					
 					$log->newuserform("newuserformname", "newuserformid", "form_action.php");
+					
+					$log->changepasswordform("changepasswordformname", "changepasswordformid", "form_action.php");
+
+					$log->resetform("resetformname", "resetformid", "form_action.php");
 				
 			  ?>
 			  

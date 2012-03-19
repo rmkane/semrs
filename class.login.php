@@ -32,9 +32,6 @@ class logmein {
 	var $level_table = 'level';
 	var $level_id = 'id';
 	var $level_type = 'type';
-	
-	var $session_user_name;
-	var $session_user_level;
  
   //encryption
   var $encrypt = false;       //set to true to use md5 encryption for the password
@@ -150,6 +147,30 @@ class logmein {
 		  echo "Passwords failed to match";
 		}
 	}
+	
+	function changepassword($username, $oldpassword, $newpassword1, $newpassword2) {
+	  //conect to DB
+    $this->dbconnect();
+		$result = $this->qry("SELECT ".$this->user_password." FROM ".$this->user_table." WHERE ".$this->user_email." = '?';", $username);
+		$row=mysql_fetch_assoc($result);
+		echo "Retrieved Old Password: ".$row[$this->user_password]."<br />";
+		if(row != "Error") {
+		  $oldpassword = md5($oldpassword);
+			echo "Entered Old Password: ".$oldpassword."<br />";
+		  if ($oldpassword == $row[$this->user_password]) {
+			  echo "Old passwords match";
+				if ($newpassword1 == $newpassword2) {
+				  $newpassword1 = md5($newpassword1);
+					$qry = "UPDATE ".$this->user_table." SET ".$this->user_password."='".$newpassword1."' WHERE ".$this->user_email."='".stripslashes($username)."'";
+					$result = mysql_query($qry) or die(mysql_error());
+				} else {
+				  echo "New passwords do not match!";
+				}
+			} else {
+			  echo "Old password does not match.";
+			}
+		}
+	}
  
     //reset password
   function passwordreset($username){
@@ -248,24 +269,6 @@ class logmein {
 </form>
 ';
   }
-  
-  //reset password form
-  function resetform($formname, $formclass, $formaction){
-    //conect to DB
-    $this->dbconnect();
-    echo'
-<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
-<fieldset>
-<legend>Reset Password</legend>
-<div><label for="username">Username</label>
-<input name="username" id="username" type="text"></div>
-<input name="action_resetpassword" id="action" value="resetlogin" type="hidden">
-<div>
-<input name="submit" id="submit" value="Reset Password" type="submit"></div>
-</fieldset>
-</form>
-';
-  }
 	
 	  //login form
   function newuserform($formname, $formclass, $formaction){
@@ -281,14 +284,56 @@ class logmein {
 <input name="password1" id="password1" type="password"></div>
 <div><label for="password2">Re-Enter Your Password</label>
 <input name="password2" id="password2" type="password"></div>';
-$this->dropdown('Choose User Level',$this->facility_table, $this->facility_id, $this->facility_name);
-$this->dropdown('Choose Facility', $this->level_table, $this->level_id, $this->level_type);
+$this->dropdown('Choose Facility',$this->facility_table, $this->facility_id, $this->facility_name);
+$this->dropdown('Choose User Level', $this->level_table, $this->level_id, $this->level_type);
     echo'
 <div><label for="lname">Enter Your Last Name</label>
 <input name="lname" id="lname" type="text"></div>
 <input name="action_newuser" id="action" value="register" type="hidden">
 <div>
 <input name="submit" id="submit" value="Register" type="submit"></div>
+</fieldset>
+</form>
+';
+  }
+	
+	  //reset password form
+  function changepasswordform($formname, $formclass, $formaction){
+    //conect to DB
+    $this->dbconnect();
+    echo'
+<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
+<fieldset>
+<legend>Change Password</legend>
+<div><label for="username">Choose A Username</label>
+<input name="username" id="username" type="text"></div>
+<div><label for="oldpassword">Old Password</label>
+<input name="oldpassword" id="oldpassword" type="password"></div>
+<div><label for="newpassword1">Enter New Password</label>
+<input name="newpassword1" id="newpassword1" type="password"></div>
+<div><label for="newpassword2">Re-Enter New Password</label>
+<input name="newpassword2" id="newpassword2" type="password"></div>
+<input name="action_changepassword" id="action" value="changepassword" type="hidden">
+<div>
+<input name="submit" id="submit" value="Update Password" type="submit"></div>
+</fieldset>
+</form>
+';
+  }
+	
+	  //reset password form
+  function resetform($formname, $formclass, $formaction){
+    //conect to DB
+    $this->dbconnect();
+    echo'
+<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
+<fieldset>
+<legend>Reset Password</legend>
+<div><label for="username">Username</label>
+<input name="username" id="username" type="text"></div>
+<input name="action_resetpassword" id="action" value="resetlogin" type="hidden">
+<div>
+<input name="submit" id="submit" value="Reset Password" type="submit"></div>
 </fieldset>
 </form>
 ';

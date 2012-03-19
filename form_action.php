@@ -52,4 +52,14 @@ if($_REQUEST['action_newuser'] == "register"){
 				echo "Failed to Create User";
     }
 }
+
+if($_REQUEST['action_changepassword'] == "changepassword"){
+    if($log->changepassword($_REQUEST['username'], $_REQUEST['oldpassword'], $_REQUEST['newpassword1'], $_REQUEST['newpassword2']) == true){
+        //do something on successful password reset
+				echo "Changed Password!";
+    } else{
+        //do something on failed password reset
+				echo "Failed to Change Password!";
+    }
+}
 ?>
