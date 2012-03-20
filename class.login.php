@@ -283,9 +283,10 @@ class logmein {
 <div><label for="username">Choose A Username</label>
 <input name="username" id="username" type="text"></div>
 <div><label for="password1">Choose Your Password</label>
-<input name="password1" id="password1" type="password"></div>
+<input name="password1" id="password1" type="password" onblur="checkpass(\'password1\', \'password2\', \'mssg_newuser\');"></div>
 <div><label for="password2">Re-Enter Your Password</label>
-<input name="password2" id="password2" type="password"></div>';
+<input name="password2" id="password2" type="password" onblur="checkpass(\'password1\', \'password2\', \'mssg_newuser\');">
+<span id="mssg_newuser"></span></div>';
 $this->dropdown('Choose Facility',$this->facility_table, $this->facility_id, $this->facility_name);
 $this->dropdown('Choose User Level', $this->level_table, $this->level_id, $this->level_type);
     echo'
@@ -305,6 +306,7 @@ $this->dropdown('Choose User Level', $this->level_table, $this->level_id, $this-
     $this->dbconnect();
     echo'
 <form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
+<script type="text/javascript" src="form_control.js"></script>
 <fieldset>
 <legend>Change Password</legend>
 <div><label for="username">Choose A Username</label>
@@ -312,9 +314,10 @@ $this->dropdown('Choose User Level', $this->level_table, $this->level_id, $this-
 <div><label for="oldpassword">Old Password</label>
 <input name="oldpassword" id="oldpassword" type="password"></div>
 <div><label for="newpassword1">Enter New Password</label>
-<input name="newpassword1" id="newpassword1" type="password"></div>
+<input name="newpassword1" id="newpassword1" type="password" onblur="checkpass(\'newpassword1\', \'newpassword2\', \'mssg_changepassword\');"></div>
 <div><label for="newpassword2">Re-Enter New Password</label>
-<input name="newpassword2" id="newpassword2" type="password"></div>
+<input name="newpassword2" id="newpassword2" type="password" onblur="checkpass(\'newpassword1\', \'newpassword2\', \'mssg_changepassword\');">
+<span id="mssg_changepassword"></span></div>
 <input name="action" id="action3" value="changepassword" type="hidden">
 <div>
 <input name="submit3" id="submit3" value="Update Password" type="submit"></div>
