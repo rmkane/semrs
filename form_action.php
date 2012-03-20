@@ -4,7 +4,7 @@ include("class.login.php");
 $log = new logmein();
 $log->encrypt = true; //set encryption
 
-if($_REQUEST['action_login'] == "login"){
+if($_REQUEST['action'] == "login"){
     if($log->login("logon", $_REQUEST['username'], $_REQUEST['password']) == true){
         //do something on successful login
 				// CHECK USER LEVELS AND REDIRECT TO APPROPRIATE FILES
@@ -33,7 +33,7 @@ if($_REQUEST['action_login'] == "login"){
     }
 }
 
-if($_REQUEST['action_resetpassword'] == "resetlogin"){
+if($_REQUEST['action'] == "resetlogin"){
     if($log->passwordreset($_REQUEST['username']) == true){
         //do something on successful password reset
 				echo "Successful Password Reset";
@@ -43,7 +43,7 @@ if($_REQUEST['action_resetpassword'] == "resetlogin"){
     }
 }
 
-if($_REQUEST['action_newuser'] == "register"){
+if($_REQUEST['action'] == "register"){
     if($log->newuser($_REQUEST['username'], $_REQUEST['password1'], $_REQUEST['password2'], $_REQUEST['level'], $_REQUEST['facility'], $_REQUEST['lname']) == true){
         //do something on successful password reset
 				echo "Created New User!";
@@ -53,7 +53,7 @@ if($_REQUEST['action_newuser'] == "register"){
     }
 }
 
-if($_REQUEST['action_changepassword'] == "changepassword"){
+if($_REQUEST['action'] == "changepassword"){
     if($log->changepassword($_REQUEST['username'], $_REQUEST['oldpassword'], $_REQUEST['newpassword1'], $_REQUEST['newpassword2']) == true){
         //do something on successful password reset
 				echo "Changed Password!";

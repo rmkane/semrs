@@ -143,8 +143,10 @@ class logmein {
 			$row=mysql_fetch_assoc($result);
 			if(row != "Error") { $type = "".$row[$this->level_type]; }
 			echo "New User: ".$username."(".$type.") was created!";
+			return true;
 		} else {
 		  echo "Passwords failed to match";
+			return false;
 		}
 	}
 	
@@ -153,21 +155,21 @@ class logmein {
     $this->dbconnect();
 		$result = $this->qry("SELECT ".$this->user_password." FROM ".$this->user_table." WHERE ".$this->user_email." = '?';", $username);
 		$row=mysql_fetch_assoc($result);
-		echo "Retrieved Old Password: ".$row[$this->user_password]."<br />";
 		if(row != "Error") {
 		  $oldpassword = md5($oldpassword);
-			echo "Entered Old Password: ".$oldpassword."<br />";
 		  if ($oldpassword == $row[$this->user_password]) {
-			  echo "Old passwords match";
 				if ($newpassword1 == $newpassword2) {
 				  $newpassword1 = md5($newpassword1);
 					$qry = "UPDATE ".$this->user_table." SET ".$this->user_password."='".$newpassword1."' WHERE ".$this->user_email."='".stripslashes($username)."'";
 					$result = mysql_query($qry) or die(mysql_error());
+					return true;
 				} else {
 				  echo "New passwords do not match!";
+					return false;
 				}
 			} else {
 			  echo "Old password does not match.";
+				return false;
 			}
 		}
 	}
@@ -262,9 +264,9 @@ class logmein {
 <input name="username" id="username" type="text"></div>
 <div><label for="password">Password</label>
 <input name="password" id="password" type="password"></div>
-<input name="action_login" id="action" value="login" type="hidden">
+<input name="action" id="action1" value="login" type="hidden">
 <div>
-<input name="submit" id="submit" value="Login" type="submit"></div>
+<input name="submit1" id="submit1" value="Login" type="submit"></div>
 </fieldset>
 </form>
 ';
@@ -289,9 +291,9 @@ $this->dropdown('Choose User Level', $this->level_table, $this->level_id, $this-
     echo'
 <div><label for="lname">Enter Your Last Name</label>
 <input name="lname" id="lname" type="text"></div>
-<input name="action_newuser" id="action" value="register" type="hidden">
+<input name="action" id="action2" value="register" type="hidden">
 <div>
-<input name="submit" id="submit" value="Register" type="submit"></div>
+<input name="submit2" id="submit2" value="Register" type="submit"></div>
 </fieldset>
 </form>
 ';
@@ -313,9 +315,9 @@ $this->dropdown('Choose User Level', $this->level_table, $this->level_id, $this-
 <input name="newpassword1" id="newpassword1" type="password"></div>
 <div><label for="newpassword2">Re-Enter New Password</label>
 <input name="newpassword2" id="newpassword2" type="password"></div>
-<input name="action_changepassword" id="action" value="changepassword" type="hidden">
+<input name="action" id="action3" value="changepassword" type="hidden">
 <div>
-<input name="submit" id="submit" value="Update Password" type="submit"></div>
+<input name="submit3" id="submit3" value="Update Password" type="submit"></div>
 </fieldset>
 </form>
 ';
@@ -331,9 +333,9 @@ $this->dropdown('Choose User Level', $this->level_table, $this->level_id, $this-
 <legend>Reset Password</legend>
 <div><label for="username">Username</label>
 <input name="username" id="username" type="text"></div>
-<input name="action_resetpassword" id="action" value="resetlogin" type="hidden">
+<input name="action" id="action3" value="resetlogin" type="hidden">
 <div>
-<input name="submit" id="submit" value="Reset Password" type="submit"></div>
+<input name="submit4" id="submit4" value="Reset Password" type="submit"></div>
 </fieldset>
 </form>
 ';
