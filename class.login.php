@@ -74,9 +74,6 @@ class logmein {
       return false;
     }
   }
-	
-	function getName() {echo $this->session_user_name;}
-	function getLevel() {echo $this->session_user_level;}
  
   //prevent injection
   function qry($query) {
@@ -264,9 +261,9 @@ class logmein {
 <input name="username" id="username" type="text"></div>
 <div><label for="password">Password</label>
 <input name="password" id="password" type="password"></div>
-<input name="action" id="action1" value="login" type="hidden">
+<input name="action" class="action" value="login" type="hidden">
 <div>
-<input name="submit1" id="submit1" value="Login" type="submit"></div>
+<input name="submit1" class="submit" value="Login" type="submit"></div>
 </fieldset>
 </form>
 ';
@@ -292,9 +289,9 @@ $this->dropdown('Choose User Level', $this->level_table, $this->level_id, $this-
     echo'
 <div><label for="lname">Enter Your Last Name</label>
 <input name="lname" id="lname" type="text"></div>
-<input name="action" id="action2" value="register" type="hidden">
+<input name="action" class="action" value="register" type="hidden">
 <div>
-<input name="submit2" id="submit2" value="Register" type="submit"></div>
+<input name="submit2" class="submit" value="Register" type="submit"></div>
 </fieldset>
 </form>
 ';
@@ -318,9 +315,9 @@ $this->dropdown('Choose User Level', $this->level_table, $this->level_id, $this-
 <div><label for="newpassword2">Re-Enter New Password</label>
 <input name="newpassword2" id="newpassword2" type="password" onblur="checkpass(\'newpassword1\', \'newpassword2\', \'mssg_changepassword\');">
 <span id="mssg_changepassword"></span></div>
-<input name="action" id="action3" value="changepassword" type="hidden">
+<input name="action" class="action" value="changepassword" type="hidden">
 <div>
-<input name="submit3" id="submit3" value="Update Password" type="submit"></div>
+<input name="submit3" class="submit" value="Update Password" type="submit"></div>
 </fieldset>
 </form>
 ';
@@ -336,9 +333,9 @@ $this->dropdown('Choose User Level', $this->level_table, $this->level_id, $this-
 <legend>Reset Password</legend>
 <div><label for="username">Username</label>
 <input name="username" id="username" type="text"></div>
-<input name="action" id="action3" value="resetlogin" type="hidden">
+<input name="action" class="action" value="resetlogin" type="hidden">
 <div>
-<input name="submit4" id="submit4" value="Reset Password" type="submit"></div>
+<input name="submit4" class="submit" value="Reset Password" type="submit"></div>
 </fieldset>
 </form>
 ';

@@ -7,10 +7,10 @@ function checkpass($pass1, $pass2, $mssg) {
 	var $mssg_elm = document.getElementById($mssg);
 	
 	if ($pass1_val != $pass2_val) {
-		$pass2_elm.style.border = "red thin solid";
+		$pass2_elm.style.border = "red 2px solid";
 		$mssg_elm.innerHTML = "<span style=\"color:red; font-size:smaller\">Passwords don't match!</span>";
 	} else {
-		$pass2_elm.style.border = "green thin solid";
+		$pass2_elm.style.border = "green 2px solid";
 		$mssg_elm.innerHTML = "<span style=\"color:green; font-size:smaller\">Passwords match!</span>";
 	}	  
 }

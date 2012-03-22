@@ -13,6 +13,7 @@ if($_REQUEST['action'] == "login"){
 				switch($_SESSION['userlevel']) {
 				  case 0: // Admin
 					  echo "<br />Administrator";
+						header("Location:admin.php");
 						break;
 				  case 1: // Physician
 					  echo "<br />Physician";
@@ -56,10 +57,20 @@ if($_REQUEST['action'] == "register"){
 if($_REQUEST['action'] == "changepassword"){
     if($log->changepassword($_REQUEST['username'], $_REQUEST['oldpassword'], $_REQUEST['newpassword1'], $_REQUEST['newpassword2']) == true){
         //do something on successful password reset
-				echo "Changed Password!";
-    } else{
+				echo "Redirecting...";
+				alertbox("Password successfully changed!", "index.php");
+    } else {
         //do something on failed password reset
 				echo "Failed to Change Password!";
     }
+}
+
+function alertbox($message, $origin_page) {
+  echo '
+	<script type="text/javascript">
+	alert("'.$message.'");
+	window.location = "'.$origin_page.'";
+	</script>
+	';
 }
 ?>
