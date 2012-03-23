@@ -5,9 +5,9 @@
   $log->dbconnect();			//Connect to the database
   $log->encrypt = true;		//set to true if password is md5 encrypted. Default is false.
 
-if($log->logincheck($_SESSION['loggedin'], "logon", "password", "useremail") == false){
+if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] != 0){
     //do something if NOT logged in. For example, redirect to login page or display message.
-		echo "You are not logged in!";
+		echo "Restricted Access: You are not logged in!";
 } else {
     //do something else if logged in.
 ?>
@@ -22,32 +22,21 @@ if($log->logincheck($_SESSION['loggedin'], "logon", "password", "useremail") == 
   </head>
   <body>
 	  <?php include('includes\header.php'); ?>
-		<?php include('includes\nav.php'); ?>
     <div id="wrapper">
+		  <?php include('includes\nav.php'); ?>
 			<div style="clear:both;"></div>
+		  <?php include('includes\sidebar.php'); ?>
+			<div style="overflow:hidden;"></div>
       <div id="login">
-        <h1>Welcome </h1>
+        <h1>Welcome <?php echo $_SESSION['userfullname']; ?></h1>
 				<?php
-			    if (isset($_SESSION['error'])) {
-  				  echo "<span id=\"error\"><p>" . $_SESSION['error'] . "</p></span>";
-				    unset($_SESSION['error']);
-			    }
-					
-					$log->loginform("loginformname", "loginformid", "form_action.php");
-					
 					$log->newuserform("newuserformname", "newuserformid", "form_action.php");
-					
 					$log->changepasswordform("changepasswordformname", "changepasswordformid", "form_action.php");
-
-					$log->resetform("resetformname", "resetformid", "form_action.php");
-				
+					$log->logoutform("logoutformname", "logoutformid", "form_action.php");
 			  ?>
-			  
       </div> <!-- content -->
-			<?php
-				include('includes\footer.php');
-			?>
     </div> <!-- wrapper -->
+		<?php include('includes\footer.php'); ?>
   </body>
 </html>
 

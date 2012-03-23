@@ -20,26 +20,14 @@
       <div id="login">
         <h1>Log In</h1>
 				<?php
-			    if (isset($_SESSION['error'])) {
-  				  echo "<span id=\"error\"><p>" . $_SESSION['error'] . "</p></span>";
-				    unset($_SESSION['error']);
-			    }
-					
 					$log->loginform("loginformname", "loginformid", "form_action.php");
-					
 					$log->newuserform("newuserformname", "newuserformid", "form_action.php");
-					
 					$log->changepasswordform("changepasswordformname", "changepasswordformid", "form_action.php");
-
 					$log->resetform("resetformname", "resetformid", "form_action.php");
-				
-				  echo '<input type="button" value="logout" onclick="$log->logout();" />';
+				  $log->logoutform("logoutformname", "logoutformid", "form_action.php");
 			  ?>
-				 
       </div> <!-- content -->
-			<?php
-				include('includes\footer.php');
-			?>
     </div> <!-- wrapper -->
+		<?php include('includes\footer.php'); ?>
   </body>
 </html>

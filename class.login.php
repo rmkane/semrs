@@ -100,19 +100,9 @@ class logmein {
   }
  
   //check if loggedin
-  function logincheck($logincode, $user_table, $user_password, $user_email){
+  function logincheck($logincode){
     //conect to DB
     $this->dbconnect();
-    //make sure password column and table are set
-    if($this->user_password == ""){
-      $this->user_password = $user_password;
-    }
-    if($this->user_email == ""){
-      $this->user_email = $user_email;
-    }
-    if($this->user_table == ""){
-      $this->user_table = $user_table;
-    }
     //exectue query
     $result = $this->qry("SELECT * FROM ".$this->user_table." WHERE ".$this->user_password." = '?';" , $logincode);
     $rownum = mysql_num_rows($result);
@@ -336,6 +326,23 @@ $this->dropdown('Choose User Level', $this->level_table, $this->level_id, $this-
 <input name="action" class="action" value="resetlogin" type="hidden">
 <div>
 <input name="submit4" class="submit" value="Reset Password" type="submit"></div>
+</fieldset>
+</form>
+';
+  }
+	
+		  //logout form
+  function logoutform($formname, $formclass, $formaction){
+    //conect to DB
+    $this->dbconnect();
+    echo'
+<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
+<fieldset>
+<legend>Logout</legend>
+<div>
+<input name="action" class="action" value="logout" type="hidden">
+<div>
+<input name="submit5" class="submit" value="Logout" type="submit"></div>
 </fieldset>
 </form>
 ';

@@ -1,14 +1,11 @@
 <div id="sidebar">
   <ul>
-    <li><a href="">Fake Link #01</a></li>
-    <li><a href="">Fake Link #02</a></li>
-    <li><a href="">Fake Link #03</a></li>
-    <li><a href="">Fake Link #04</a></li>
-    <li><a href="">Fake Link #05</a></li>
-    <li><a href="">Fake Link #06</a></li>
-    <li><a href="">Fake Link #07</a></li>
-    <li><a href="">Fake Link #08</a></li>
-    <li><a href="">Fake Link #09</a></li>
-    <li><a href="">Fake Link #10</a></li>
+    <li><a href="">Add User</a></li>
+    <li><a href="">Update User</a></li>
+    <li><a href="">Add Patient</a></li>
+    <li><a href="">Update Patient</a></li>
+    <li><a href="">Add Appointment</a></li>
+    <li><a href="">Update Appointment</a></li>
+    <li><a href="">Add Prescription</a></li>
   </ul>
 </div> <!-- sidebar -->

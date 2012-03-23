@@ -4,8 +4,8 @@ include("class.login.php");
 $log = new logmein();
 $log->encrypt = true; //set encryption
 
-if($_REQUEST['action'] == "login"){
-    if($log->login("logon", $_REQUEST['username'], $_REQUEST['password']) == true){
+if($_POST['action'] == "login"){
+    if($log->login("logon", $_POST['username'], $_POST['password']) == true){
         //do something on successful login
 				// CHECK USER LEVELS AND REDIRECT TO APPROPRIATE FILES
 				echo "Successful Login: ".$_SESSION['userfullname']."! You are now being redirected.";
@@ -34,8 +34,8 @@ if($_REQUEST['action'] == "login"){
     }
 }
 
-if($_REQUEST['action'] == "resetlogin"){
-    if($log->passwordreset($_REQUEST['username']) == true){
+if($_POST['action'] == "resetlogin"){
+    if($log->passwordreset($_POST['username']) == true){
         //do something on successful password reset
 				echo "Successful Password Reset";
     }else{
@@ -44,8 +44,8 @@ if($_REQUEST['action'] == "resetlogin"){
     }
 }
 
-if($_REQUEST['action'] == "register"){
-    if($log->newuser($_REQUEST['username'], $_REQUEST['password1'], $_REQUEST['password2'], $_REQUEST['level'], $_REQUEST['facility'], $_REQUEST['lname']) == true){
+if($_POST['action'] == "register"){
+    if($log->newuser($_POST['username'], $_POST['password1'], $_POST['password2'], $_POST['level'], $_POST['facility'], $_POST['lname']) == true){
         //do something on successful password reset
 				echo "Created New User!";
     } else{
@@ -54,8 +54,8 @@ if($_REQUEST['action'] == "register"){
     }
 }
 
-if($_REQUEST['action'] == "changepassword"){
-    if($log->changepassword($_REQUEST['username'], $_REQUEST['oldpassword'], $_REQUEST['newpassword1'], $_REQUEST['newpassword2']) == true){
+if($_POST['action'] == "changepassword"){
+    if($log->changepassword($_POST['username'], $_POST['oldpassword'], $_POST['newpassword1'], $_POST['newpassword2']) == true){
         //do something on successful password reset
 				echo "Redirecting...";
 				alertbox("Password successfully changed!", "index.php");
@@ -63,6 +63,12 @@ if($_REQUEST['action'] == "changepassword"){
         //do something on failed password reset
 				echo "Failed to Change Password!";
     }
+}
+
+if($_POST['action'] == "logout"){
+  $log->logout();
+	echo "Redirecting...";
+	alertbox("Successfully logged out!", "index.php");
 }
 
 function alertbox($message, $origin_page) {

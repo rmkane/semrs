@@ -3,13 +3,16 @@ body {
   background:#448;
 	color:#000;
 }
+#header, #wrapper, #footer {
+  min-width:800px;
+	max-width:1000px;
+	margin:0 auto;
+}
+
 #wrapper {
   color:#000;
 	background:#fff;
-	margin:0 auto;
 	padding:1em;
-	min-width:800px;
-	max-width:1000px;
 }
 h1 {
   color:#008;
