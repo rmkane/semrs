@@ -73,6 +73,9 @@ h1 {
   background:#77f;
 	color:#321;
 }
+#nav input[type="submit"] {
+  text-align:center;
+}
 
 /* Sidebar Styling */
 #sidebar {
@@ -84,7 +87,7 @@ h1 {
   list-style-type:none;
   margin:0;
   padding:0;
-  width:8em;
+  width:10em;
 }
 #sidebar ul a{
   background:#008;
@@ -94,7 +97,7 @@ h1 {
 	padding:0.25em 0 0.25em 0;
   text-align:center;
   text-decoration:none;
-  width:8em;
+  width:10em;
 }  
 #sidebar ul a:hover{
   background:#77f;

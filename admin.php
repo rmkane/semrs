@@ -32,7 +32,7 @@ if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] !=
 				<?php
 					$log->newuserform("newuserformname", "newuserformid", "form_action.php");
 					$log->changepasswordform("changepasswordformname", "changepasswordformid", "form_action.php");
-					$log->logoutform("logoutformname", "logoutformid", "form_action.php");
+					$log->new_patient_form("blah", "blah", "form_action.php")
 			  ?>
       </div> <!-- content -->
     </div> <!-- wrapper -->

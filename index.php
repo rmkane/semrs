@@ -18,13 +18,9 @@
     <div id="wrapper">
 			<div style="clear:both;"></div>
       <div id="login">
-        <h1>Log In</h1>
 				<?php
 					$log->loginform("loginformname", "loginformid", "form_action.php");
-					$log->newuserform("newuserformname", "newuserformid", "form_action.php");
-					$log->changepasswordform("changepasswordformname", "changepasswordformid", "form_action.php");
 					$log->resetform("resetformname", "resetformid", "form_action.php");
-				  $log->logoutform("logoutformname", "logoutformid", "form_action.php");
 			  ?>
       </div> <!-- content -->
     </div> <!-- wrapper -->
