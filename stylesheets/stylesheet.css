@@ -1,3 +1,21 @@
+@import"reset.css";
+/* Set headings */
+/* HTML4 Defaults: http://www.w3.org/TR/CSS21/sample.html */
+h1 { font-size: 2.00em; margin: 0.67em 0em; line-height:1.75em; }
+h2 { font-size: 1.30em; margin: 0.75em 0em; line-height:1.50em; }
+h3 { font-size: 1.17em; margin: 0.83em 0em; line-height:1.20em; }
+h4 { font-size: 1.00em; margin: 1.12em 0em; line-height:1.18em; }
+h5 { font-size: 0.83em; margin: 1.50em 0em; line-height:1.14em; }
+h6 { font-size: 0.75em; margin: 1.67em 0em; line-height:1.12em; }
+p  { font-size: 1.00em; margin: 0.50em 1em; line-height:1.20em; }
+h1, h2, h3, h4, h5, h6, b { font-weight:bolder; }
+ol {list-style-type:decimal; margin-left:2em;}
+ul {list-style-type:circle; margin-left:2em;}
+strong { font-weight:bold; }
+em { font-size:smaller; }
+fieldset { border:#000 thin solid; padding:1em;}
+legend { font-weight:bold; text-align:center; }
+
 /* General Styling */
 body {
   background:#448;
@@ -11,7 +29,7 @@ body {
 
 #wrapper {
   color:#000;
-	background:#fff;
+	background:#aaf;
 	padding:1em;
 }
 h1 {
@@ -20,19 +38,20 @@ h1 {
 
 /* Log In Styling */
 #login {
-  background:#ddd;
-	padding:4px; 
+  background:inherit;
 }
 #login form {
-  width:500px;
+  width:250px;
 	margin:0 auto;
 }
-#login input[type="submit"] {
-  margin-left:0px;
-}
 
-#login legend {
-  font-weight:bold;
+/* Admin page Styling */
+#admin {
+  background:inherit
+}
+#admin form {
+  width:600px;
+	margin:0 auto;
 }
 
 /* Header Styling */

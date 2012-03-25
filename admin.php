@@ -27,7 +27,7 @@ if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] !=
 			<div style="clear:both;"></div>
 		  <?php include('includes\sidebar.php'); ?>
 			<div style="overflow:hidden;"></div>
-      <div id="login">
+      <div id="admin">
         <h1>Welcome <?php echo $_SESSION['userfullname']; ?></h1>
 				<?php
 					$log->newuserform("newuserformname", "newuserformid", "form_action.php");

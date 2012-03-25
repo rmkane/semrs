@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 16, 2012 at 05:42 PM
+-- Generation Time: Mar 25, 2012 at 07:01 PM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -26,7 +26,6 @@ SET time_zone = "+00:00";
 -- Table structure for table `facility`
 --
 
-DROP TABLE IF EXISTS `facility`;
 CREATE TABLE IF NOT EXISTS `facility` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -55,7 +54,6 @@ INSERT INTO `facility` (`id`, `name`, `phone`, `fax`, `street`, `postal_code`, `
 -- Table structure for table `geo_country_reference`
 --
 
-DROP TABLE IF EXISTS `geo_country_reference`;
 CREATE TABLE IF NOT EXISTS `geo_country_reference` (
   `countries_id` int(5) NOT NULL AUTO_INCREMENT,
   `countries_name` varchar(64) DEFAULT NULL,
@@ -315,7 +313,6 @@ INSERT INTO `geo_country_reference` (`countries_id`, `countries_name`, `countrie
 -- Table structure for table `history_data`
 --
 
-DROP TABLE IF EXISTS `history_data`;
 CREATE TABLE IF NOT EXISTS `history_data` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `coffee` longtext,
@@ -380,7 +377,6 @@ CREATE TABLE IF NOT EXISTS `history_data` (
 -- Table structure for table `immunizations`
 --
 
-DROP TABLE IF EXISTS `immunizations`;
 CREATE TABLE IF NOT EXISTS `immunizations` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `patient_id` bigint(20) DEFAULT NULL,
@@ -410,7 +406,6 @@ CREATE TABLE IF NOT EXISTS `immunizations` (
 -- Table structure for table `insurance_companies`
 --
 
-DROP TABLE IF EXISTS `insurance_companies`;
 CREATE TABLE IF NOT EXISTS `insurance_companies` (
   `id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(255) DEFAULT NULL,
@@ -429,7 +424,6 @@ CREATE TABLE IF NOT EXISTS `insurance_companies` (
 -- Table structure for table `insurance_data`
 --
 
-DROP TABLE IF EXISTS `insurance_data`;
 CREATE TABLE IF NOT EXISTS `insurance_data` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `type` enum('primary','secondary','tertiary') DEFAULT NULL,
@@ -470,7 +464,6 @@ CREATE TABLE IF NOT EXISTS `insurance_data` (
 -- Table structure for table `insurance_numbers`
 --
 
-DROP TABLE IF EXISTS `insurance_numbers`;
 CREATE TABLE IF NOT EXISTS `insurance_numbers` (
   `id` int(11) NOT NULL DEFAULT '0',
   `provider_id` int(11) NOT NULL DEFAULT '0',
@@ -489,7 +482,6 @@ CREATE TABLE IF NOT EXISTS `insurance_numbers` (
 -- Table structure for table `level`
 --
 
-DROP TABLE IF EXISTS `level`;
 CREATE TABLE IF NOT EXISTS `level` (
   `id` int(1) NOT NULL,
   `type` varchar(20) DEFAULT NULL,
@@ -512,7 +504,6 @@ INSERT INTO `level` (`id`, `type`) VALUES
 -- Table structure for table `patient_data`
 --
 
-DROP TABLE IF EXISTS `patient_data`;
 CREATE TABLE IF NOT EXISTS `patient_data` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -557,7 +548,6 @@ INSERT INTO `patient_data` (`id`, `title`, `language`, `fname`, `mname`, `lname`
 -- Table structure for table `pharmacy`
 --
 
-DROP TABLE IF EXISTS `pharmacy`;
 CREATE TABLE IF NOT EXISTS `pharmacy` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -578,7 +568,6 @@ CREATE TABLE IF NOT EXISTS `pharmacy` (
 -- Table structure for table `photo`
 --
 
-DROP TABLE IF EXISTS `photo`;
 CREATE TABLE IF NOT EXISTS `photo` (
   `patient_id` bigint(20) NOT NULL,
   `data` longblob,
@@ -599,7 +588,6 @@ INSERT INTO `photo` (`patient_id`, `data`, `timestamp`) VALUES
 -- Table structure for table `prescriptions`
 --
 
-DROP TABLE IF EXISTS `prescriptions`;
 CREATE TABLE IF NOT EXISTS `prescriptions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `drug_name` varchar(255) DEFAULT NULL,
@@ -628,10 +616,9 @@ CREATE TABLE IF NOT EXISTS `prescriptions` (
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `useremail` varchar(50) NOT NULL,
+  `email` varchar(50) DEFAULT NULL,
   `password` varchar(50) NOT NULL,
   `userlevel` int(1) NOT NULL,
   `fname` varchar(20) DEFAULT NULL,
@@ -639,20 +626,17 @@ CREATE TABLE IF NOT EXISTS `users` (
   `lname` varchar(20) NOT NULL,
   `facility_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `facility_id` (`facility_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+  KEY `users_ibfk_2` (`userlevel`),
+  KEY `users_ibfk_1` (`facility_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `useremail`, `password`, `userlevel`, `fname`, `mname`, `lname`, `facility_id`) VALUES
-(1, 'rmkane89@gmail.com', '4ab214e959bf0734f4f7a5481e658e4b', 0, 'Ryan', 'M', 'Kane', 1),
-(2, 'donald', 'c9638e27430d8eb745205732a30b9588', 1, 'Donald', 'J', 'Shaner', 1),
-(3, 'Michele', 'chloe', 2, NULL, NULL, 'Dove', 2),
-(6, 'Joe', 'red', 0, NULL, NULL, 'O''doul', 1),
-(7, 'Jim', 'blue', 0, NULL, NULL, 'Jones', 1),
-(8, 'Jimmy', 'purple', 0, NULL, NULL, 'Johnson', 1);
+INSERT INTO `users` (`id`, `email`, `password`, `userlevel`, `fname`, `mname`, `lname`, `facility_id`) VALUES
+(1, 'admin', '1a1dc91c907325c69271ddf0c944bc72', 0, NULL, NULL, 'Administrator', 1),
+(2, 'ricky', '7694f4a66316e53c8cdd9d9954bd611d', 1, NULL, NULL, 'Orndorff', 1);
 
 --
 -- Constraints for dumped tables
@@ -698,7 +682,8 @@ ALTER TABLE `prescriptions`
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`facility_id`) REFERENCES `facility` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`facility_id`) REFERENCES `facility` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`userlevel`) REFERENCES `level` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
