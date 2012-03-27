@@ -22,6 +22,8 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
+use semrs;
+
 --
 -- Table structure for table `facility`
 --
