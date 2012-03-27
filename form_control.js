@@ -22,7 +22,37 @@ function checkpass($pass1, $pass2, $mssg) {
 		}
 }
 
-function requestForm(s) {
+function clearForm(oForm) {
+  var elements = oForm.elements; 
+  oForm.reset();
+  for(i = 0; i < elements.length; i++) {
+		/* field_type = elements[i].type.toLowerCase(); */
+		field_type = elements[i].type;
+		switch(field_type) {
+			case "text": 
+			case "password": 
+			case "textarea":
+      case "hidden":   
+        elements[i].value = "";
+				elements[i].focus(); // Clear out any associate text
+				break;
+      case "radio":
+			case "checkbox":
+				if (elements[i].checked) elements[i].checked = false;
+				break;
+		case "select":
+		/* case "select-one":
+     * case "select-multi": */
+      elements[i].selectedIndex = -1;
+      break;
+		default: 
+      break;
+		}
+  }
+}
+
+/* Create a XMLHttpRequest object */
+function requestForm(s, form_id) {
   var htmlHttp;
 	htmlHttp = new XMLHttpRequest();
 	htmlHttp.open("POST", "form_action.php", true);
@@ -60,15 +90,13 @@ function requestForm(s) {
 			// continue only if HTTP status is "OK"
 			if (htmlHttp.status == 200) {
 				alert(htmlHttp.responseText);
-				
-				ClearNewUserForm();
-				ClearChangePasswordForm();
+				clearForm(document.getElementById(form_id));
 			}
 		}
 	}
 }
 
-function newuser() {
+function newuser(form_id) {
 	// Get form information
 	var username = document.getElementById('usernameCreate').value;
 	var pass1 = document.getElementById('password1').value;
@@ -78,19 +106,10 @@ function newuser() {
 	var lname = document.getElementById('lname').value;
 	// Send data to the form action
 	var s = "action=register&username=" + username + "&password1=" + pass1 + "&password2=" + pass2 + "&facility=" + facility + "&level=" + level + "&lname=" + lname;
-	requestForm(s);
+	requestForm(s, form_id);
 }
 
-function ClearNewUserForm() {
-  document.getElementById('usernameCreate').value = "";
-	document.getElementById('password1').value = "";
-	document.getElementById('password2').value = "";
-	document.getElementById('facility').selectedIndex = 0;
-	document.getElementById('level').selectedIndex = 0;
-	document.getElementById('lname').value = "";
-}
-
-function changepassword() {
+function changepassword(form_id) {
   // Get form information
 	var name = document.getElementById('usernameChange').value;
 	var old_pass = document.getElementById('oldpassword').value;
@@ -98,13 +117,6 @@ function changepassword() {
 	var new_pass2 = document.getElementById('newpassword2').value;
 	// Send data to the form action
 	var s = "action=changepassword&username=" + name + "&oldpassword=" + old_pass + "&newpassword1=" + new_pass1 + "&newpassword2=" + new_pass2
-	requestForm(s);
-}
-
-function ClearChangePasswordForm() {
-  document.getElementById('usernameChange').value = "";
-	document.getElementById('oldpassword').value = "";
-	document.getElementById('newpassword1').value = "";
-	document.getElementById('newpassword2').value = "";
+	requestForm(s, form_id);
 }
 

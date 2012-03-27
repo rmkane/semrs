@@ -271,7 +271,7 @@ class logmein {
         <td></td>
         <td align="left">
           <input name="action" class="action" value="login" type="hidden" />
-          <input name="submit1" class="submit" value="Login" type="submit" />
+          <input name="submit1" class="submit" value="Log In" type="submit" />
         </td>
       </tr>
     </table>
@@ -285,7 +285,7 @@ class logmein {
     //conect to DB
     $this->dbconnect();
     echo'
-<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="">
+<form name="newUser_form" id="newUser_form" method="post" action="">
   <script type="text/javascript" src="form_control.js"></script>
 	<fieldset>
     <legend>Create User</legend>
@@ -334,7 +334,7 @@ class logmein {
       <tr>
         <td></td>
         <td align="left">
-          <input class="submit" value="Register" type="button" onclick="newuser();">
+          <input class="submit" value="Register" type="button" onclick="newuser(\'newUser_form\');">
         </td>
       </tr>
     </table>
@@ -344,11 +344,11 @@ class logmein {
   }
 	
 	  //reset password form
-  function changepasswordform($formname, $formclass, $formaction){		
+  function changepasswordform(){		
 		//conect to DB
     $this->dbconnect();
     echo'
-<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" action="">
+<form name="changePass_form" id="changePass_form" method="post" action="">
   <script type="text/javascript" src="form_control.js"></script>
   <fieldset>
     <legend>Change Password</legend>
@@ -389,7 +389,7 @@ class logmein {
       <tr>
 			  <td></td>
         <td align="left">
-          <input class="submit" value="Update Password" type="button" onclick="changepassword()">
+          <input class="submit" value="Update Password" type="button" onclick="changepassword(\'changePass_form\')">
         </td>
       </tr>
     </table>

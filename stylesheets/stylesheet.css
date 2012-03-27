@@ -14,7 +14,7 @@ ul {list-style-type:circle; margin-left:2em;}
 strong { font-weight:bold; }
 em { font-size:smaller; }
 fieldset { border:#000 thin solid; padding:1em;}
-legend { font-weight:bold; text-align:center; }
+legend { font-weight:bold;}
 label { font-weight:bold; }
 
 /* General Styling */

@@ -12,11 +12,10 @@ if($_POST['action'] == "login"){
 				
 				switch($_SESSION['userlevel']) {
 				  case 0: // Admin
-					  echo "<br />Administrator";
 						header("Location:admin.php");
 						break;
 				  case 1: // Physician
-					  echo "<br />Physician";
+						header("Location:physician.php");
 						break;
 				  case 2: // Receptionist
 					  echo "<br />Receptionist";

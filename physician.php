@@ -4,7 +4,7 @@
   $log->dbconnect();			//Connect to the database
   $log->encrypt = true;		//set to true if password is md5 encrypted. Default is false.
 
-if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] != 0){
+if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] != 1){
     //do something if NOT logged in. For example, redirect to login page or display message.
 		echo "Restricted Access: You are not logged in!";
 } else {
@@ -15,7 +15,7 @@ if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] !=
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>Admin | Home</title>
+    <title>Physician | Home</title>
     <meta name="Author" content="Ryan Kane">
     <link rel=stylesheet href="<?php echo $css_header;?>" type="text/css">
   </head>
@@ -29,8 +29,7 @@ if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] !=
       <div id="admin" style="float:left; margin-left:1em;">
         <h1>Welcome <?php echo $_SESSION['userfullname']; ?></h1>
 				<?php
-					$log->newuserform();
-					$log->changepasswordform();
+					$log->new_patient_form()
 			  ?>
       </div> <!-- content -->
 			<div style="clear:both"></div>
