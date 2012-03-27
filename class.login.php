@@ -2,6 +2,8 @@
 //For security reasons, don't display any errors or warnings. Comment out in DEV.
 error_reporting(0);
 
+include('globals.php');	
+
 //start session
 session_start();
 // http://www.emirplicanic.com/php/simple-phpmysql-authentication-class
@@ -132,7 +134,7 @@ class logmein {
 			echo "New User: ".$username."(".$type.") was created!";
 			return true;
 		} else {
-		  echo "Passwords failed to match";
+		  echo "Failed to create user";
 			return false;
 		}
 	}
@@ -226,14 +228,15 @@ class logmein {
  
   //create random password with 8 alphanumerical characters
   function createPassword() {
-    $chars = "abcdefghijkmnopqrstuvwxyz023456789";
+    $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     srand((double)microtime()*1000000);
     $i = 0;
     $pass = '' ;
-    while ($i <= 7) { // Random 7 character password
-      $num = rand() % 33;
+    while ($i <= 7) { // Random 8 character password
+      $num = rand() % 61;
       $tmp = substr($chars, $num, 1);
       $pass = $pass . $tmp;
+			
       $i++;
     }
     return $pass;
@@ -282,7 +285,7 @@ class logmein {
     //conect to DB
     $this->dbconnect();
     echo'
-<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
+<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="">
   <script type="text/javascript" src="form_control.js"></script>
 	<fieldset>
     <legend>Create User</legend>
@@ -331,8 +334,7 @@ class logmein {
       <tr>
         <td></td>
         <td align="left">
-          <input name="action" class="action" value="register" type="hidden">
-          <input name="submit2" class="submit" value="Register" type="submit">
+          <input class="submit" value="Register" type="button" onclick="newuser();">
         </td>
       </tr>
     </table>
@@ -346,7 +348,7 @@ class logmein {
 		//conect to DB
     $this->dbconnect();
     echo'
-<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="">
+<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" action="">
   <script type="text/javascript" src="form_control.js"></script>
   <fieldset>
     <legend>Change Password</legend>
@@ -387,7 +389,7 @@ class logmein {
       <tr>
 			  <td></td>
         <td align="left">
-          <input name="submit3" class="submit" value="Update Password" type="button" onclick="changepassword()">
+          <input class="submit" value="Update Password" type="button" onclick="changepassword()">
         </td>
       </tr>
     </table>
@@ -450,7 +452,7 @@ class logmein {
     <table>
       <tr>
         <td>
-          <label>Name:</label>
+          <label>Name</label>
         </td>
         <td>
           <select title="Title">
@@ -473,7 +475,7 @@ class logmein {
       </tr>
       <tr>
         <td>
-          <label>DOB:</label>
+          <label>DOB</label>
         </td>
         <td colspan="3">
           <input type="text" name="dob" value="" size="10" title="Date of Birth" /> <span style="font-size:smaller" >YYYY/MM/DD</span>
@@ -481,7 +483,7 @@ class logmein {
       </tr>
       <tr>
         <td>
-          <label>Race:</label>
+          <label>Race</label>
         </td>
         <td colspan="4">
           <select title="Race">
@@ -497,7 +499,7 @@ class logmein {
       </tr>
       <tr>
         <td>
-          <label>Ethnicity:</label>
+          <label>Ethnicity</label>
         </td>
         <td colspan="4">
           <select title="Ethnicity">
@@ -509,7 +511,7 @@ class logmein {
       </tr>
       <tr>
         <td>
-          <label>Address:</label>
+          <label>Address</label>
         </td>
         <td colspan="2">
           <input type="text" name="street" value="" size="20" title="Street" />
@@ -532,7 +534,7 @@ class logmein {
       </tr>
       <tr>
         <td>
-          <label>Phone:</label>
+          <label>Phone</label>
         </td>
         <td>
           <input type="text" name="home" value="" size="10" title="Home Phone" />

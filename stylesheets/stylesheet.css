@@ -15,6 +15,7 @@ strong { font-weight:bold; }
 em { font-size:smaller; }
 fieldset { border:#000 thin solid; padding:1em;}
 legend { font-weight:bold; text-align:center; }
+label { font-weight:bold; }
 
 /* General Styling */
 body {
@@ -44,6 +45,19 @@ h1 {
   width:250px;
 	margin:0 auto;
 }
+.fake_link {
+	color:#00f;
+	text-decoration:none;
+}
+.fake_link:hover {
+	text-decoration:underline;
+	cursor:pointer;
+}
+.fake_link:active {
+	text-decoration:underline;
+	cursor:pointer;
+	color:#f00;
+}
 
 /* Admin page Styling */
 #admin {
@@ -68,7 +82,7 @@ h1 {
 /* Navagation Styling */
 #nav {
   float:right;
-	background:red;
+	background:red; /* why? */
 	margin:0;
 }
 #nav ul>li {

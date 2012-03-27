@@ -1,5 +1,4 @@
 <?php
-	include('variables\variables.php');	
 	include("class.login.php");
   $log = new logmein();		//Instentiate the class
   $log->dbconnect();			//Connect to the database
