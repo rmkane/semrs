@@ -21,3 +21,37 @@ function checkpass($pass1, $pass2, $mssg) {
 			$mssg_elm.innerHTML = ""; // Clear message
 		}
 }
+var htmlHttp;
+function changepassword() {
+  var name = document.getElementById('usernameChange').value;
+	var old_pass = document.getElementById('oldpassword').value;
+	var new_pass1 = document.getElementById('newpassword1').value;
+	var new_pass2 = document.getElementById('newpassword2').value;
+	
+	
+	htmlHttp = new XMLHttpRequest();
+	htmlHttp.open("POST", "form_action.php", true);
+	htmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	htmlHttp.onreadystatechange = handleReq;
+	var s = "action=changepassword&username=" + name + "&oldpassword=" + old_pass + "&newpassword1=" + new_pass1 + "&newpassword2=" + new_pass2
+	htmlHttp.send(s);
+	alert(s);
+	
+	// Reset form?
+	document.innerHTML.name = "";
+	document.innerHTML.old_pass = "";
+	document.innerHTML.new_pass1 = "";
+	document.innerHTML.new_pass2 = "";
+}
+
+function handleReq()
+{
+ if (htmlHttp.readyState == 4) 
+  {
+    // continue only if HTTP status is "OK"
+    if (htmlHttp.status == 200) 
+    {
+			alert(htmlHttp.responseText);
+		}
+	}
+}

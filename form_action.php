@@ -57,8 +57,8 @@ if($_POST['action'] == "register"){
 if($_POST['action'] == "changepassword"){
     if($log->changepassword($_POST['username'], $_POST['oldpassword'], $_POST['newpassword1'], $_POST['newpassword2']) == true){
         //do something on successful password reset
-				echo "Redirecting...";
-				alertbox("Password successfully changed!", "index.php");
+				echo "Successfully Change Password!";
+				//alertbox("Password successfully changed!", "index.php");
     } else {
         //do something on failed password reset
 				echo "Failed to Change Password!";

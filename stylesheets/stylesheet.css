@@ -1,8 +1,8 @@
 @import"reset.css";
 /* Set headings */
 /* HTML4 Defaults: http://www.w3.org/TR/CSS21/sample.html */
-h1 { font-size: 2.00em; margin: 0.67em 0em; line-height:1.75em; }
-h2 { font-size: 1.30em; margin: 0.75em 0em; line-height:1.50em; }
+h1 { font-size: 2.00em; margin: 0.67em 0em; line-height:1.50em; }
+h2 { font-size: 1.30em; margin: 0.75em 0em; line-height:1.25em; }
 h3 { font-size: 1.17em; margin: 0.83em 0em; line-height:1.20em; }
 h4 { font-size: 1.00em; margin: 1.12em 0em; line-height:1.18em; }
 h5 { font-size: 0.83em; margin: 1.50em 0em; line-height:1.14em; }
@@ -18,19 +18,18 @@ legend { font-weight:bold; text-align:center; }
 
 /* General Styling */
 body {
-  background:#448;
+  background:url("../images/bg_tile.png") top left repeat;
 	color:#000;
 }
+
 #header, #wrapper, #footer {
   min-width:800px;
-	max-width:1000px;
 	margin:0 auto;
 }
 
 #wrapper {
   color:#000;
-	background:#aaf;
-	padding:1em;
+	background:inherit;
 }
 h1 {
   color:#008;
@@ -38,6 +37,7 @@ h1 {
 
 /* Log In Styling */
 #login {
+	margin-top:100px;
   background:inherit;
 }
 #login form {
@@ -47,19 +47,19 @@ h1 {
 
 /* Admin page Styling */
 #admin {
-  background:inherit
+  background:inherit;
 }
 #admin form {
-  width:600px;
+  width:500px;
 	margin:0 auto;
 }
 
 /* Header Styling */
 #header {
 	text-align:center;
-	font-size:2em;
-	padding:0.5em;
-	background:#eef;
+	font-size:1.50em;
+	background:#dde;
+	border-bottom:#008 4px solid;
 }
 #header h1 {
 	margin:0;
@@ -68,6 +68,8 @@ h1 {
 /* Navagation Styling */
 #nav {
   float:right;
+	background:red;
+	margin:0;
 }
 #nav ul>li {
   float:left;
@@ -100,7 +102,7 @@ h1 {
 #sidebar {
   float:left;
 	background:#eee;
-	padding:1em;
+	padding:0.25em;
 }
 #sidebar ul {
   list-style-type:none;

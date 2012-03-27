@@ -4,7 +4,6 @@ error_reporting(0);
 
 //start session
 session_start();
-
 // http://www.emirplicanic.com/php/simple-phpmysql-authentication-class
 class logmein {
   //database setup
@@ -266,7 +265,8 @@ class logmein {
         </td>
       </tr>
       <tr>
-        <td colspan="2" align="center">
+        <td></td>
+        <td align="left">
           <input name="action" class="action" value="login" type="hidden" />
           <input name="submit1" class="submit" value="Login" type="submit" />
         </td>
@@ -289,10 +289,10 @@ class logmein {
     <table>
       <tr>
         <td>
-          <label for="username">Choose A Username</label>
+          <label for="usernameCreate">Choose A Username</label>
         </td>
         <td>
-          <input name="username" id="username" type="text" />
+          <input name="username" id="usernameCreate" type="text" />
         </td>
       </tr>
       <tr>
@@ -329,7 +329,8 @@ class logmein {
         </td>
       </tr>
       <tr>
-        <td colspan="2" align="center">
+        <td></td>
+        <td align="left">
           <input name="action" class="action" value="register" type="hidden">
           <input name="submit2" class="submit" value="Register" type="submit">
         </td>
@@ -341,21 +342,21 @@ class logmein {
   }
 	
 	  //reset password form
-  function changepasswordform($formname, $formclass, $formaction){
-    //conect to DB
+  function changepasswordform($formname, $formclass, $formaction){		
+		//conect to DB
     $this->dbconnect();
     echo'
-<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
+<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="">
   <script type="text/javascript" src="form_control.js"></script>
   <fieldset>
     <legend>Change Password</legend>
     <table>
       <tr>
         <td>
-          <label for="username">Choose A Username</label>
+          <label for="usernameChange">Choose A Username</label>
         </td>
         <td>
-          <input name="username" id="username" type="text" />
+          <input name="username" id="usernameChange" type="text" />
         </td>
       </tr>
       <tr>
@@ -384,9 +385,9 @@ class logmein {
         </td>
       </tr>
       <tr>
-        <td colspan="2" align="center">
-          <input name="action" class="action" value="changepassword" type="hidden">
-          <input name="submit3" class="submit" value="Update Password" type="submit">
+			  <td></td>
+        <td align="left">
+          <input name="submit3" class="submit" value="Update Password" type="button" onclick="changepassword()">
         </td>
       </tr>
     </table>
@@ -413,7 +414,8 @@ class logmein {
         </td>
       </tr>
       <tr>
-        <td colspan="2" align="center">
+        <td></td>
+        <td align="left">
           <input name="action" class="action" value="resetlogin" type="hidden">
           <input name="submit4" class="submit" value="Reset Password" type="submit">
         </td>

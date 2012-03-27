@@ -27,14 +27,17 @@ if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] !=
 			<div style="clear:both;"></div>
 		  <?php include('includes\sidebar.php'); ?>
 			<div style="overflow:hidden;"></div>
-      <div id="admin">
+      <div id="admin" style="float:left; margin-left:1em;">
         <h1>Welcome <?php echo $_SESSION['userfullname']; ?></h1>
 				<?php
 					$log->newuserform("newuserformname", "newuserformid", "form_action.php");
+					//
 					$log->changepasswordform("changepasswordformname", "changepasswordformid", "form_action.php");
+					//
 					$log->new_patient_form("blah", "blah", "form_action.php")
 			  ?>
       </div> <!-- content -->
+			<div style="clear:both"></div>
     </div> <!-- wrapper -->
 		<?php include('includes\footer.php'); ?>
   </body>
@@ -43,3 +46,4 @@ if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] !=
 <?php
 }
 ?>
+

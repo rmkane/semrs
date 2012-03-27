@@ -17,10 +17,7 @@
 	  <?php include('includes\header.php'); ?>
     <div id="wrapper">
 			<div style="clear:both;"></div>
-      <div style="float:left; width:24%; text-align:center;">
-			  <img src="images/logo.png" alt="">
-			</div>
-			<div id="login" style="float:left; width:50%; text-align:left;">
+			<div id="login" style="background:url('images/logo.png') no-repeat; min-height:320px; width:100%; padding-top:1em;">
 				<?php
 					$log->loginform("loginformname", "loginformid", "form_action.php");
 					$log->resetform("resetformname", "resetformid", "form_action.php");
