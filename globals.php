@@ -39,8 +39,8 @@ $GLOBALS['level_type'] = 'type';
 $GLOBALS['css_header'] = 'stylesheets/stylesheet.css';
 
 ////////////////////////////////////////
-/////////// Header/Footer Info /////////////////
+///////// Header/Footer Info ///////////
 ////////////////////////////////////////
 $GLOBALS['heading'] = 'Welcome to MCHC';
-$GLOBALS['footer'] = 'Kane &amp; Orndorff | Copyright &copy; 2011-2012'
+$GLOBALS['footer'] = 'SEMRS | Kane &amp; Orndorff | Copyright &copy; 2011-2012'
 ?>

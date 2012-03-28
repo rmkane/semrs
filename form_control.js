@@ -116,7 +116,37 @@ function changepassword(form_id) {
 	var new_pass1 = document.getElementById('newpassword1').value;
 	var new_pass2 = document.getElementById('newpassword2').value;
 	// Send data to the form action
-	var s = "action=changepassword&username=" + name + "&oldpassword=" + old_pass + "&newpassword1=" + new_pass1 + "&newpassword2=" + new_pass2
+	var s = "action=changepassword&username=" + name + "&oldpassword=" + old_pass + "&newpassword1=" + new_pass1 + "&newpassword2=" + new_pass2;
 	requestForm(s, form_id);
+}
+
+function addpatient(form_id) {
+	// Get form information
+	var title = document.getElementById('title').value;
+	var fname = document.getElementById('fname').value;
+	var mname = document.getElementById('mname').value;
+	var lname = document.getElementById('lname').value;
+	var dob = document.getElementById('dob').value;
+	var sex = document.getElementById('sex').value;
+	var race = document.getElementById('race').value;
+	var ethnicity = document.getElementById('ethnicity').value;
+	var street = document.getElementById('street').value;
+	var city = document.getElementById('city').value;
+	var postal_code = document.getElementById('postal_code').value;
+	var country = document.getElementById('geo_country_reference').value;
+	var phone_home = document.getElementById('home').value;
+	var phone_cell = document.getElementById('cell').value;
+	var regdate = getDate();	
+	// Send data to the form action
+	var s = "action=addpatient&title=" + title + "&fname=" + fname + "&mname=" + mname + "&lname=" + lname + "&dob=" + dob + "&sex=" + sex + "&race=" + race + "&ethnicity=" + ethnicity + "&street=" + street + "&city=" + city + "&postal_code=" + postal_code + "&country=" + country + "&phone_home=" + phone_home + "&phone_cell=" + phone_cell + "&regdate=" + regdate;
+	requestForm(s, form_id);
+}
+
+function getDate() {
+  var currentTime = new Date()
+  var month = currentTime.getMonth() + 1
+  var day = currentTime.getDate()
+  var year = currentTime.getFullYear()
+  return year + "-" + month + "-" + day;
 }
 

@@ -16,11 +16,11 @@ class logmein {
   var $password_logon = '';						//Database PASSWORD
  
   //table fields
-  var $user_table = 'users';          //Users table name
+  var $user_table = 'users';
 	var $user_id = 'id';
-  var $user_email = 'email';     //USERNAME column (value MUST be valid email)
-  var $user_password = 'password';      //PASSWORD column
-  var $user_level = 'userlevel';      //(optional) userlevel column
+  var $user_email = 'email';
+  var $user_password = 'password';
+  var $user_level = 'userlevel';
 	var $user_fname = 'fname';
 	var $user_mname = 'mname';
 	var $user_lname = 'lname';
@@ -33,6 +33,23 @@ class logmein {
 	var $level_table = 'level';
 	var $level_id = 'id';
 	var $level_type = 'type';
+	
+	var $patient_table = 'patient_data';
+	var $patient_title = 'title';
+	var $patient_fname = 'fname';
+	var $patient_mname = 'mname';
+	var $patient_lname = 'lname';
+	var $patient_dob = 'DOB';
+	var $patient_sex = 'sex';
+	var $patient_race = 'race';
+	var $patient_ethnicity = 'ethnicity';
+	var $patient_street = 'street';
+	var $patient_city = 'city';
+	var $patient_postal_code = 'postal_code';
+	var $patient_country = 'country';
+	var $patient_phone_home = 'phone_home';
+	var $patient_phone_cell = 'phone_cell';
+	var $patient_regdate = 'regdate';
  
   //encryption
   var $encrypt = false;       //set to true to use md5 encryption for the password
@@ -241,6 +258,16 @@ class logmein {
     }
     return $pass;
   }
+	
+		// I added this
+	function createpatient($title, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $postal_code, $country, $phone_home, $phone_cell, $regdate) {
+	  //conect to DB
+    $this->dbconnect();
+		//if both passwords match
+		$qry = $this->qry("INSERT INTO ".$this->patient_table." (".$this->patient_title.",".$this->patient_fname.",".$this->patient_mname.",".$this->patient_lname.",".$this->patient_dob.",".$this->patient_sex.",".$this->patient_race.",".$this->patient_ethnicity.",".$this->patient_street.",".$this->patient_city.",".$this->patient_postal_code.",".$this->patient_country.",".$this->patient_phone_home.",".$this->patient_phone_cell.",".$this->patient_regdate.") VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');", $title, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $postal_code, $country, $phone_home, $phone_cell, $regdate);
+		echo "New Patient: ".$lname." ".$mname.", ".$fname." was created!";
+		return true;
+	}
  
   //login form
   function loginform($formname, $formclass, $formaction){
@@ -316,11 +343,11 @@ class logmein {
         </td>
       </tr>
       <tr>';
-        $this->dropdown('Choose Facility',$this->facility_table, $this->facility_id, $this->facility_name);
+        $this->dropdown('Choose Facility', 'Facility', $this->facility_table, $this->facility_id, $this->facility_name);
         echo '
       </tr>
       <tr>';
-        $this->dropdown('Choose User Level', $this->level_table, $this->level_id, $this->level_type);
+        $this->dropdown('Choose User Level', 'User Level', $this->level_table, $this->level_id, $this->level_type);
         echo'
       </tr>
       <tr>
@@ -442,43 +469,48 @@ class logmein {
 ';
   }
 	
-	function new_patient_form($formname, $formclass, $formaction){
+	function new_patient_form(){
     //conect to DB
     $this->dbconnect();
     echo'
-<form name="new_patient_form" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
-  <fieldset>
+<form name="newPatient_form" method="post" id="newPatient_form" action="">
+  <script type="text/javascript" src="form_control.js"></script>
+	<fieldset>
     <legend>New Patient</legend>
     <table>
       <tr>
         <td>
           <label>Name</label>
         </td>
-        <td>
-          <select title="Title">
+        <td colspan="5">
+          <select name="title" id="title" title="Title">
             <option>Unassigned</option>
             <option>Mr.</option>
             <option>Mrs.</option>
             <option>Ms.</option>
             <option>Dr.</option>
           </select>
-        </td>
-        <td>
-          <input type="text" name="fname" value="" size="10" title="First Name" />
-        </td>
-        <td>
-          <input type="text" name="mname" value="" size="5"  title="Middle Name" />
-        </td>
-        <td>
-          <input type="text" name="lname" value=""  size="10" title="Last Name" />
+          <input type="text" name="fname" id="fname" value="" size="10" title="First Name" />
+          <input type="text" name="mname" id="mname" value="" size="5"  title="Middle Name" />
+          <input type="text" name="lname" id="lname" value=""  size="10" title="Last Name" />
         </td>
       </tr>
       <tr>
         <td>
           <label>DOB</label>
         </td>
-        <td colspan="3">
-          <input type="text" name="dob" value="" size="10" title="Date of Birth" /> <span style="font-size:smaller" >YYYY/MM/DD</span>
+        <td colspan="2">
+          <input name="dob" id="dob" type="text" value="" size="10" title="Date of Birth" />
+					<span style="font-size:smaller" >YYYY/MM/DD</span>			  
+				</td>
+				<td>
+          <label>Sex</label>
+        </td>
+        <td>
+					<select name="sex" id="sex" title="Gender">
+					  <option value="M">Male</option>
+						<option value="F">Female</option>
+					</select>
         </td>
       </tr>
       <tr>
@@ -486,7 +518,7 @@ class logmein {
           <label>Race</label>
         </td>
         <td colspan="4">
-          <select title="Race">
+          <select name="race" id="race" title="Race">
             <option value="Unknown">Unknown</option>
             <option value="American Indian">American Indian or Alaska Native</option>
             <option value="Asian">Asian</option>
@@ -502,7 +534,7 @@ class logmein {
           <label>Ethnicity</label>
         </td>
         <td colspan="4">
-          <select title="Ethnicity">
+          <select name="ethnicity" id="ethnicity" title="Ethnicity">
             <option value="Unknown">Unknown</option>
             <option value="Hispanic">Hispanic</option>
             <option value="Non-Hispanic">Non-Hispanic</option>
@@ -514,53 +546,52 @@ class logmein {
           <label>Address</label>
         </td>
         <td colspan="2">
-          <input type="text" name="street" value="" size="20" title="Street" />
+          <input name="street" id="street" type="text" value="" size="27" title="Street" />
         </td>
       </tr>
       <tr>
         <td></td>
         <td>
-          <input type="text" name="city" value="" size="10" title="City" />
+          <input name="city" id="city" type="text" value="" size="10" title="City" />
         </td>
         <td>
-          <input type="text" name="state" value="" size="10" title="State" />
+          <input name="state" id="state" type="text" value="" size="10" title="State" />
         </td>
         <td>
-          <input type="text" name="zip" value="" size="5" title="Postal Code" />
-        </td>
-        <td>
-          <input type="text" name="country" value="" size="10" title="Country" />
-        </td>
+          <input name="postal_code" id="postal_code" type="text" value="" size="5" title="Postal Code" />
+        </td>';
+					$this->dropdown('','Country','geo_country_reference', 'countries_id', 'countries_name');
+					echo '
       </tr>
       <tr>
         <td>
           <label>Phone</label>
         </td>
-        <td>
-          <input type="text" name="home" value="" size="10" title="Home Phone" />
+        <td colspan="2">
+          <input name="home" id="home" type="text" value="" size="10" title="Home Phone" />(Home)
         </td>
-        <td  align="left">
-          <label>(Home)</label>
-        </td>
-        <td>
-          <input type="text" name="country" value="" size="10" title="Cell Phone" />
-        </td>
-        <td align="left">
-          <label>(Cell)</label>
+        <td colspan="2">
+          <input name="cell" id="cell" type="text" value="" size="10" title="Cell Phone" />(Cell)
         </td>
       </tr>
+			<tr>
+				<td></td>
+        <td align="center" colspan="4">
+          <input class="submit" value="Create Patient" type="button" onclick="addpatient(\'newPatient_form\')" />
+        </td>
+			</tr>
     </table>
   </fieldset>
 </form>
     ';
   }
-	
-	
-	
+		
 	// Creates a dropdown menu for a specific table
-	function dropdown($label, $table, $value, $option) {
+	function dropdown($label, $title, $table, $value, $option) {
 	  $this->dbconnect();
-		$dropdown_list = '<td><label for="'.$table.'">'.$label.'</label></td><td><select name="'.$table.'" id="'.$table.'">';
+		$dropdown_list = '';
+		$dropdown_list .= $label == '' ? '' : '<td><label for="'.$table.'">'.$label.'</label></td>';
+		$dropdown_list .= '<td><select title="'.$title.'" name="'.$table.'" id="'.$table.'">';
 		$qry = "SELECT * FROM ".$table.";";
     $result = mysql_query($qry) or die(mysql_error());
     while($row = mysql_fetch_assoc($result)) { $dropdown_list .= "<option value ='".$row[$value]."'>".$row[$option]."</option>"; }
