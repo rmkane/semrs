@@ -142,6 +142,15 @@ function addpatient(form_id) {
 	requestForm(s, form_id);
 }
 
+function searchpatient(form_id) {
+	// Get form information
+	var type = document.getElementById('search_type').value;
+	var input = document.getElementById('search_input').value;
+	// Send data to the form action
+	var s = "action=searchpatient&type=" + type + "&input=" + input;
+	requestForm(s, form_id);
+}
+
 function getDate() {
   var currentTime = new Date()
   var month = currentTime.getMonth() + 1

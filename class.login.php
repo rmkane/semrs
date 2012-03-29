@@ -263,10 +263,28 @@ class logmein {
 	function createpatient($title, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $postal_code, $country, $phone_home, $phone_cell, $regdate) {
 	  //conect to DB
     $this->dbconnect();
+		//
+		if ($lname != "" && $dob != "") {
+			$qry = $this->qry("INSERT INTO ".$this->patient_table." (".$this->patient_title.",".$this->patient_fname.",".$this->patient_mname.",".$this->patient_lname.",".$this->patient_dob.",".$this->patient_sex.",".$this->patient_race.",".$this->patient_ethnicity.",".$this->patient_street.",".$this->patient_city.",".$this->patient_postal_code.",".$this->patient_country.",".$this->patient_phone_home.",".$this->patient_phone_cell.",".$this->patient_regdate.") VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');", $title, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $postal_code, $country, $phone_home, $phone_cell, $regdate);
+			echo "New Patient: ".$lname." ".$mname.", ".$fname." was created!";
+			return true;
+		} else return false;
+	}
+	
+	function displaypatientinfo($search_type, $search_input) {
+		//conect to DB
+    $this->dbconnect();
 		//if both passwords match
-		$qry = $this->qry("INSERT INTO ".$this->patient_table." (".$this->patient_title.",".$this->patient_fname.",".$this->patient_mname.",".$this->patient_lname.",".$this->patient_dob.",".$this->patient_sex.",".$this->patient_race.",".$this->patient_ethnicity.",".$this->patient_street.",".$this->patient_city.",".$this->patient_postal_code.",".$this->patient_country.",".$this->patient_phone_home.",".$this->patient_phone_cell.",".$this->patient_regdate.") VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');", $title, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $postal_code, $country, $phone_home, $phone_cell, $regdate);
-		echo "New Patient: ".$lname." ".$mname.", ".$fname." was created!";
-		return true;
+		$condition = $search_type == 'DOB' ? '=' : 'LIKE';
+		$search_input = $condition == "LIKE" ? "%".$search_input : $search_input;
+	  $qry = "SELECT * FROM ".$this->patient_table." WHERE ".$search_type." ".$condition." '".$search_input."';";
+		$result = mysql_query($qry) or die(mysql_error());
+		if (mysql_num_rows($result) > 0) {
+			while($row = mysql_fetch_array($result)) {
+				echo "".$row[$this->patient_lname]." ".$row[$this->patient_mname].", ".$row[$this->patient_fname]."; Age:".$this->GetAge($row[$this->patient_dob])."\n";
+			}
+			return true;
+		} else return false;
 	}
  
   //login form
@@ -307,7 +325,7 @@ class logmein {
 ';
   }
 	
-	  //login form
+	  //new user form
   function newuserform($formname, $formclass, $formaction){
     //conect to DB
     $this->dbconnect();
@@ -370,7 +388,7 @@ class logmein {
 ';
   }
 	
-	  //reset password form
+	  //change password form
   function changepasswordform(){		
 		//conect to DB
     $this->dbconnect();
@@ -455,7 +473,7 @@ class logmein {
 ';
   }
 	
-		  //logout form
+	//logout form
   function logoutform($formname, $formclass, $formaction){
     //conect to DB
     $this->dbconnect();
@@ -469,6 +487,7 @@ class logmein {
 ';
   }
 	
+	//new patient form
 	function new_patient_form(){
     //conect to DB
     $this->dbconnect();
@@ -585,6 +604,40 @@ class logmein {
 </form>
     ';
   }
+	
+	//search form
+  function search_patient_form(){
+    //conect to DB
+    $this->dbconnect();
+    echo'
+<form name="searchPatient_form" method="post" id="searchPatient_form" action="">
+  <fieldset>
+    <legend>Search Patient</legend>
+    <table>
+      <tr>
+			  <td>
+				  <label>Search By<label>
+				</td>
+				<td>
+				  <select name="search_type" id="search_type">
+					  <option value="lname">Last Name</option>
+						<option value="DOB">Date of Birth</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+        <td colspan="2">
+          <input name="search_input" id="search_input" type="text" value="" size="22" title="Search for a patient." />
+        </td>
+        <td>
+          <input class="submit" value="Search" type="button" onclick="searchpatient(\'searchPatient_form\')" />
+        </td>
+      </tr>
+    </table>
+  </fieldset>
+</form>
+';
+  }
 		
 	// Creates a dropdown menu for a specific table
 	function dropdown($label, $title, $table, $value, $option) {
@@ -598,6 +651,18 @@ class logmein {
     $dropdown_list .= '</select></td>';
 		echo $dropdown_list;
 	}
+	
+	function GetAge($birthdate) {
+		// Explode the date (YYYY-MM-DD)
+		list($birth_year, $birth_month, $birth_day) = explode("-", $birthdate);
+		// Find the differences
+		$year_diff = date("Y") - $birth_year;
+		$month_diff = date("m") - $birth_month;
+		$day_diff = date("d") - $birth_day;
+		// If the birthday has not occured this year
+		if ($day_diff < 0 || $month_diff < 0) $year_diff--;
+		return $year_diff;
+  }
 	
 	//function to install logon table
   function cratetable($users_table){

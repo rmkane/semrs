@@ -26,10 +26,11 @@ if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] !=
 			<div style="clear:both;"></div>
 		  <?php include('includes\sidebar.php'); ?>
 			<div style="overflow:hidden;"></div>
-      <div id="admin" style="float:left; margin-left:1em;">
+      <div id="content">
         <h1>Welcome <?php echo $_SESSION['userfullname']; ?></h1>
 				<?php
-					$log->new_patient_form()
+					$log->new_patient_form();
+					$log->search_patient_form();
 			  ?>
       </div> <!-- content -->
 			<div style="clear:both"></div>
