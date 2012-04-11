@@ -20,7 +20,6 @@ SET time_zone = "+00:00";
 -- Database: `semrs`
 --
 
-drop database semrs;
 create database semrs;
 use semrs;
 

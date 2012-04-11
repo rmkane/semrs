@@ -8,8 +8,7 @@ if($_POST['action'] == "login"){
     if($log->login("logon", $_POST['username'], $_POST['password']) == true){
         //do something on successful login
 				// CHECK USER LEVELS AND REDIRECT TO APPROPRIATE FILES
-				echo "Successful Login: ".$_SESSION['userfullname']."! You are now being redirected.";
-				
+				//echo "Successful Login: ".$_SESSION['userfullname']."! You are now being redirected.";
 				switch($_SESSION['userlevel']) {
 				  case 0: // Admin
 						header("Location:admin.php");
@@ -18,14 +17,14 @@ if($_POST['action'] == "login"){
 						header("Location:physician.php");
 						break;
 				  case 2: // Receptionist
-					  echo "<br />Receptionist";
+					  header("Location:receptionist.php");
 						break;
 				  case 3: // Pharmacist
-					  echo "<br />Pharmacist";
+					  header("Location:pharmacist.php");
 						break;
 					default: // Unknown User
-					  echo "<br />Unknown";
-						break;
+					  $log->logout();
+						header("location:logout.php");
 				}
     } else{
         //do something on FAILED login
@@ -85,14 +84,15 @@ if($_POST['action'] == "searchpatient"){
 
 if($_POST['action'] == "logout"){
   $log->logout();
-	echo "Redirecting...";
-	alertbox("Successfully logged out!", "index.php");
+	//echo "Redirecting...";
+	//alertbox("Successfully logged out!", "index.php");
+	header("location:logout.php");
 }
 
 function alertbox($message, $origin_page) {
-  echo '
+  return '
 	<script type="text/javascript">
-	alert("'.$message.'");
+	if ($message.length < 1) alert("'.$message.'");
 	window.location = "'.$origin_page.'";
 	</script>
 	';

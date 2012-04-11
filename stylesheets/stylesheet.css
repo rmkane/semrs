@@ -106,14 +106,15 @@ h1 {
 /* Sidebar Styling */
 #sidebar {
   float:left;
-	background:#eee;
+	background:#dd0;
 	padding:0.25em;
+	display:block;
+	width:10em;
 }
 #sidebar ul {
   list-style-type:none;
   margin:0;
   padding:0;
-  width:10em;
 }
 #sidebar ul a{
   background:#008;
@@ -123,7 +124,6 @@ h1 {
 	padding:0.25em 0 0.25em 0;
   text-align:center;
   text-decoration:none;
-  width:10em;
 }  
 #sidebar ul a:hover{
   background:#77f;
@@ -134,8 +134,7 @@ h1 {
 #content {
   background:#ddd;
 	padding:1em;
-	margin-left:1em;
-	float:left;
+	margin-left:11em;	
 }
 
 /* Footer Styling */	

@@ -4,8 +4,10 @@ error_reporting(0);
 
 include('globals.php');	
 
-//start session
-session_start();
+session_cache_expire(10); // Call before start
+session_start(); // Start session
+$inactive = 600; // 10 minute timeout
+
 // http://www.emirplicanic.com/php/simple-phpmysql-authentication-class
 class logmein {
   //database setup
@@ -79,10 +81,15 @@ class logmein {
     if($row != "Error"){
       if($row[$this->user_email] !="" && $row[$this->user_password] !=""){
         //register sessions you can add additional sessions here if needed
-        $_SESSION['useremail'] = $row[$this->user_email];
+        $_SESSION['userid'] = $row[$this->user_id];
+				$_SESSION['useremail'] = $row[$this->user_email];
 				$_SESSION['userfullname'] = $row[$this->user_fname]." ".$row[$this->user_mname]." ".$row[$this->user_lname];
 				$_SESSION['loggedin'] = $row[$this->user_password];
         $_SESSION['userlevel'] = $row[$this->user_level];
+				
+				$datetime = gmdate("Y-m-d H:i:s", time());
+				$qry = $this->qry("INSERT INTO `log`(`date`, `event`, `user_id`, `level_id`, `comments`, `user_notes`) VALUES ('?', '?', '?', '?', '?', '?');", $datetime, 'log in', $_SESSION['userid'], $_SESSION['userlevel'], '', '', '');
+				
         return true;
       } else {
         session_destroy();
@@ -113,7 +120,9 @@ class logmein {
   
 	//logout function
   function logout(){
-	  $_SESSION = array();
+		$datetime = gmdate("Y-m-d H:i:s", time());
+		$qry = $this->qry("INSERT INTO `log`(`date`, `event`, `user_id`, `level_id`, `comments`, `user_notes`) VALUES ('?', '?', '?', '?', '?', '?');", $datetime, 'log out', $_SESSION['userid'], $_SESSION['userlevel'], '', '', '');
+		$_SESSION = array();
     session_destroy();
   return;
   }
@@ -663,6 +672,12 @@ class logmein {
 		if ($day_diff < 0 || $month_diff < 0) $year_diff--;
 		return $year_diff;
   }
+	
+	function getTimeStamp() {
+		$mysqldate = date( 'Y-m-d H:i:s', $phpdate );
+		$phpdate = strtotime( $mysqldate );
+		return $phpdate;
+	}
 	
 	//function to install logon table
   function cratetable($users_table){
