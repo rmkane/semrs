@@ -1,7 +1,9 @@
+<!-- Sidebar for Physician -->
 <div id="sidebar">
   <ul>
-    <li><a href="">Add Patient</a></li>
-    <li><a href="">Update Patient</a></li>
-		<li><a href="">Account Management</a></li>
+    <li><a href="main.php?newpatient">New Patient</a></li>
+    <li><a href="main.php?updatepatient">Update Patient</a></li>
+		<li><a href="main.php?prescriptions">Add Prescription</a></li>
+		<li><a href="main.php?account">Account Management</a></li>
   </ul>
-</div> <!-- sidebar -->
+</div>

@@ -1,4 +1,6 @@
 <?php
+	$pagearray = array("home", "help", "about", "newpatient", "updatepatient", "newvisit", "account");
+	$which =  $_SERVER["QUERY_STRING"];
 	include("../../class.login.php");
   $log = new logmein();		//Instentiate the class
   $log->dbconnect();			//Connect to the database
@@ -36,9 +38,17 @@ if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] !=
       <div id="content">
         <h1>Welcome <?php echo $_SESSION['userfullname']; ?></h1>
 				<?php
-					$log->newuserform();
-					$log->changepasswordform();
-			  ?>
+					if ($which == "") include("home.php");
+					else if (in_array($which, $pagearray)) include($which.".php");
+					else {
+					  echo "
+						  <h1>Not Found</h1>
+							<h3>The requested URL".$_SERVER['PHP_SELF'].'?'.$which." was not found on this server.</h3>
+							<hr />
+							<h3>".$_SERVER['SERVER_SOFTWARE']." Server at ".$_SERVER['HTTP_HOST']." Port ".$_SERVER['SERVER_PORT']."</h3>
+						";
+					}
+				?>
       </div> <!-- content -->
 			<div style="clear:both"></div>
     </div> <!-- wrapper -->

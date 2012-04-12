@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.10.1
+-- version 3.4.5
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 12, 2012 at 08:38 PM
--- Server version: 5.5.20
--- PHP Version: 5.3.10
+-- Generation Time: Mar 29, 2012 at 03:26 PM
+-- Server version: 5.5.16
+-- PHP Version: 5.3.8
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -20,6 +20,9 @@ SET time_zone = "+00:00";
 -- Database: `semrs`
 --
 
+create database semrs;
+use semrs;
+
 -- --------------------------------------------------------
 
 --
@@ -28,17 +31,17 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `facility` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `phone` varchar(255) NOT NULL DEFAULT '',
-  `fax` varchar(255) NOT NULL DEFAULT '',
-  `street` varchar(255) NOT NULL DEFAULT '',
-  `postal_code` varchar(255) NOT NULL DEFAULT '',
-  `city` varchar(255) NOT NULL DEFAULT '',
-  `state` varchar(255) NOT NULL DEFAULT '',
-  `country` varchar(255) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL DEFAULT '''''',
+  `phone` varchar(255) NOT NULL DEFAULT '''''',
+  `fax` varchar(255) NOT NULL DEFAULT '''''',
+  `street` varchar(255) NOT NULL DEFAULT '''''',
+  `postal_code` varchar(255) NOT NULL DEFAULT '''''',
+  `city` varchar(255) NOT NULL DEFAULT '''''',
+  `state` varchar(255) NOT NULL DEFAULT '''''',
+  `country` varchar(255) NOT NULL DEFAULT '''''',
   `notes` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `facility`
@@ -502,27 +505,6 @@ INSERT INTO `level` (`id`, `type`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `log`
---
-
-CREATE TABLE IF NOT EXISTS `log` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `date` datetime DEFAULT NULL,
-  `event` varchar(255) DEFAULT NULL,
-  `user_id` bigint(20) DEFAULT NULL,
-  `level_id` int(1) DEFAULT NULL,
-  `comments` longtext,
-  `user_notes` longtext,
-  `patient_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `log_ibfk_1` (`user_id`),
-  KEY `log_ibfk_2` (`level_id`),
-  KEY `log_ibfk_3` (`patient_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `patient_data`
 --
 
@@ -637,17 +619,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   KEY `users_ibfk_2` (`userlevel`),
   KEY `users_ibfk_1` (`facility_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `userlevel`, `fname`, `mname`, `lname`, `facility_id`) VALUES
-(1, 'admin', '1a1dc91c907325c69271ddf0c944bc72', 0, NULL, NULL, 'Administrator', 1),
-(2, 'physician', '1a1dc91c907325c69271ddf0c944bc72', 1, NULL, NULL, 'Physician', 1),
-(3, 'receptionist', '1a1dc91c907325c69271ddf0c944bc72', 2, NULL, NULL, 'Receptionist', 1),
-(4, 'pharmacist', '1a1dc91c907325c69271ddf0c944bc72', 3, NULL, NULL, 'Pharmacist', 1);
+(1, 'admin', '1a1dc91c907325c69271ddf0c944bc72', 0, NULL, NULL, 'Administrator', 1);
 
 --
 -- Constraints for dumped tables
@@ -675,14 +654,6 @@ ALTER TABLE `insurance_data`
   ADD CONSTRAINT `insurance_data_ibfk_1` FOREIGN KEY (`patient_id`) REFERENCES `patient_data` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `log`
---
-ALTER TABLE `log`
-  ADD CONSTRAINT `log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `log_ibfk_2` FOREIGN KEY (`level_id`) REFERENCES `level` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `log_ibfk_3` FOREIGN KEY (`patient_id`) REFERENCES `patient_data` (`id`) ON DELETE CASCADE;
-
---
 -- Constraints for table `photo`
 --
 ALTER TABLE `photo`
@@ -701,8 +672,8 @@ ALTER TABLE `prescriptions`
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`facility_id`) REFERENCES `facility` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`userlevel`) REFERENCES `level` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`facility_id`) REFERENCES `facility` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`userlevel`) REFERENCES `level` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
