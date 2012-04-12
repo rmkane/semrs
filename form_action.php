@@ -11,20 +11,20 @@ if($_POST['action'] == "login"){
 				//echo "Successful Login: ".$_SESSION['userfullname']."! You are now being redirected.";
 				switch($_SESSION['userlevel']) {
 				  case 0: // Admin
-						header("Location:admin.php");
+						header("Location:interface/admin/main.php");
 						break;
 				  case 1: // Physician
-						header("Location:physician.php");
+						header("Location:interface/physician/main.php");
 						break;
 				  case 2: // Receptionist
-					  header("Location:receptionist.php");
+					  header("Location:interface/receptionist/main.php");
 						break;
 				  case 3: // Pharmacist
-					  header("Location:pharmacist.php");
+					  header("Location:interface/pharmacist/main.php");
 						break;
 					default: // Unknown User
 					  $log->logout();
-						header("location:logout.php");
+						header("location:interface/logout/main.php");
 				}
     } else{
         //do something on FAILED login
@@ -86,7 +86,7 @@ if($_POST['action'] == "logout"){
   $log->logout();
 	//echo "Redirecting...";
 	//alertbox("Successfully logged out!", "index.php");
-	header("location:logout.php");
+	header("location:interface/login/logout.php");
 }
 
 function alertbox($message, $origin_page) {

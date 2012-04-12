@@ -340,7 +340,7 @@ class logmein {
     $this->dbconnect();
     echo'
 <form name="newUser_form" id="newUser_form" method="post" action="">
-  <script type="text/javascript" src="form_control.js"></script>
+  <script type="text/javascript" src="../..form_control.js"></script>
 	<fieldset>
     <legend>Create User</legend>
     <table>
@@ -403,7 +403,7 @@ class logmein {
     $this->dbconnect();
     echo'
 <form name="changePass_form" id="changePass_form" method="post" action="">
-  <script type="text/javascript" src="form_control.js"></script>
+  <script type="text/javascript" src="../../form_control.js"></script>
   <fieldset>
     <legend>Change Password</legend>
     <table>
@@ -502,7 +502,7 @@ class logmein {
     $this->dbconnect();
     echo'
 <form name="newPatient_form" method="post" id="newPatient_form" action="">
-  <script type="text/javascript" src="form_control.js"></script>
+  <script type="text/javascript" src="../../form_control.js"></script>
 	<fieldset>
     <legend>New Patient</legend>
     <table>

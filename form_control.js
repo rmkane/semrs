@@ -55,7 +55,7 @@ function clearForm(oForm) {
 function requestForm(s, form_id) {
   var htmlHttp;
 	htmlHttp = new XMLHttpRequest();
-	htmlHttp.open("POST", "form_action.php", true);
+	htmlHttp.open("POST", "../../form_action.php", true);
 	htmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	htmlHttp.onreadystatechange = handleReq;	
 	htmlHttp.send(s);
