@@ -31,6 +31,7 @@ if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] !=
   <body>
 	  <?php include('../includes/header.php'); ?>
     <div id="wrapper">
+			<div style="float:left; margin:2px;"><?php echo $log->search_patient_form(); ?></div>
 		  <?php include('../includes/nav.php'); ?>
 			<div style="clear:both;"></div>
 		  <?php include('sidebar.php'); ?>

@@ -25,7 +25,7 @@
 			<div id="login" style="background:url('../../images/logo.png') no-repeat; min-height:320px; width:100%; padding-top:1em;">
 				<div style="margin-bottom:1em;">
 					<?php
-						$log->loginform("loginformname", "loginformid", "../../form_action.php");
+						$log->loginform("../../form_action.php");
 					?>
 				</div>
 				<div id="hideLink" style="text-align:center;">
@@ -33,7 +33,7 @@
 				</div>
 				<div id="showForm" style="display:none">
 					<?php
-						$log->resetform("resetformname", "resetformid", "form_action.php");
+						$log->resetform("../../form_action.php");
 					?>
 				</div>
       </div> <!-- content -->

@@ -52,10 +52,10 @@ function clearForm(oForm) {
 }
 
 /* Create a XMLHttpRequest object */
-function requestForm(s, form_id) {
-  var htmlHttp;
-	htmlHttp = new XMLHttpRequest();
-	htmlHttp.open("POST", "../../form_action.php", true);
+function requestForm(s, form_id, alert_mssg) {
+  var htmlHttp = new XMLHttpRequest();
+	var url = "../../form_action.php"
+	htmlHttp.open("POST", url, true);
 	htmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	htmlHttp.onreadystatechange = handleReq;	
 	htmlHttp.send(s);
@@ -89,7 +89,12 @@ function requestForm(s, form_id) {
 			**********************************************************************/
 			// continue only if HTTP status is "OK"
 			if (htmlHttp.status == 200) {
-				alert(htmlHttp.responseText);
+				var return_data = htmlHttp.responseText;
+				if (alert_mssg) alert(return_data);
+				else {
+					win = window.open("", return_data, "width=300,height=200");
+					win.document.writeln(return_data);
+				}
 				clearForm(document.getElementById(form_id));
 			}
 		}
@@ -106,18 +111,17 @@ function newuser(form_id) {
 	var lname = document.getElementById('lname').value;
 	// Send data to the form action
 	var s = "action=register&username=" + username + "&password1=" + pass1 + "&password2=" + pass2 + "&facility=" + facility + "&level=" + level + "&lname=" + lname;
-	requestForm(s, form_id);
+	requestForm(s, form_id, true);
 }
 
 function changepassword(form_id) {
   // Get form information
-	var name = document.getElementById('usernameChange').value;
 	var old_pass = document.getElementById('oldpassword').value;
 	var new_pass1 = document.getElementById('newpassword1').value;
 	var new_pass2 = document.getElementById('newpassword2').value;
 	// Send data to the form action
-	var s = "action=changepassword&username=" + name + "&oldpassword=" + old_pass + "&newpassword1=" + new_pass1 + "&newpassword2=" + new_pass2;
-	requestForm(s, form_id);
+	var s = "action=changepassword&oldpassword=" + old_pass + "&newpassword1=" + new_pass1 + "&newpassword2=" + new_pass2;
+	requestForm(s, form_id, true);
 }
 
 function addpatient(form_id) {
@@ -139,7 +143,7 @@ function addpatient(form_id) {
 	var regdate = getDate();	
 	// Send data to the form action
 	var s = "action=addpatient&title=" + title + "&fname=" + fname + "&mname=" + mname + "&lname=" + lname + "&dob=" + dob + "&sex=" + sex + "&race=" + race + "&ethnicity=" + ethnicity + "&street=" + street + "&city=" + city + "&postal_code=" + postal_code + "&country=" + country + "&phone_home=" + phone_home + "&phone_cell=" + phone_cell + "&regdate=" + regdate;
-	requestForm(s, form_id);
+	requestForm(s, form_id, true);
 }
 
 function searchpatient(form_id) {
@@ -148,7 +152,7 @@ function searchpatient(form_id) {
 	var input = document.getElementById('search_input').value;
 	// Send data to the form action
 	var s = "action=searchpatient&type=" + type + "&input=" + input;
-	requestForm(s, form_id);
+	requestForm(s, form_id, false);
 }
 
 function getDate() {

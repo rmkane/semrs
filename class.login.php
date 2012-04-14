@@ -165,9 +165,10 @@ class logmein {
 		}
 	}
 	
-	function changepassword($username, $oldpassword, $newpassword1, $newpassword2) {
+	function changepassword($oldpassword, $newpassword1, $newpassword2) {
 	  //conect to DB
     $this->dbconnect();
+		$username = $_SESSION['useremail'];
 		$result = $this->qry("SELECT ".$this->user_password." FROM ".$this->user_table." WHERE ".$this->user_email." = '?';", $username);
 		$row=mysql_fetch_assoc($result);
 		if(row != "Error") {
@@ -283,369 +284,344 @@ class logmein {
 	function displaypatientinfo($search_type, $search_input) {
 		//conect to DB
     $this->dbconnect();
-		//if both passwords match
+		//if both passwords match		
 		$condition = $search_type == 'DOB' ? '=' : 'LIKE';
-		$search_input = $condition == "LIKE" ? "%".$search_input : $search_input;
-	  $qry = "SELECT * FROM ".$this->patient_table." WHERE ".$search_type." ".$condition." '".$search_input."';";
+		$search_term = $condition == "LIKE" ? "%".$search_input : $search_input;
+	  $qry = "SELECT * FROM ".$this->patient_table." WHERE ".$search_type." ".$condition." '".$search_term."';";
 		$result = mysql_query($qry) or die(mysql_error());
 		if (mysql_num_rows($result) > 0) {
-			while($row = mysql_fetch_array($result)) {
-				echo "".$row[$this->patient_lname]." ".$row[$this->patient_mname].", ".$row[$this->patient_fname]."; Age:".$this->GetAge($row[$this->patient_dob])."\n";
+			$num = mysql_num_rows($result);
+			?>
+			<strong>Found <?php echo $num ?> patients matching <?php echo $search_input ?><br /></strong>
+			<?php while($row = mysql_fetch_array($result)) { ?>
+			<a href="main.php?patient"><?php echo $row[$this->patient_lname] ?> <?php echo $row[$this->patient_mname] ?>, <?php echo $row[$this->patient_fname] ?> 	<?php echo "Age:".$this->GetAge($row[$this->patient_dob]); ?></a><br />
+			<?php 
 			}
 			return true;
 		} else return false;
 	}
  
   //login form
-  function loginform($formname, $formclass, $formaction){
+  function loginform($action_login){
     //conect to DB
     $this->dbconnect();
-    echo'
-<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
-  <fieldset>
-    <legend>Log In</legend>
-    <table>
-      <tr>
-        <td>
-          <label for="username">Username</label>
-        </td>
-        <td>
-          <input name="username" id="username" type="text" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="password">Password</label>
-        </td>
-        <td>
-          <input name="password" id="password" type="password" />
-        </td>
-      </tr>
-      <tr>
-        <td></td>
-        <td align="left">
-          <input name="action" class="action" value="login" type="hidden" />
-          <input name="submit1" class="submit" value="Log In" type="submit" />
-        </td>
-      </tr>
-    </table>
-  </fieldset>
-</form>
-';
+    ?>
+		<form name="login_name" id="login_id" class="login_class" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $action_login ?>">
+			<fieldset>
+				<legend>Log In</legend>
+				<table>
+				<tr>
+					<td>
+						<label for="username">Username</label>
+					</td>
+					<td>
+						<input name="username" id="username" type="text" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label for="password">Password</label>
+					</td>
+					<td>
+						<input name="password" id="password" type="password" />
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td align="left">
+						<input name="action" class="action" value="login" type="hidden" />
+						<input name="submit1" class="submit" value="Log In" type="submit" />
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+	</form>
+	<?php
   }
 	
 	  //new user form
-  function newuserform($formname, $formclass, $formaction){
+  function newuserform($formaction){
     //conect to DB
     $this->dbconnect();
-    echo'
-<form name="newUser_form" id="newUser_form" method="post" action="">
-  <script type="text/javascript" src="../..form_control.js"></script>
-	<fieldset>
-    <legend>Create User</legend>
-    <table>
-      <tr>
-        <td>
-          <label for="usernameCreate">Choose A Username</label>
-        </td>
-        <td>
-          <input name="username" id="usernameCreate" type="text" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="password1">Choose Your Password</label>
-        </td>
-        <td>
-          <input name="password1" id="password1" type="password" onblur="checkpass(\'password1\', \'password2\', \'mssg_newuser\');" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="password2">Re-Enter Your Password</label>
-        </td>
-        <td>
-          <input name="password2" id="password2" type="password" onblur="checkpass(\'password1\', \'password2\', \'mssg_newuser\');" />
-					<span id="mssg_newuser" /></span>
-        </td>
-      </tr>
-      <tr>';
-        $this->dropdown('Choose Facility', 'Facility', $this->facility_table, $this->facility_id, $this->facility_name);
-        echo '
-      </tr>
-      <tr>';
-        $this->dropdown('Choose User Level', 'User Level', $this->level_table, $this->level_id, $this->level_type);
-        echo'
-      </tr>
-      <tr>
-        <td>
-          <label for="lname">Enter Your Last Name</label>
-        </td>
-        <td>
-          <input name="lname" id="lname" type="text">
-        </td>
-      </tr>
-      <tr>
-        <td></td>
-        <td align="left">
-          <input class="submit" value="Register" type="button" onclick="newuser(\'newUser_form\');">
-        </td>
-      </tr>
-    </table>
-  </fieldset>
-</form>
-';
+    ?>
+		<form name="newuser_form" id="newUser_form" method="post" action="">
+			<script type="text/javascript" src="../..form_control.js"></script>
+			<fieldset>
+				<legend>Create User</legend>
+				<table>
+					<tr>
+						<td>
+							<label for="usernameCreate">Choose A Username</label>
+						</td>
+						<td>
+							<input name="username" id="usernameCreate" type="text" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="password1">Choose Your Password</label>
+						</td>
+						<td>
+							<input name="password1" id="password1" type="password" onblur="checkpass(\'password1\', \'password2\', \'mssg_newuser\');" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label for="password2">Re-Enter Your Password</label>
+						</td>
+						<td>
+							<input name="password2" id="password2" type="password" onblur="checkpass(\'password1\', \'password2\', \'mssg_newuser\');" />
+							<span id="mssg_newuser" /></span>
+						</td>
+					</tr>
+					<tr>
+						<?php $this->dropdown('Choose Facility', 'Facility', $this->facility_table, $this->facility_id, $this->facility_name); ?>
+					</tr>
+					<tr>
+						<?php $this->dropdown('Choose User Level', 'User Level', $this->level_table, $this->level_id, $this->level_type); ?>
+					</tr>
+					<tr>
+						<td>
+							<label for="lname">Enter Your Last Name</label>
+						</td>
+						<td>
+							<input name="lname" id="lname" type="text">
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td align="left">
+							<input class="submit" value="Register" type="button" onclick="newuser('newUser_form');">
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</form>
+		<?php
   }
 	
 	  //change password form
   function changepasswordform(){		
 		//conect to DB
     $this->dbconnect();
-    echo'
-<form name="changePass_form" id="changePass_form" method="post" action="">
-  <script type="text/javascript" src="../../form_control.js"></script>
-  <fieldset>
-    <legend>Change Password</legend>
-    <table>
-      <tr>
-        <td>
-          <label for="usernameChange">Choose A Username</label>
-        </td>
-        <td>
-          <input name="username" id="usernameChange" type="text" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="oldpassword">Old Password</label>
-        </td>
-        <td>
-          <input name="oldpassword" id="oldpassword" type="password" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="newpassword1">Enter New Password</label>
-        </td>
-        <td>
-          <input name="newpassword1" id="newpassword1" type="password" onblur="checkpass(\'newpassword1\', \'newpassword2\', \'mssg_changepassword\');" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="newpassword2">Re-Enter New Password</label>
-        </td>
-        <td>
-          <input name="newpassword2" id="newpassword2" type="password" onblur="checkpass(\'newpassword1\', \'newpassword2\', \'mssg_changepassword\');" />
-          <span id="mssg_changepassword"></span>
-        </td>
-      </tr>
-      <tr>
-			  <td></td>
-        <td align="left">
-          <input class="submit" value="Update Password" type="button" onclick="changepassword(\'changePass_form\')">
-        </td>
-      </tr>
-    </table>
-</fieldset>
-</form>
-';
+    ?>
+		<form name="changepass_form" id="changepass_form" method="post" action="">
+			<script type="text/javascript" src="../../form_control.js"></script>
+			<fieldset>
+				<legend>Change Password</legend>
+				<table>
+      		<tr>
+        		<td>
+          		<label for="oldpassword">Old Password</label>
+        		</td>
+		        <td>
+          		<input name="oldpassword" id="oldpassword" type="password" />
+        		</td>
+      		</tr>
+      		<tr>
+        		<td>
+          		<label for="newpassword1">Enter New Password</label>
+        		</td>
+        		<td>
+          		<input name="newpassword1" id="newpassword1" type="password" onblur="checkpass('newpassword1', 'newpassword2', 'mssg_changepassword');" />
+        		</td>
+      		</tr>
+      		<tr>
+        		<td>
+          		<label for="newpassword2">Re-Enter New Password</label>
+        		</td>
+        		<td>
+          		<input name="newpassword2" id="newpassword2" type="password" onblur="checkpass('newpassword1', 'newpassword2', 'mssg_changepassword');" />
+          		<span id="mssg_changepassword"></span>
+        		</td>
+      		</tr>
+		   		<tr>
+						<td></td>
+		     		<td align="left">
+    	     		<input class="submit" value="Update Password" type="button" onclick="changepassword('changepass_form')">
+      			</td>
+		   		</tr>
+	   		</table>
+			</fieldset>
+		</form>
+	<?php
   }
 	
 	  //reset password form
-  function resetform($formname, $formclass, $formaction){
+  function resetform($action_reset){
     //conect to DB
     $this->dbconnect();
-    echo'
-<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
-  <fieldset>
-    <legend>Reset Password</legend>
-    <table>
-      <tr>
-        <td>
-          <label for="username">Username</label>
-        </td>
-        <td>
-          <input name="username" id="username" type="text"></div>
-        </td>
-      </tr>
-      <tr>
-        <td></td>
-        <td align="left">
-          <input name="action" class="action" value="resetlogin" type="hidden">
-          <input name="submit4" class="submit" value="Reset Password" type="submit">
-        </td>
-      </tr>
-    </table>
-  </fieldset>
-</form>
-';
+    ?>
+		<form name="reset_form" id="reset_form" enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $action_reset ?>">
+			<fieldset>
+				<legend>Reset Password</legend>
+				<table>
+					<tr>
+						<td>
+							<label for="username">Username</label>
+						</td>
+						<td>
+							<input name="username" id="username" type="text"></div>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td align="left">
+							<input name="action" class="action" value="resetlogin" type="hidden">
+							<input name="submit4" class="submit" value="Reset Password" type="submit">
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+		</form>
+	<?php
   }
 	
 	//logout form
-  function logoutform($formname, $formclass, $formaction){
+  function logoutform($action_logout){
     //conect to DB
     $this->dbconnect();
-    echo'
-<form name="'.$formname.'" method="post" id="'.$formname.'" class="'.$formclass.'" enctype="application/x-www-form-urlencoded" action="'.$formaction.'">
-  <input name="action" class="action" value="logout" type="hidden" />
-  <input
-	  style="background:none; border:none; color:#fff; padding:0; margin:0" 
-		name="submit5" class="submit" value="Logout" type="submit" />
-</form>
-';
+    ?>
+		<form name="logout_form" id="logout_form" enctype="application/x-www-form-urlencoded" method="post"action="<?php echo $action_logout ?>">
+			<input type="submit" name="submit5" class="submit" value="Logout"
+				style="background:none; border:none; color:#fff; padding:0; margin:0" />
+			<input name="action" class="action" value="logout" type="hidden" />
+		</form>
+	<?php
   }
 	
 	//new patient form
 	function new_patient_form(){
     //conect to DB
     $this->dbconnect();
-    echo'
-<form name="newPatient_form" method="post" id="newPatient_form" action="">
-  <script type="text/javascript" src="../../form_control.js"></script>
-	<fieldset>
-    <legend>New Patient</legend>
-    <table>
-      <tr>
-        <td>
-          <label>Name</label>
-        </td>
-        <td colspan="5">
-          <select name="title" id="title" title="Title">
-            <option>Unassigned</option>
-            <option>Mr.</option>
-            <option>Mrs.</option>
-            <option>Ms.</option>
-            <option>Dr.</option>
-          </select>
-          <input type="text" name="fname" id="fname" value="" size="10" title="First Name" />
-          <input type="text" name="mname" id="mname" value="" size="5"  title="Middle Name" />
-          <input type="text" name="lname" id="lname" value=""  size="10" title="Last Name" />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label>DOB</label>
-        </td>
-        <td colspan="2">
-          <input name="dob" id="dob" type="text" value="" size="10" title="Date of Birth" />
-					<span style="font-size:smaller" >YYYY/MM/DD</span>			  
-				</td>
-				<td>
-          <label>Sex</label>
-        </td>
-        <td>
-					<select name="sex" id="sex" title="Gender">
-					  <option value="M">Male</option>
-						<option value="F">Female</option>
-					</select>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label>Race</label>
-        </td>
-        <td colspan="4">
-          <select name="race" id="race" title="Race">
-            <option value="Unknown">Unknown</option>
-            <option value="American Indian">American Indian or Alaska Native</option>
-            <option value="Asian">Asian</option>
-            <option value="Black">Black or African American</option>
-            <option value="Pacific Islander">Native Hawaiian or Other Pacific Islander</option>
-            <option value="White">White</option>
-            <option value="Other">Other</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label>Ethnicity</label>
-        </td>
-        <td colspan="4">
-          <select name="ethnicity" id="ethnicity" title="Ethnicity">
-            <option value="Unknown">Unknown</option>
-            <option value="Hispanic">Hispanic</option>
-            <option value="Non-Hispanic">Non-Hispanic</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label>Address</label>
-        </td>
-        <td colspan="2">
-          <input name="street" id="street" type="text" value="" size="27" title="Street" />
-        </td>
-      </tr>
-      <tr>
-        <td></td>
-        <td>
-          <input name="city" id="city" type="text" value="" size="10" title="City" />
-        </td>
-        <td>
-          <input name="state" id="state" type="text" value="" size="10" title="State" />
-        </td>
-        <td>
-          <input name="postal_code" id="postal_code" type="text" value="" size="5" title="Postal Code" />
-        </td>';
-					$this->dropdown('','Country','geo_country_reference', 'countries_id', 'countries_name');
-					echo '
-      </tr>
-      <tr>
-        <td>
-          <label>Phone</label>
-        </td>
-        <td colspan="2">
-          <input name="home" id="home" type="text" value="" size="10" title="Home Phone" />(Home)
-        </td>
-        <td colspan="2">
-          <input name="cell" id="cell" type="text" value="" size="10" title="Cell Phone" />(Cell)
-        </td>
-      </tr>
-			<tr>
-				<td></td>
-        <td align="center" colspan="4">
-          <input class="submit" value="Create Patient" type="button" onclick="addpatient(\'newPatient_form\')" />
-        </td>
-			</tr>
-    </table>
-  </fieldset>
-</form>
-    ';
+    ?>
+		<form name="newPatient_form" method="post" id="newPatient_form" action="">
+			<script type="text/javascript" src="../../form_control.js"></script>
+			<fieldset>
+				<legend>New Patient</legend>
+				<table>
+					<tr>
+						<td>
+							<label>Name</label>
+						</td>
+						<td colspan="5">
+							<select name="title" id="title" title="Title">
+								<option>Unassigned</option>
+								<option>Mr.</option>
+								<option>Mrs.</option>
+								<option>Ms.</option>
+								<option>Dr.</option>
+							</select>
+							<input type="text" name="fname" id="fname" value="" size="10" title="First Name" />
+							<input type="text" name="mname" id="mname" value="" size="5"  title="Middle Name" />
+							<input type="text" name="lname" id="lname" value=""  size="10" title="Last Name" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label>DOB</label>
+						</td>
+						<td colspan="2">
+							<input name="dob" id="dob" type="text" value="" size="10" title="Date of Birth" />
+							<span style="font-size:smaller" >YYYY/MM/DD</span>			  
+						</td>
+						<td>
+							<label>Sex</label>
+						</td>
+						<td>
+							<select name="sex" id="sex" title="Gender">
+								<option value="M">Male</option>
+								<option value="F">Female</option>
+							</select>
+						</td>
+      		</tr>
+      		<tr>
+        		<td>
+          		<label>Race</label>
+        		</td>
+        		<td colspan="4">
+          		<select name="race" id="race" title="Race">
+            		<option value="Unknown">Unknown</option>
+            		<option value="American Indian">American Indian or Alaska Native</option>
+            		<option value="Asian">Asian</option>
+            		<option value="Black">Black or African American</option>
+            		<option value="Pacific Islander">Native Hawaiian or Other Pacific Islander</option>
+            		<option value="White">White</option>
+            		<option value="Other">Other</option>
+          		</select>
+        		</td>
+      		</tr>
+      		<tr>
+        		<td>
+          		<label>Ethnicity</label>
+        		</td>
+        		<td colspan="4">
+          		<select name="ethnicity" id="ethnicity" title="Ethnicity">
+            		<option value="Unknown">Unknown</option>
+            		<option value="Hispanic">Hispanic</option>
+            		<option value="Non-Hispanic">Non-Hispanic</option>
+          		</select>
+        		</td>
+      		</tr>
+      		<tr>
+        		<td>
+          		<label>Address</label>
+        		</td>
+        		<td colspan="2">
+          		<input name="street" id="street" type="text" value="" size="27" title="Street" />
+        		</td>
+      		</tr>
+      		<tr>
+        		<td></td>
+        		<td>
+          		<input name="city" id="city" type="text" value="" size="10" title="City" />
+		        </td>
+        		<td>
+          		<input name="state" id="state" type="text" value="" size="10" title="State" />
+        		</td>
+        		<td>
+          		<input name="postal_code" id="postal_code" type="text" value="" size="5" title="Postal Code" />
+        		</td>
+							<?php $this->dropdown('','Country','geo_country_reference', 'countries_id', 'countries_name'); ?>
+      		</tr>
+      		<tr>
+        		<td>
+		          <label>Phone</label>
+        		</td>
+        		<td colspan="2">
+          		<input name="home" id="home" type="text" value="" size="10" title="Home Phone" />(Home)
+        		</td>
+        		<td colspan="2">
+          		<input name="cell" id="cell" type="text" value="" size="10" title="Cell Phone" />(Cell)
+        		</td>
+      		</tr>
+					<tr>
+						<td></td>
+        		<td align="center" colspan="4">
+          		<input class="submit" value="Create Patient" type="button" onclick="addpatient('newPatient_form')" />
+        		</td>
+					</tr>
+		    </table>
+  		</fieldset>
+		</form>
+    <?php
   }
 	
 	//search form
   function search_patient_form(){
     //conect to DB
     $this->dbconnect();
-    echo'
-<form name="searchPatient_form" method="post" id="searchPatient_form" action="">
-  <fieldset>
-    <legend>Search Patient</legend>
-    <table>
-      <tr>
-			  <td>
-				  <label>Search By<label>
-				</td>
-				<td>
-				  <select name="search_type" id="search_type">
-					  <option value="lname">Last Name</option>
-						<option value="DOB">Date of Birth</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-        <td colspan="2">
-          <input name="search_input" id="search_input" type="text" value="" size="22" title="Search for a patient." />
-        </td>
-        <td>
-          <input class="submit" value="Search" type="button" onclick="searchpatient(\'searchPatient_form\')" />
-        </td>
-      </tr>
-    </table>
-  </fieldset>
-</form>
-';
+    ?>
+		<form name="searchPatient_form" method="post" id="searchPatient_form" action="">
+			<label for="search_input">Patient</label>
+			<input name="search_input" id="search_input" type="text" value="" size="22" title="Search for a patient." />
+			<select name="search_type" id="search_type">
+				<option value="lname">Last Name</option>
+				<option value="DOB">Date of Birth</option>
+			</select>
+			<input class="submit" value="Search" type="button" onclick="searchpatient('searchPatient_form')" />
+		</form>
+	<?php
   }
 		
 	// Creates a dropdown menu for a specific table
