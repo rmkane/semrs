@@ -92,7 +92,7 @@ function requestForm(s, form_id, alert_mssg) {
 				var return_data = htmlHttp.responseText;
 				if (alert_mssg) alert(return_data);
 				else {
-					win = window.open("", return_data, "width=300,height=200");
+					win = window.open("", "", "width=300,height=300");
 					win.document.writeln(return_data);
 				}
 				clearForm(document.getElementById(form_id));
@@ -153,6 +153,12 @@ function searchpatient(form_id) {
 	// Send data to the form action
 	var s = "action=searchpatient&type=" + type + "&input=" + input;
 	requestForm(s, form_id, false);
+}
+
+function selectpatient(form_id) {
+  var id = document.getElementById('selectedpatient').value;
+	var s = "action=selectpatient&selectedpatient=" + id;
+	requestForm(s, form_id, true);
 }
 
 function getDate() {

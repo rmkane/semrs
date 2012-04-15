@@ -37,6 +37,7 @@ class logmein {
 	var $level_type = 'type';
 	
 	var $patient_table = 'patient_data';
+	var $patient_id = 'id';
 	var $patient_title = 'title';
 	var $patient_fname = 'fname';
 	var $patient_mname = 'mname';
@@ -287,16 +288,33 @@ class logmein {
 		//if both passwords match		
 		$condition = $search_type == 'DOB' ? '=' : 'LIKE';
 		$search_term = $condition == "LIKE" ? "%".$search_input : $search_input;
-	  $qry = "SELECT * FROM ".$this->patient_table." WHERE ".$search_type." ".$condition." '".$search_term."';";
+	  $qry = "SELECT * FROM ".$this->patient_table." WHERE ".$search_type." ".$condition." '".$search_term."' ORDER BY lname, fname;";
 		$result = mysql_query($qry) or die(mysql_error());
 		if (mysql_num_rows($result) > 0) {
 			$num = mysql_num_rows($result);
 			?>
-			<strong>Found <?php echo $num ?> patients matching <?php echo $search_input ?><br /></strong>
-			<?php while($row = mysql_fetch_array($result)) { ?>
-			<a href="main.php?patient"><?php echo $row[$this->patient_lname] ?> <?php echo $row[$this->patient_mname] ?>, <?php echo $row[$this->patient_fname] ?> 	<?php echo "Age:".$this->GetAge($row[$this->patient_dob]); ?></a><br />
-			<?php 
-			}
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+			"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+				<head>
+					<title>Search Results</title>
+					<meta name="Author" content="Ryan Kane" />
+					<link rel="stylesheet" href="<?php echo $css_header;?>" type="text/css" />
+				</head>
+				<body onblur="self.close();" >
+					<strong>Found <?php echo $num ?> patients matching <?php echo $search_input ?><br /></strong>
+					<form name="select_name" id="select_id" enctype="application/x-www-form-urlencoded" method="post" action="../../form_action.php">
+					<select name="selectedpatient" multiple="yes" size="<?php echo $num ?>" />
+					<?php while($row = mysql_fetch_array($result)) { ?>
+						<option value="<?php echo $row[$this->patient_id] ?>"><?php echo $row[$this->patient_lname] ?> <?php echo $row[$this->patient_mname] ?>, <?php echo $row[$this->patient_fname] ?> 	<?php echo "Age:".$this->GetAge($row[$this->patient_dob]); ?></option>				
+					<?php } ?>
+					</select><br />
+					<input name="action" class="action" value="selectpatient" type="hidden" />
+					<input name="submit" class="submit" value="Select Patient" type="submit" />
+					<br /><a href="main.php">Return</a>
+				</body>
+			</html>
+			<?php
 			return true;
 		} else return false;
 	}

@@ -24,11 +24,12 @@ if($_POST['action'] == "login"){
 						break;
 					default: // Unknown User
 					  $log->logout();
-						header("location:interface/logout/main.php");
+						header("location:interface/login/login.php");
 				}
     } else{
         //do something on FAILED login
 				echo "Failed Login";
+				header("location:interface/login/login.php");
     }
 }
 
@@ -80,6 +81,11 @@ if($_POST['action'] == "searchpatient"){
         //do something on failed patient search...
 				echo "Failed to Find Patient!";
     }
+}
+
+if($_POST['action'] == "selectpatient"){
+  $_SESSION['patient_id'] = $_POST['selectedpatient'];
+	echo "Selected patient id = ".$_SESSION['patient_id'];
 }
 
 if($_POST['action'] == "logout"){
