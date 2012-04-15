@@ -36,13 +36,12 @@ if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] !=
 		  <?php include('sidebar.php'); ?>
 			<div style="overflow:hidden;"></div>
       <div id="content">
-        <h1>Welcome <?php echo $_SESSION['userfullname']; ?></h1>
 				<?php
 					if ($which == "") include("home.php");
 					else if (in_array($which, $pagearray)) include($which.".php");
 					else {
 					  echo "
-						  <h1>Not Found</h1>
+						  <h2>Not Found</h2>
 							<h3>The requested URL".$_SERVER['PHP_SELF'].'?'.$which." was not found on this server.</h3>
 							<hr />
 							<h3>".$_SERVER['SERVER_SOFTWARE']." Server at ".$_SERVER['HTTP_HOST']." Port ".$_SERVER['SERVER_PORT']."</h3>

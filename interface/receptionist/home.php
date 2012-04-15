@@ -1,1 +1,1 @@
-<h2>Home</h2>
+<h1>Welcome <?php echo $_SESSION['userfullname']; ?></h1>
