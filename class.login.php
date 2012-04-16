@@ -4,9 +4,9 @@ error_reporting(0);
 
 include('globals.php');	
 
-session_cache_expire(10); // Call before start
+session_cache_expire(1); // Call before start
 session_start(); // Start session
-$inactive = 600; // 10 minute timeout
+$inactive = 60; // 10 minute timeout
 
 // http://www.emirplicanic.com/php/simple-phpmysql-authentication-class
 class logmein {
@@ -125,6 +125,17 @@ class logmein {
     $qry = $this->qry("INSERT INTO `log`(`date`, `event`, `user_id`, `level_id`, `comments`, `user_notes`) VALUES ('?', '?', '?', '?', '?', '?');", $datetime, 'log out', $_SESSION['userid'], $_SESSION['userlevel'], '', '', '');
     $_SESSION = array();
     session_destroy();
+		header("location:interface/login/logout.php");
+  return;
+  }
+	
+	//logout function
+  function timeout(){
+    $datetime = gmdate("Y-m-d H:i:s", time());
+    $qry = $this->qry("INSERT INTO `log`(`date`, `event`, `user_id`, `level_id`, `comments`, `user_notes`) VALUES ('?', '?', '?', '?', '?', '?');", $datetime, 'timeout', $_SESSION['userid'], $_SESSION['userlevel'], '', '', '');
+    $_SESSION = array();
+    session_destroy();
+		header("location:../login/logout.php");
   return;
   }
  
@@ -303,15 +314,14 @@ class logmein {
         </head>
         <body onblur="self.close();" >
           <strong>Found <?php echo $num ?> patients matching <?php echo $search_input ?><br /></strong>
-          <form name="select_name" id="select_id" enctype="application/x-www-form-urlencoded" method="post" action="../../form_action.php">
-          <select name="selectedpatient" multiple="yes" size="<?php echo $num ?>" />
+          <form name="select_name" id="select_id" enctype="application/x-www-form-urlencoded" method="post" action="../../form_action.php" onsubmit="window.close();">
+          <select name="selectedpatient" size="<?php echo $num ?>" />
           <?php while($row = mysql_fetch_array($result)) { ?>
             <option value="<?php echo $row[$this->patient_id] ?>"><?php echo $row[$this->patient_lname] ?> <?php echo $row[$this->patient_mname] ?>, <?php echo $row[$this->patient_fname] ?> 	<?php echo "Age:".$this->getAge($row[$this->patient_dob]); ?></option>				
           <?php } ?>
           </select><br />
           <input name="action" class="action" value="selectpatient" type="hidden" />
           <input name="submit" class="submit" value="Select Patient" type="submit" />
-          <br /><a href="main.php">Return</a>
         </body>
       </html>
       <?php
@@ -372,10 +382,10 @@ class logmein {
             <td><input name="password2" id="password2" type="password" onblur="checkpass(\'password1\', \'password2\', \'mssg_newuser\');" /><span id="mssg_newuser" /></span></td>
           </tr>
           <tr>
-            <td><?php $this->dropdown('Choose Facility', 'Facility', $this->facility_table, $this->facility_id, $this->facility_name); ?></td>
+            <?php $this->dropdown('Choose Facility', 'Facility', $this->facility_table, $this->facility_id, $this->facility_name); ?>
           </tr>
           <tr>
-            <td><?php $this->dropdown('Choose User Level', 'User Level', $this->level_table, $this->level_id, $this->level_type); ?></td>
+            <?php $this->dropdown('Choose User Level', 'User Level', $this->level_table, $this->level_id, $this->level_type); ?>
           </tr>
           <tr>
             <td><label for="lname">Enter Your Last Name</label></td>
@@ -536,7 +546,7 @@ class logmein {
             <td><input name="city" id="city" type="text" value="" size="10" title="City" /></td>
             <td><input name="state" id="state" type="text" value="" size="10" title="State" /></td>
             <td><input name="postal_code" id="postal_code" type="text" value="" size="5" title="Postal Code" /></td>
-            <td><?php $this->dropdown('','Country','geo_country_reference', 'countries_id', 'countries_name'); ?></td>
+            <?php $this->dropdown('','Country','geo_country_reference', 'countries_id', 'countries_name'); ?>
           </tr>
           <tr>
             <td><label>Phone</label></td>
@@ -575,11 +585,11 @@ class logmein {
     $this->dbconnect();
     $dropdown_list = '';
     $dropdown_list .= $label == '' ? '' : '<td><label for="'.$table.'">'.$label.'</label></td>';
-    $dropdown_list .= '<select title="'.$title.'" name="'.$table.'" id="'.$table.'">';
+    $dropdown_list .= '<td><select title="'.$title.'" name="'.$table.'" id="'.$table.'">';
     $qry = "SELECT * FROM ".$table.";";
     $result = mysql_query($qry) or die(mysql_error());
     while($row = mysql_fetch_assoc($result)) { $dropdown_list .= "<option value ='".$row[$value]."'>".$row[$option]."</option>"; }
-    $dropdown_list .= '</select>';
+    $dropdown_list .= '</select></td>';
     echo $dropdown_list;
   }
   

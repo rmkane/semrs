@@ -92,7 +92,6 @@ if($_POST['action'] == "logout"){
   $log->logout();
 	//echo "Redirecting...";
 	//alertbox("Successfully logged out!", "index.php");
-	header("location:interface/login/logout.php");
 }
 
 function alertbox($message, $origin_page) {
