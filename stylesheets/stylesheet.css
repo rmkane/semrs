@@ -1,17 +1,7 @@
 @import"reset.css";
-/* Set headings */
-/* HTML4 Defaults: http://www.w3.org/TR/CSS21/sample.html */
-h1 { font-size: 2.00em; margin: 0.67em 0em; line-height:1.50em; }
-h2 { font-size: 1.30em; margin: 0.75em 0em; line-height:1.25em; }
-h3 { font-size: 1.17em; margin: 0.83em 0em; line-height:1.20em; }
-h4 { font-size: 1.00em; margin: 1.12em 0em; line-height:1.18em; }
-h5 { font-size: 0.83em; margin: 1.50em 0em; line-height:1.14em; }
-h6 { font-size: 0.75em; margin: 1.67em 0em; line-height:1.12em; }
-p  { font-size: 1.00em; margin: 0.50em 1em; line-height:1.20em; }
-h1, h2, h3, h4, h5, h6, b { font-weight:bolder; }
-ol {list-style-type:decimal; margin-left:2em;}
-ul {list-style-type:circle; margin-left:2em;}
-strong { font-weight:bold; }
+@import"typography.css";
+@imprort"forms.css";
+
 em { font-size:smaller; }
 fieldset { border:#000 thin solid; padding:1em;}
 legend { font-weight:bold;}
@@ -32,13 +22,10 @@ body {
   color:#000;
 	background:inherit;
 }
-h1 {
-  color:#008;
-}
 
 /* Log In Styling */
 #login {
-	margin-top:100px;
+	margin-top:98px;
   background:inherit;
 }
 #login form {
@@ -64,40 +51,40 @@ h1 {
 	text-align:center;
 	font-size:1.50em;
 	background:#dde;
-	border-bottom:#008 4px solid;
+	border-bottom:#444 4px solid;
+	margin-bottom:2px;
 }
 #header h1 {
 	margin:0;
+	padding:12px;
 }
 
 /* Navagation Styling */
 #nav {
   float:right;
-	background:red; /* why? */
-	margin:0;
+	margin-top:0;
 }
 #nav ul>li {
   float:left;
-	width:6em;
 }
 #nav ul {  
   list-style-type:none;
-  margin:0; 
-  padding:0;
+	margin-right:0;
 }
 #nav ul a {          
-  background:#008;
-	border:solid thin #840;
+  background:#444;
+	border:solid thin #222;
 	color:#fff;
 	display:block;
-  padding:0.25em 0 0.25em 0;
-	width:6em;
+  padding:0.25em 0;
 	text-align:center;
-  text-decoration:none;  
+  text-decoration:none;
+	margin-left:2px;
+	width:96px;
 }
 #nav ul a:hover {
-  background:#77f;
-	color:#321;
+  background:#666;
+	color:#000;
 }
 #nav input[type="submit"] {
   text-align:center;
@@ -106,10 +93,8 @@ h1 {
 /* Sidebar Styling */
 #sidebar {
   float:left;
-	background:#dd0;
 	padding:0.25em;
 	display:block;
-	width:10em;
 }
 #sidebar ul {
   list-style-type:none;
@@ -117,24 +102,27 @@ h1 {
   padding:0;
 }
 #sidebar ul a{
-  background:#008;
-	border:solid thin #840;
+  background:#444;
 	color:#fff;
 	display:block;
 	padding:0.25em 0 0.25em 0;
   text-align:center;
   text-decoration:none;
-}  
+	width:80px;
+	height:64px;
+	margin:2px;
+	border:#222 1px solid;
+} 
 #sidebar ul a:hover{
-  background:#77f;
-	color:#321;
+  background:#666;
+	color:#000;
 } 
 
 /* Content Styling */
 #content {
   background:#ddd;
 	padding:1em;
-	margin-left:11em;	
+	margin-left:96px;	
 }
 
 /* Footer Styling */	

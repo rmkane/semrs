@@ -1,13 +1,13 @@
 <?php
 
 function connect(){
-	$host = 'localhost';
-	$user = 'root';
-	$pass = '';
-	$db = 'semrs';
+	$mysql_host = 'localhost';
+	$mysql_user = 'root';
+	$mysql_pass = '';
+	$mysql_db = 'semrs';
 
-	$connections = mysql_connect($host, $user, $pass) or die ('Unabale to connect to the database');
-	mysql_select_db($db) or die ('Unable to select database!');
+	$connections = mysql_connect($mysql_host, $mysql_user, $mysql_pass) or die ('Unabale to connect to the database');
+	mysql_select_db($mysql_db) or die ('Unable to select database!');
 	return;
 }
 
@@ -111,22 +111,22 @@ if (!isset($_SESSION['patient_id'])) {
 					?>
 					<label>Address:</label> <?php echo $address ?><br />
 				</div>
-				<div class="tab_view" id="tab_appointments"  style="display:none;">
+				<div class="tab_view" id="tab_appointments" style="display:none;">
 					<h2>Appointments</h2>
 				</div>
-				<div class="tab_view" id="tab_prescriptions"  style="display:none;">
+				<div class="tab_view" id="tab_prescriptions" style="display:none;">
 					<h2>Prescriptions</h2>
 				</div>
-				<div class="tab_view" id="tab_messages"  style="display:none;">
+				<div class="tab_view" id="tab_messages" style="display:none;">
 					<h2>Messages</h2>
 				</div>
-				<div class="tab_view" id="tab_access"  style="display:none;">
+				<div class="tab_view" id="tab_access" style="display:none;">
 					<h2>Access</h2>
 					
 					<table>
 					<tr><th>Event</th><th>Timestamp</th></tr>
 					<?php
-					//$query = "SELECT * FROM `log` WHERE `patient_id` = '".$_SESSION['patient_id']."'";
+					//$query = "SELECT * FROM `log` WHERE `patient_id` = '".$_SESSION['patient_id']."' ORDER BY `date` DESC";
 					$query = "SELECT * FROM `log` ORDER BY `date` DESC";
 					$result = mysql_query($query) or die(mysql_error());
 					while($row = mysql_fetch_array($result)) {
@@ -146,6 +146,33 @@ if (!isset($_SESSION['patient_id'])) {
 		</html>
 		
 	<!-- HTML --> <?php
+	
+			echo "<br />MOAR<br />";
+	
+	
+		
+			/* Create the private and public key */
+			$res = openssl_pkey_new();
+			 
+			/* Extract the private key from $res to $privKey */
+			openssl_pkey_export($res, $privKey);
+			 
+			/* Extract the public key from $res to $pubKey */
+			$pubKey = openssl_pkey_get_details($res);
+			$pubKey = $pubKey["key"];
+			 
+			$data = 'i.amniels.com is a great website!';
+			 
+			/* Encrypt the data using the public key
+			 * The encrypted data is stored in $encrypted */
+			openssl_public_encrypt($data, $encrypted, $pubKey);
+			 
+			/* Decrypt the data using the private key and store the
+			 * result in $decrypted. */
+			openssl_private_decrypt($encrypted, $decrypted, $privKey);
+			 
+			echo $decrypted;
+		
 
 }
 ?>

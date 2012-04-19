@@ -21,7 +21,6 @@
   <body>
 	  <?php include('../includes/header.php'); ?>
     <div id="wrapper">
-			<div style="clear:both;"></div>
 			<div id="login" style="background:url('../../images/logo.png') no-repeat; min-height:320px; width:100%; padding-top:1em;">
 				<div style="margin-bottom:1em;">
 					<?php

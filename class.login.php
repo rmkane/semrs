@@ -4,9 +4,9 @@ error_reporting(0);
 
 include('globals.php');	
 
-session_cache_expire(1); // Call before start
+session_cache_expire(10); // Call before start
 session_start(); // Start session
-$inactive = 60; // 10 minute timeout
+$inactive = 600; // 10 minute timeout
 
 // http://www.emirplicanic.com/php/simple-phpmysql-authentication-class
 class logmein {
@@ -103,20 +103,20 @@ class logmein {
  
   //prevent injection
   function qry($query) {
-    $this->dbconnect();
-    $args  = func_get_args();
-    $query = array_shift($args);
-    $query = str_replace("?", "%s", $query);
-    $args  = array_map('mysql_real_escape_string', $args);
-    array_unshift($args,$query);
-    $query = call_user_func_array('sprintf',$args);
-    $result = mysql_query($query) or die(mysql_error());
-    if($result){
-      return $result;
-    } else {
-      $error = "Error";
-      return $result;
-    }
+		$this->dbconnect();
+		$args  = func_get_args();
+		$query = array_shift($args);
+		$query = str_replace("?", "%s", $query);
+		$args  = array_map('mysql_real_escape_string', $args);
+		array_unshift($args,$query);
+		$query = call_user_func_array('sprintf',$args);
+		$result = mysql_query($query) or die(mysql_error());
+		if($result){
+			return $result;
+		} else {
+			$error = "Error";
+			return $result;
+		}
   }
   
   //logout function
@@ -168,7 +168,7 @@ class logmein {
       // Get the associated user type from the id			
       $result = $this->qry("SELECT ".$this->level_type." FROM ".$this->level_table." WHERE ".$this->level_id." = '?';", $level);
       $row=mysql_fetch_assoc($result);
-      if(row != "Error") { $type = "".$row[$this->level_type]; }
+      if(row != "Error") { $type = $row[$this->level_type]; }
       echo "New User: ".$username."(".$type.") was created!";
       return true;
     } else {
@@ -382,10 +382,10 @@ class logmein {
             <td><input name="password2" id="password2" type="password" onblur="checkpass(\'password1\', \'password2\', \'mssg_newuser\');" /><span id="mssg_newuser" /></span></td>
           </tr>
           <tr>
-            <?php $this->dropdown('Choose Facility', 'Facility', $this->facility_table, $this->facility_id, $this->facility_name); ?>
+            <?php $this->dropdown('Choose Facility', 'Facility', $this->facility_table, $this->facility_id, $this->facility_name, 0); ?>
           </tr>
           <tr>
-            <?php $this->dropdown('Choose User Level', 'User Level', $this->level_table, $this->level_id, $this->level_type); ?>
+            <?php $this->dropdown('Choose User Level', 'User Level', $this->level_table, $this->level_id, $this->level_type, 0); ?>
           </tr>
           <tr>
             <td><label for="lname">Enter Your Last Name</label></td>
@@ -486,10 +486,14 @@ class logmein {
       <script type="text/javascript" src="../../form_control.js"></script>
       <fieldset>
         <legend>New Patient</legend>
+				<style type="text/css">
+					tr {border:#00f thin solid; margin:2px; padding:2px;}
+					td {border:#f00 thin solid; margin:12px;}
+				</style>
         <table>
           <tr>
             <td><label>Name</label></td>
-            <td colspan="5">
+            <td>
               <select name="title" id="title" title="Title">
                 <option>Unassigned</option>
                 <option>Mr.</option>
@@ -504,7 +508,7 @@ class logmein {
           </tr>
           <tr>
             <td><label>DOB</label></td>
-            <td colspan="2"><input name="dob" id="dob" type="text" value="" size="10" title="Date of Birth" /><span style="font-size:smaller" >YYYY-MM-DD</span></td>
+            <td><input name="dob" id="dob" type="text" value="" size="10" title="Date of Birth" /><span style="font-size:smaller" >YYYY-MM-DD</span></td>
             <td><label>Sex</label></td>
             <td>
               <select name="sex" id="sex" title="Gender">
@@ -515,7 +519,7 @@ class logmein {
           </tr>
           <tr>
             <td><label>Race</label></td>
-            <td colspan="4">
+            <td>
               <select name="race" id="race" title="Race">
                 <option value="Unknown">Unknown</option>
                 <option value="American Indian">American Indian or Alaska Native</option>
@@ -526,10 +530,8 @@ class logmein {
                 <option value="Other">Other</option>
               </select>
             </td>
-          </tr>
-          <tr>
-            <td><label>Ethnicity</label></td>
-            <td colspan="4">
+						<td><label>Ethnicity</label></td>
+            <td>
               <select name="ethnicity" id="ethnicity" title="Ethnicity">
                 <option value="Unknown">Unknown</option>
                 <option value="Hispanic">Hispanic</option>
@@ -538,24 +540,29 @@ class logmein {
             </td>
           </tr>
           <tr>
-            <td><label>Address</label></td>
-            <td colspan="2"><input name="street" id="street" type="text" value="" size="27" title="Street" /></td>
+            <td><label>Street</label></td>
+            <td><input name="street" id="street" type="text" value="" size="27" title="Street" /></td>
           </tr>
           <tr>
             <td></td>
-            <td><input name="city" id="city" type="text" value="" size="10" title="City" /></td>
-            <td><input name="state" id="state" type="text" value="" size="10" title="State" /></td>
-            <td><input name="postal_code" id="postal_code" type="text" value="" size="5" title="Postal Code" /></td>
-            <?php $this->dropdown('','Country','geo_country_reference', 'countries_id', 'countries_name'); ?>
+						<td>
+            <input name="city" id="city" type="text" value="" size="10" title="City" />
+            <input name="state" id="state" type="text" value="" size="10" title="State" />
+            <input name="postal_code" id="postal_code" type="text" value="" size="5" title="Postal Code" />
+						</td>
+					</tr>
+					<tr>
+            <?php $this->dropdown('Country','Country','geo_country_reference', 'countries_id', 'countries_name', 223); ?>
           </tr>
           <tr>
             <td><label>Phone</label></td>
-            <td colspan="2"><input name="home" id="home" type="text" value="" size="10" title="Home Phone" />(Home)</td>
-            <td colspan="2"><input name="cell" id="cell" type="text" value="" size="10" title="Cell Phone" />(Cell)</td>
+            <td>
+							<input name="home" id="home" type="text" value="" size="10" title="Home Phone" />(Home)
+							<input name="cell" id="cell" type="text" value="" size="10" title="Cell Phone" />(Cell)
+						</td>
           </tr>
           <tr>
-            <td></td>
-            <td align="center" colspan="4"><input class="submit" value="Create Patient" type="button" onclick="addpatient('newPatient_form')" /></td>
+            <td colspan="4" align="center"><div style="text-align:center;"><input class="submit" value="Create Patient" type="button" onclick="addpatient('newPatient_form')" /> <input type="reset" /></div></td>
           </tr>
         </table>
       </fieldset>
@@ -581,14 +588,18 @@ class logmein {
   }
     
   // Creates a dropdown menu for a specific table
-  function dropdown($label, $title, $table, $value, $option) {
+  function dropdown($label, $title, $table, $value, $option, $selected) {
     $this->dbconnect();
     $dropdown_list = '';
     $dropdown_list .= $label == '' ? '' : '<td><label for="'.$table.'">'.$label.'</label></td>';
     $dropdown_list .= '<td><select title="'.$title.'" name="'.$table.'" id="'.$table.'">';
     $qry = "SELECT * FROM ".$table.";";
     $result = mysql_query($qry) or die(mysql_error());
-    while($row = mysql_fetch_assoc($result)) { $dropdown_list .= "<option value ='".$row[$value]."'>".$row[$option]."</option>"; }
+    while($row = mysql_fetch_assoc($result)) {
+			$dropdown_list .= "<option ";
+			$dropdown_list .= $row[$value] == $selected ? "SELECTED" : "";
+			$dropdown_list .= " value ='".$row[$value]."'>".$row[$option]."</option>";
+		}
     $dropdown_list .= '</select></td>';
     echo $dropdown_list;
   }
