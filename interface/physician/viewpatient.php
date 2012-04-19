@@ -37,17 +37,24 @@ if (!isset($_SESSION['patient_id'])) {
 	$query = "SELECT * FROM `patient_data` WHERE `id` = '".$_SESSION['patient_id']."'";
 	$result = mysql_query($query) or die(mysql_error());
 	$row = mysql_fetch_assoc($result);
-	$fname = $row['fname'];
-	$mname = $row['mname'];
+	$fname = $row['fname'] != "" ? $row['fname']." " : "";
+	$mname = $row['mname'] != "" ? $row['mname']." " : "";
 	$lname = $row['lname'];
 	$dob = $row['DOB'];
+	
+	$name = $fname.$mname.$lname;
+	
+	$street = $row['street'] != "" ? $row['street'].", " : "";
+	$city = $row['city'] != "" ? $row['city'].", " : "";
+	$state = $row['state'] != "" ? $row['state']." " : "";
+	$postal_code = $row['postal_code'] != "" ? $row['postal_code'].", " : "";
 	
 	$qry = "SELECT * FROM `geo_country_reference` WHERE `countries_id` = '".$row['country']."'";
 	$rlt = mysql_query($qry) or die(mysql_error());
 	$r = mysql_fetch_assoc($rlt);
 	$country = $r['countries_iso_code_3'];
-	
-	$address = $row['street'].", ".$row['city'].", ".$row['state']." ".$row['postal_code'].", ".$country;
+
+	$address = $street.$city.$state.$postal_code.$country;
 	// Add stuff here!!!
 	
 	
@@ -87,7 +94,7 @@ if (!isset($_SESSION['patient_id'])) {
 			<form>
 				<h2>Patient Info</h2>
 				<div id="patient_info_bar">
-					<span class="patient_info"><strong>Name:</strong> <?php echo $fname; ?></span>
+					<span class="patient_info"><strong>Name:</strong> <?php echo $name; ?></span>
 					<span class="patient_info"><strong>Age:</strong> <?php echo getAge($dob)." yrs"; ?></span>
 					<span class="patient_info"><strong>DOB:</strong> <?php echo $dob; ?></span>
 				</div>
@@ -147,10 +154,8 @@ if (!isset($_SESSION['patient_id'])) {
 		
 	<!-- HTML --> <?php
 	
-			echo "<br />MOAR<br />";
-	
-	
-		
+			echo "<br />OpenSSL Works!<br />";
+
 			/* Create the private and public key */
 			$res = openssl_pkey_new();
 			 
@@ -161,7 +166,7 @@ if (!isset($_SESSION['patient_id'])) {
 			$pubKey = openssl_pkey_get_details($res);
 			$pubKey = $pubKey["key"];
 			 
-			$data = 'i.amniels.com is a great website!';
+			$data = 'This data was once encrypted!';
 			 
 			/* Encrypt the data using the public key
 			 * The encrypted data is stored in $encrypted */
@@ -172,7 +177,5 @@ if (!isset($_SESSION['patient_id'])) {
 			openssl_private_decrypt($encrypted, $decrypted, $privKey);
 			 
 			echo $decrypted;
-		
-
 }
 ?>

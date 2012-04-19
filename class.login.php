@@ -87,6 +87,7 @@ class logmein {
         $_SESSION['userfullname'] = $row[$this->user_fname]." ".$row[$this->user_mname]." ".$row[$this->user_lname];
         $_SESSION['loggedin'] = $row[$this->user_password];
         $_SESSION['userlevel'] = $row[$this->user_level];
+				$_SESSION['patient_id'] = null;
         
         $datetime = gmdate("Y-m-d H:i:s", time());
         $qry = $this->qry("INSERT INTO `log`(`date`, `event`, `user_id`, `level_id`, `comments`, `user_notes`) VALUES ('?', '?', '?', '?', '?', '?');", $datetime, 'log in', $_SESSION['userid'], $_SESSION['userlevel'], '', '', '');
@@ -364,8 +365,8 @@ class logmein {
     //conect to DB
     $this->dbconnect();
     ?>
-    <form name="newuser_form" id="newUser_form" method="post" action="">
-      <script type="text/javascript" src="../..form_control.js"></script>
+    <form name="newuser_form" id="newuser_form" method="post" action="">
+      <script type="text/javascript" src="../../form_control.js"></script>
       <fieldset>
         <legend>Create User</legend>
         <table>
@@ -375,11 +376,11 @@ class logmein {
           </tr>
           <tr>
             <td><label for="password1">Choose Your Password</label></td>
-            <td><input name="password1" id="password1" type="password" onblur="checkpass(\'password1\', \'password2\', \'mssg_newuser\');" /></td>
+            <td><input name="password1" id="password1" type="password" onblur="checkpass('password1', 'password2', 'mssg_newuser');" /></td>
           </tr>
           <tr>
             <td><label for="password2">Re-Enter Your Password</label></td>
-            <td><input name="password2" id="password2" type="password" onblur="checkpass(\'password1\', \'password2\', \'mssg_newuser\');" /><span id="mssg_newuser" /></span></td>
+            <td><input name="password2" id="password2" type="password" onblur="checkpass('password1', 'password2', 'mssg_newuser');" /><span id="mssg_newuser" /></span></td>
           </tr>
           <tr>
             <?php $this->dropdown('Choose Facility', 'Facility', $this->facility_table, $this->facility_id, $this->facility_name, 0); ?>
@@ -394,7 +395,7 @@ class logmein {
           <tr>
             <td></td>
             <td align="left">
-              <input class="submit" value="Register" type="button" onclick="newuser('newUser_form');">
+              <input class="submit" value="Register" type="button" onclick="newuser('newuser_form');">
             </td>
           </tr>
         </table>
