@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 12, 2012 at 08:38 PM
+-- Generation Time: Apr 19, 2012 at 11:08 AM
 -- Server version: 5.5.20
 -- PHP Version: 5.3.10
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `facility` (
   `country` varchar(255) NOT NULL DEFAULT '',
   `notes` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `facility`
@@ -528,35 +528,35 @@ CREATE TABLE IF NOT EXISTS `log` (
 
 CREATE TABLE IF NOT EXISTS `patient_data` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL DEFAULT '''''',
-  `language` varchar(255) NOT NULL DEFAULT '''''',
-  `fname` varchar(255) NOT NULL DEFAULT '''''',
-  `mname` varchar(255) NOT NULL DEFAULT '''''',
-  `lname` varchar(255) NOT NULL DEFAULT '''''',
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `language` varchar(255) NOT NULL DEFAULT '',
+  `fname` varchar(255) NOT NULL DEFAULT '',
+  `mname` varchar(255) NOT NULL DEFAULT '',
+  `lname` varchar(255) NOT NULL DEFAULT '',
   `DOB` date DEFAULT NULL,
-  `street` varchar(255) NOT NULL DEFAULT '''''',
-  `postal_code` varchar(255) NOT NULL DEFAULT '''''',
-  `city` varchar(255) NOT NULL DEFAULT '''''',
-  `state` varchar(255) NOT NULL DEFAULT '''''',
-  `country` varchar(255) NOT NULL DEFAULT '''''',
-  `drivers_license` varchar(255) NOT NULL DEFAULT '''''',
-  `national_id` varchar(255) NOT NULL DEFAULT '''''',
+  `street` varchar(255) NOT NULL DEFAULT '',
+  `postal_code` varchar(255) NOT NULL DEFAULT '',
+  `city` varchar(255) NOT NULL DEFAULT '',
+  `state` varchar(255) NOT NULL DEFAULT '',
+  `country` varchar(255) NOT NULL DEFAULT '',
+  `drivers_license` varchar(255) NOT NULL DEFAULT '',
+  `national_id` varchar(255) NOT NULL DEFAULT '',
   `occupation` longtext NOT NULL,
-  `phone_home` varchar(255) NOT NULL DEFAULT '''''',
-  `phone_cell` varchar(255) NOT NULL DEFAULT '''''',
+  `phone_home` varchar(255) NOT NULL DEFAULT '',
+  `phone_cell` varchar(255) NOT NULL DEFAULT '',
   `pharmacy_id` bigint(20) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
-  `sex` varchar(255) NOT NULL DEFAULT '''''',
-  `ethnicity` varchar(255) NOT NULL DEFAULT '''''',
-  `race` varchar(255) NOT NULL DEFAULT '''''',
-  `homeless` varchar(255) NOT NULL DEFAULT '''''',
-  `mothers_name` varchar(255) NOT NULL DEFAULT '''''',
-  `guardians_name` varchar(255) NOT NULL DEFAULT '''''',
+  `sex` varchar(255) NOT NULL DEFAULT '',
+  `ethnicity` varchar(255) NOT NULL DEFAULT '',
+  `race` varchar(255) NOT NULL DEFAULT '',
+  `homeless` varchar(255) NOT NULL DEFAULT '',
+  `mothers_name` varchar(255) NOT NULL DEFAULT '',
+  `guardians_name` varchar(255) NOT NULL DEFAULT '',
   `deceased_date` datetime DEFAULT NULL,
   `deceased_reason` varchar(255) DEFAULT NULL,
   `regdate` date DEFAULT NULL COMMENT 'Registration Date',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -566,15 +566,15 @@ CREATE TABLE IF NOT EXISTS `patient_data` (
 
 CREATE TABLE IF NOT EXISTS `pharmacy` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `phone` varchar(255) NOT NULL,
-  `fax` varchar(255) NOT NULL,
-  `street` varchar(255) NOT NULL,
-  `postal_code` varchar(255) NOT NULL,
-  `city` varchar(255) NOT NULL,
-  `state` varchar(255) NOT NULL,
-  `country` varchar(255) NOT NULL,
-  `notes` text NOT NULL,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `phone` varchar(255) NOT NULL DEFAULT '',
+  `fax` varchar(255) NOT NULL DEFAULT '',
+  `street` varchar(255) NOT NULL DEFAULT '',
+  `postal_code` varchar(255) NOT NULL DEFAULT '',
+  `city` varchar(255) NOT NULL DEFAULT '',
+  `state` varchar(255) NOT NULL DEFAULT '',
+  `country` varchar(255) NOT NULL DEFAULT '',
+  `notes` text NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -599,8 +599,8 @@ CREATE TABLE IF NOT EXISTS `photo` (
 
 CREATE TABLE IF NOT EXISTS `prescriptions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `drug_name` varchar(255) DEFAULT NULL,
-  `dosage` varchar(100) DEFAULT NULL,
+  `drug_name` varchar(255) NOT NULL DEFAULT '',
+  `dosage` varchar(100) NOT NULL DEFAULT '',
   `count` int(11) unsigned DEFAULT NULL,
   `refill` int(11) unsigned DEFAULT NULL,
   `refill_limit` int(11) unsigned DEFAULT NULL,
@@ -627,17 +627,17 @@ CREATE TABLE IF NOT EXISTS `prescriptions` (
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `email` varchar(50) DEFAULT NULL,
-  `password` varchar(50) NOT NULL,
+  `email` varchar(50) DEFAULT '',
+  `password` varchar(50) NOT NULL DEFAULT '',
   `userlevel` int(1) NOT NULL,
-  `fname` varchar(20) DEFAULT NULL,
-  `mname` varchar(20) DEFAULT NULL,
-  `lname` varchar(20) NOT NULL,
+  `fname` varchar(20) DEFAULT '',
+  `mname` varchar(20) DEFAULT '',
+  `lname` varchar(20) NOT NULL DEFAULT '',
   `facility_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `users_ibfk_2` (`userlevel`),
   KEY `users_ibfk_1` (`facility_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `users`
