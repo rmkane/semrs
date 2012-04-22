@@ -209,22 +209,12 @@ class logmein {
     $this->dbconnect();
     //generate new password
     $newpassword = $this->createPassword();
-        
+
     ////////////////////////////////
     // -- GIVES ME THE PASSWORD ! //
     ////////////////////////////////
     echo "<p>New Password: ".$newpassword."</p>"; // ADDED THIS
- 
-    //make sure password column and table are set
-    if($this->user_password == ""){
-      $this->user_password = $user_password;
-    }
-    if($this->user_email == ""){
-      $this->user_email = $user_email;
-    }
-    if($this->user_table == ""){
-      $this->user_table = $user_table;
-    }
+		
     //check if encryption is used
     if($this->encrypt == true){
       $newpassword_db = md5($newpassword);

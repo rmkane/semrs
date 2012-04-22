@@ -151,31 +151,5 @@ if (!isset($_SESSION['patient_id'])) {
 				</div>
 			</form>
 		</html>
-		
-	<!-- HTML --> <?php
-	
-			echo "<br />OpenSSL Works!<br />";
-
-			/* Create the private and public key */
-			$res = openssl_pkey_new();
-			 
-			/* Extract the private key from $res to $privKey */
-			openssl_pkey_export($res, $privKey);
-			 
-			/* Extract the public key from $res to $pubKey */
-			$pubKey = openssl_pkey_get_details($res);
-			$pubKey = $pubKey["key"];
-			 
-			$data = 'This data was once encrypted!';
-			 
-			/* Encrypt the data using the public key
-			 * The encrypted data is stored in $encrypted */
-			openssl_public_encrypt($data, $encrypted, $pubKey);
-			 
-			/* Decrypt the data using the private key and store the
-			 * result in $decrypted. */
-			openssl_private_decrypt($encrypted, $decrypted, $privKey);
-			 
-			echo $decrypted;
-}
-?>
+	<!-- HTML -->
+	<?php } ?>

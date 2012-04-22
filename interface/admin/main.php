@@ -50,6 +50,7 @@ if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] !=
 				?>
       </div> <!-- content -->
 			<div style="clear:both"></div>
+			<div id="search_results"></div>
     </div> <!-- wrapper -->
 		<?php include('../includes/footer.php'); ?>
   </body>

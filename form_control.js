@@ -92,7 +92,7 @@ function requestForm(s, form_id, alert_mssg) {
 				var return_data = htmlHttp.responseText;
 				if (alert_mssg) alert(return_data);
 				else {
-					win = window.open("", "", "width=300,height=300");
+					win = window.open(this.href, "", "width=300,height=300");
 					win.document.writeln(return_data);
 				}
 				clearForm(document.getElementById(form_id));
