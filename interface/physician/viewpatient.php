@@ -39,11 +39,11 @@ if (!isset($_SESSION['patient_id'])) {
 	$state = $state != "" ? $state." " : "";
 	$postal_code = $postal_code != "" ? $postal_code.", " : "";
 	
-	$qry = "SELECT * FROM `geo_country_reference` WHERE `countries_id` = '".$row['country']."'";
+	$qry = "SELECT * FROM `geo_country_reference` WHERE `countries_id` = '".$log->decrypt($row['country'], $privKey)."'";
 	$rlt = mysql_query($qry) or die(mysql_error());
 	$r = mysql_fetch_assoc($rlt);
 	$country = $r['countries_iso_code_3'];
-
+	
 	$address = $street.$city.$state.$postal_code.$country;
 	// Add stuff here!!!
 	
