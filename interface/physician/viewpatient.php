@@ -1,29 +1,6 @@
 <?php
+$log->dbconnect();
 
-function connect(){
-	$mysql_host = 'localhost';
-	$mysql_user = 'root';
-	$mysql_pass = '';
-	$mysql_db = 'semrs';
-
-	$connections = mysql_connect($mysql_host, $mysql_user, $mysql_pass) or die ('Unabale to connect to the database');
-	mysql_select_db($mysql_db) or die ('Unable to select database!');
-	return;
-}
-
-function getAge($birthdate) {
-	// Explode the date (YYYY-MM-DD)
-	list($birth_year, $birth_month, $birth_day) = explode("-", $birthdate);
-	// Find the differences
-	$year_diff = date("Y") - $birth_year;
-	$month_diff = date("m") - $birth_month;
-	$day_diff = date("d") - $birth_day;
-	// If the birthday has not occured this year
-	if ($day_diff < 0 || $month_diff < 0) $year_diff--;
-	return $year_diff;
-}
-
-connect();
 if (!isset($_SESSION['patient_id'])) {
 	
 	?> <!-- HTML / FAIL-->
@@ -33,21 +10,34 @@ if (!isset($_SESSION['patient_id'])) {
 	<!-- HTML --> <?php
 
 } else {
+	// Private Key
+	$privKey = $log->getPrivateKey('../../', 'common');
+	
 	// Get all of the nessesary data for the user to view
-	$query = "SELECT * FROM `patient_data` WHERE `id` = '".$_SESSION['patient_id']."'";
+	$query = "SELECT * FROM `patient_data` WHERE `id` = '".$_SESSION['patient_id']."';";
 	$result = mysql_query($query) or die(mysql_error());
 	$row = mysql_fetch_assoc($result);
-	$fname = $row['fname'] != "" ? $row['fname']." " : "";
-	$mname = $row['mname'] != "" ? $row['mname']." " : "";
-	$lname = $row['lname'];
+		
+	$fname = $log->decrypt($row['fname'], $privKey);
+	$mname = $log->decrypt($row['mname'], $privKey);
+	$lname = $log->decrypt($row['lname'], $privKey);
 	$dob = $row['DOB'];
+	$street = $log->decrypt($row['street'], $privKey);
+	$city = $log->decrypt($row['city'], $privKey);
+	$state = $log->decrypt($row['state'], $privKey);
+	$postal_code = $log->decrypt($row['postal_code'], $privKey);
+	
+	
+	$fname = $fname != "" ? $fname." " : "";
+	$mname = $mname != "" ? $mname." " : "";
+	$lname = $lname;
 	
 	$name = $fname.$mname.$lname;
 	
-	$street = $row['street'] != "" ? $row['street'].", " : "";
-	$city = $row['city'] != "" ? $row['city'].", " : "";
-	$state = $row['state'] != "" ? $row['state']." " : "";
-	$postal_code = $row['postal_code'] != "" ? $row['postal_code'].", " : "";
+	$street = $street != "" ? $street.", " : "";
+	$city = $city != "" ? $city.", " : "";
+	$state = $state != "" ? $state." " : "";
+	$postal_code = $postal_code != "" ? $postal_code.", " : "";
 	
 	$qry = "SELECT * FROM `geo_country_reference` WHERE `countries_id` = '".$row['country']."'";
 	$rlt = mysql_query($qry) or die(mysql_error());
@@ -95,7 +85,7 @@ if (!isset($_SESSION['patient_id'])) {
 				<h2>Patient Info</h2>
 				<div id="patient_info_bar">
 					<span class="patient_info"><strong>Name:</strong> <?php echo $name; ?></span>
-					<span class="patient_info"><strong>Age:</strong> <?php echo getAge($dob)." yrs"; ?></span>
+					<span class="patient_info"><strong>Age:</strong> <?php echo $log->getAge($dob)." yrs"; ?></span>
 					<span class="patient_info"><strong>DOB:</strong> <?php echo $dob; ?></span>
 				</div>
 				<div id="patient_tabs">

@@ -276,17 +276,39 @@ class logmein {
   function createpatient($title, $fname, $mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $postal_code, $country, $phone_home, $phone_cell, $regdate) {
     //conect to DB
     $this->dbconnect();
-    //
-    if ($lname != "" && $dob != "") {
-      $qry = $this->qry("INSERT INTO ".$this->patient_table." (".$this->patient_title.",".$this->patient_fname.",".$this->patient_mname.",".$this->patient_lname.",".$this->patient_dob.",".$this->patient_sex.",".$this->patient_race.",".$this->patient_ethnicity.",".$this->patient_street.",".$this->patient_city.",".$this->patient_postal_code.",".$this->patient_country.",".$this->patient_phone_home.",".$this->patient_phone_cell.",".$this->patient_regdate.") VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');", $title, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $postal_code, $country, $phone_home, $phone_cell, $regdate);
-      echo "New Patient: ".$lname." ".$mname.", ".$fname." was created!";
-      return true;
-    } else return false;
+		
+		$pubKey = $this->getPublicKey('', 'common');
+		
+		$title = $this->encrypt($title, $pubKey);
+		$fname = $this->encrypt($fname, $pubKey);
+		$mname = $this->encrypt($mname, $pubKey);
+		$lname = $this->encrypt($lname, $pubKey);
+		$dob = $dob;
+		$sex = $this->encrypt($sex, $pubKey);
+		$race = $this->encrypt($race, $pubKey);
+		$ethnicity = $this->encrypt($ethnicity, $pubKey);
+		$street = $this->encrypt($street, $pubKey);
+		$city = $this->encrypt($city, $pubKey);
+		$postal_code = $this->encrypt($postal_code, $pubKey);
+		$country = $this->encrypt($country, $pubKey);
+		$phone_home = $this->encrypt($phone_home, $pubKey);
+		$phone_cell = $this->encrypt($phone_cell, $pubKey);
+		
+
+		$qry = $this->qry("INSERT INTO ".$this->patient_table." (".$this->patient_title.",".$this->patient_fname.",".$this->patient_mname.",".$this->patient_lname.",".$this->patient_dob.",".$this->patient_sex.",".$this->patient_race.",".$this->patient_ethnicity.",".$this->patient_street.",".$this->patient_city.",".$this->patient_postal_code.",".$this->patient_country.",".$this->patient_phone_home.",".$this->patient_phone_cell.",".$this->patient_regdate.") VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');", $title, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $postal_code, $country, $phone_home, $phone_cell, $regdate);
+		echo "New Patient: ".$lname." ".$mname.", ".$fname." was created!";
+		return true;
   }
   
   function displaypatientinfo($search_type, $search_input) {
     //conect to DB
     $this->dbconnect();
+
+		$pubKey = $this->getPublicKey('', 'common');
+		$privKey = $this->getPrivateKey('', 'common');
+		
+		if ($search_input > 0) $search_input = encrypt($search_input, $pubKey);
+		
     //if both passwords match		
     $condition = $search_type == 'DOB' ? '=' : 'LIKE';
     $search_term = $condition == "LIKE" ? "%".$search_input : $search_input;
@@ -308,7 +330,7 @@ class logmein {
           <form name="select_name" id="select_id" enctype="application/x-www-form-urlencoded" method="post" action="../../form_action.php" onsubmit="window.close();">
           <select name="selectedpatient" size="<?php echo $num ?>" />
           <?php while($row = mysql_fetch_array($result)) { ?>
-            <option value="<?php echo $row[$this->patient_id] ?>"><?php echo $row[$this->patient_lname] ?> <?php echo $row[$this->patient_mname] ?>, <?php echo $row[$this->patient_fname] ?> 	<?php echo "Age:".$this->getAge($row[$this->patient_dob]); ?></option>				
+            <option value="<?php echo $row[$this->patient_id]; ?>"><?php echo $this->decrypt($row[$this->patient_lname], $privKey); ?> <?php echo $this->decrypt($row[$this->patient_mname], $privKey); ?>, <?php echo $this->decrypt($row[$this->patient_fname], $privKey); ?> 	<?php echo "Age:".$this->getAge($row[$this->patient_dob]); ?></option>				
           <?php } ?>
           </select><br />
           <input name="action" class="action" value="selectpatient" type="hidden" />
@@ -473,7 +495,28 @@ class logmein {
     //conect to DB
     $this->dbconnect();
     ?>
-    <form name="newPatient_form" method="post" id="newPatient_form" action="">
+		<script type="text/javascript">
+		function checkForm(f) {
+			var errors = new Array();
+			
+			var lname = f.elements["lname"].value;
+			var dob = f.elements["dob"].value;
+			
+			if (lname < 1) errors.push("Please enter a last name.\n");			
+			if (dob < 1) errors.push("Please enter a date of birth.\n");
+			else if (!isValidDate(dob)) errors.push("Please enter a valid date of birth.\n");
+			
+			if (errors.length > 0) {
+				var error_string = "";
+				for (var e = 0; e < errors.length; e++) error_string += errors[e];
+				alert(error_string);
+				return false;
+			} else {
+				addpatient(f);
+			}
+		}
+		</script>
+    <form method="post" action="" id="newPatient_form">
       <script type="text/javascript" src="../../form_control.js"></script>
       <fieldset>
         <legend>New Patient</legend>
@@ -553,7 +596,7 @@ class logmein {
 						</td>
           </tr>
           <tr>
-            <td colspan="4" align="center"><div style="text-align:center;"><input class="submit" value="Create Patient" type="button" onclick="addpatient('newPatient_form')" /> <input type="reset" /></div></td>
+            <td colspan="4" align="center"><div style="text-align:center;"><input class="submit" value="Create Patient" type="button" onclick="return checkForm(this.form); return false;" /> <input type="reset" /></div></td>
           </tr>
         </table>
       </fieldset>
@@ -566,18 +609,46 @@ class logmein {
     //conect to DB
     $this->dbconnect();
     ?>
-    <form name="searchPatient_form" method="post" id="searchPatient_form" action="">
+    <form method="post" action="">
       <label for="search_input">Patient</label>
       <input name="search_input" id="search_input" type="text" value="" size="22" title="Search for a patient." />
       <select name="search_type" id="search_type">
         <option value="lname">Last Name</option>
         <option value="DOB">Date of Birth</option>
       </select>
-      <input class="submit" value="Search" type="button" onclick="searchpatient('searchPatient_form')" />
+      <input class="submit" value="Search" type="button" onclick="searchpatient(this.form)" />
     </form>
   <?php
   }
-    
+	
+	function encrypt($data, $pubKey) {			
+		openssl_public_encrypt($data, $encrypted, $pubKey);
+		return $encrypted;
+	}
+	
+	function decrypt($data, $privKey) {			
+		openssl_private_decrypt($data, $decrypted, $privKey); 
+		return $decrypted;
+	}
+	
+	function getPublicKey($parentDir, $key) {
+		// Public Key
+		$filename = $parentDir."ssl/keys/".$key.".pub";
+		$handle = fopen($filename, 'r');
+		$pubKey = fread($handle, filesize($filename));
+		fclose($handle);
+		return $pubKey;
+	}
+	
+	function getPrivateKey($parentDir, $key) {
+		// Private Key
+		$filename = $parentDir."ssl/keys/".$key;
+		$handle = fopen($filename, 'r');
+		$privKey = fread($handle, filesize($filename));
+		fclose($handle);
+		return $privKey;
+	}
+	
   // Creates a dropdown menu for a specific table
   function dropdown($label, $title, $table, $value, $option, $selected) {
     $this->dbconnect();

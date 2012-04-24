@@ -76,7 +76,6 @@ if($_POST['action'] == "addpatient"){
 if($_POST['action'] == "searchpatient"){
     if($log->displaypatientinfo($_POST['type'], $_POST['input']) == true){
         //do something after finding patients...
-				//echo "Found Patient!";
     } else {
         //do something on failed patient search...
 				echo "Failed to Find Patient!";

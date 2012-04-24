@@ -95,7 +95,7 @@ function requestForm(s, form_id, alert_mssg) {
 					win = window.open(this.href, "", "width=300,height=300");
 					win.document.writeln(return_data);
 				}
-				clearForm(document.getElementById(form_id));
+				clearForm(form_id);
 			}
 		}
 	}
@@ -126,20 +126,20 @@ function changepassword(form_id) {
 
 function addpatient(form_id) {
 	// Get form information
-	var title = document.getElementById('title').value;
-	var fname = document.getElementById('fname').value;
-	var mname = document.getElementById('mname').value;
-	var lname = document.getElementById('lname').value;
-	var dob = document.getElementById('dob').value;
-	var sex = document.getElementById('sex').value;
-	var race = document.getElementById('race').value;
-	var ethnicity = document.getElementById('ethnicity').value;
-	var street = document.getElementById('street').value;
-	var city = document.getElementById('city').value;
-	var postal_code = document.getElementById('postal_code').value;
-	var country = document.getElementById('geo_country_reference').value;
-	var phone_home = document.getElementById('home').value;
-	var phone_cell = document.getElementById('cell').value;
+	var title = form_id.elements['title'].value;
+	var fname = form_id.elements['fname'].value;
+	var mname = form_id.elements['mname'].value;
+	var lname = form_id.elements['lname'].value;
+	var dob = form_id.elements['dob'].value;
+	var sex = form_id.elements['sex'].value;
+	var race = form_id.elements['race'].value;
+	var ethnicity = form_id.elements['ethnicity'].value;
+	var street = form_id.elements['street'].value;
+	var city = form_id.elements['city'].value;
+	var postal_code = form_id.elements['postal_code'].value;
+	var country = form_id.elements['geo_country_reference'].value;
+	var phone_home = form_id.elements['home'].value;
+	var phone_cell = form_id.elements['cell'].value;
 	var regdate = getDate();	
 	// Send data to the form action
 	var s = "action=addpatient&title=" + title + "&fname=" + fname + "&mname=" + mname + "&lname=" + lname + "&dob=" + dob + "&sex=" + sex + "&race=" + race + "&ethnicity=" + ethnicity + "&street=" + street + "&city=" + city + "&postal_code=" + postal_code + "&country=" + country + "&phone_home=" + phone_home + "&phone_cell=" + phone_cell + "&regdate=" + regdate;
@@ -167,5 +167,48 @@ function getDate() {
   var day = currentTime.getDate()
   var year = currentTime.getFullYear()
   return year + "-" + month + "-" + day;
+}
+
+function isValidDate(dateStr) {
+	// Checks for the following valid date formats:
+	// YYYY/MM/DD/YY or YYYY-MM-DD
+	// Also separates date into month, day, and year variables
+
+	// To require a 4 digit year entry, use this line instead:
+	var datePat = /^(\d{4})(\/|-)(\d{1,2})\2(\d{1,2})$/;
+
+	var matchArray = dateStr.match(datePat); // is the format ok?
+	if (matchArray == null) {
+		alert("Date is not in a valid format.")
+		return false;
+	}
+	
+	year = matchArray[1]; // parse date into variables
+	month = matchArray[3];
+	day = matchArray[4];
+	
+	if (month.length == 1) month = "0" + month;
+	if (day.length == 1) day = "0" + day;
+	
+	if (month < 1 || month > 12) { // check month range
+		alert("Month must be between 1 and 12.");
+		return false;
+	}
+	if (day < 1 || day > 31) {
+		alert("Day must be between 1 and 31.");
+		return false;
+	}
+	if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+		alert("Month "+month+" doesn't have 31 days!")
+		return false;
+	}
+	if (month == 2) { // check for february 29th
+		var isleap = (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+		if (day > 29 || (day == 29 && !isleap)) {
+			alert("February " + year + " doesn't have " + day + " days!");
+			return false;
+		}
+	}
+	return true;  // date is valid
 }
 
