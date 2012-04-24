@@ -85,6 +85,7 @@ if($_POST['action'] == "searchpatient"){
 if($_POST['action'] == "selectpatient"){
   $_SESSION['patient_id'] = $_POST['selectedpatient'];
 	echo "Selected patient id = ".$_SESSION['patient_id'];
+	header("location:interface/physician/main.php?viewpatient");
 }
 
 if($_POST['action'] == "logout"){

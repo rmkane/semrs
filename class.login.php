@@ -299,48 +299,6 @@ class logmein {
 		echo "New Patient: ".$lname." ".$mname.", ".$fname." was created!";
 		return true;
   }
-  
-  function displaypatientinfo($search_type, $search_input) {
-    //conect to DB
-    $this->dbconnect();
-
-		$pubKey = $this->getPublicKey('', 'common');
-		$privKey = $this->getPrivateKey('', 'common');
-		
-		if ($search_input > 0) $search_input = encrypt($search_input, $pubKey);
-		
-    //if both passwords match		
-    $condition = $search_type == 'DOB' ? '=' : 'LIKE';
-    $search_term = $condition == "LIKE" ? "%".$search_input : $search_input;
-    $qry = "SELECT * FROM ".$this->patient_table." WHERE ".$search_type." ".$condition." '".$search_term."' ORDER BY lname, fname;";
-    $result = mysql_query($qry) or die(mysql_error());
-    if (mysql_num_rows($result) > 0) {
-      $num = mysql_num_rows($result);
-      ?>
-      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-      <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-        <head>
-          <title>Search Results</title>
-          <meta name="Author" content="Ryan Kane" />
-          <link rel="stylesheet" href="<?php echo $css_header;?>" type="text/css" />
-        </head>
-        <body onblur="self.close();" >
-          <strong>Found <?php echo $num ?> patients matching <?php echo $search_input ?><br /></strong>
-          <form name="select_name" id="select_id" enctype="application/x-www-form-urlencoded" method="post" action="../../form_action.php" onsubmit="window.close();">
-          <select name="selectedpatient" size="<?php echo $num ?>" />
-          <?php while($row = mysql_fetch_array($result)) { ?>
-            <option value="<?php echo $row[$this->patient_id]; ?>"><?php echo $this->decrypt($row[$this->patient_lname], $privKey); ?> <?php echo $this->decrypt($row[$this->patient_mname], $privKey); ?>, <?php echo $this->decrypt($row[$this->patient_fname], $privKey); ?> 	<?php echo "Age:".$this->getAge($row[$this->patient_dob]); ?></option>				
-          <?php } ?>
-          </select><br />
-          <input name="action" class="action" value="selectpatient" type="hidden" />
-          <input name="submit" class="submit" value="Select Patient" type="submit" />
-        </body>
-      </html>
-      <?php
-      return true;
-    } else return false;
-  }
  
   //login form
   function loginform($action_login){
@@ -608,15 +566,23 @@ class logmein {
   function search_patient_form(){
     //conect to DB
     $this->dbconnect();
-    ?>
-    <form method="post" action="">
+		
+		$privKey = $this->getPrivateKey('../../', 'common');
+		
+		$qry = "SELECT * FROM `patient_data` ORDER BY `lname`";
+		$result = mysql_query($qry) or die(mysql_error());
+		?>		
+		
+    <form enctype="application/x-www-form-urlencoded" method="post" action="../../form_action.php">
       <label for="search_input">Patient</label>
-      <input name="search_input" id="search_input" type="text" value="" size="22" title="Search for a patient." />
-      <select name="search_type" id="search_type">
-        <option value="lname">Last Name</option>
-        <option value="DOB">Date of Birth</option>
+      <select name="selectedpatient" id="selectedpatient"/>
+        <?php while($row = mysql_fetch_assoc($result)) { ?>
+            <option value="<?php echo $row[$this->patient_id]; ?>"><?php echo $this->decrypt($row[$this->patient_lname], $privKey); ?> <?php echo $this->decrypt($row[$this->patient_mname], $privKey); ?>, <?php echo $this->decrypt($row[$this->patient_fname], $privKey); ?> 	<?php echo "Age:".$this->getAge($row[$this->patient_dob]); ?></option>				
+        <?php } ?>
       </select>
-      <input class="submit" value="Search" type="button" onclick="searchpatient(this.form)" />
+			<script type="text/javascript">document.getElementById('selectedpatient').selectedIndex = -1;</script>
+      <input name="action" class="action" value="selectpatient" type="hidden" />
+      <input name="submit" class="submit" value="Select Patient" type="submit" />
     </form>
   <?php
   }
