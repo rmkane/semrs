@@ -118,7 +118,7 @@ if (!isset($_SESSION['patient_id'])) {
 						<label for="file">Upload Patient Photo:</label><br />
 						Supported filetype: jpg<br />
 						Dimensions 128x128<br />
-						Max Size: 3kb Max<br />
+						Max Size: 60kb Max<br />
 						<input type="file" name="file" id="file" /><br />
 						<input type="submit" name="submit" value="Submit" />
 						<input name="action" class="action" value="upload" type="hidden" />
@@ -135,6 +135,30 @@ if (!isset($_SESSION['patient_id'])) {
 			</div>
 			<div class="tab_view" id="tab_messages" style="display:none;">
 				<h2>Messages</h2>
+				<input type="button" value="New Message" onclick="document.getElementById('new_message').style.display = 'block'" />
+				<div id="new_message" style="display:none">
+					<form method="post">
+						<label>To</label><?php user_list('sender') ?>
+						<label>Subject</label><input type="text" name="subject" /><br />
+						<label>Message</label><br /><textarea rows="12" cols="60"></textarea><br />
+						<input type="submit" name="send" value="Send Message" />
+					</form>
+					<?php
+					// Does not actually work
+					if(isset($_POST['send']) && isset($_POST['sender']) && isset($_POST['subject']) && isset($_POST['message'])){
+						$query = "INSERT INTO `message`(`author`, `recipient`, `subject`, `message`) VALUES ('".$_SESSION['userid']."','".$_POST['subject']."','".$_POST['message']."')";
+						mysql_query($query) or die(mysql_error());
+					}
+					?>
+				</div>
+				<table>
+					<tr><th>From</th><th>Subject</th><th>Message</th><th>Date</th></tr>
+					<tr>
+						<?php
+						
+						?>
+					</tr>
+				</table>
 			</div>
 			<div class="tab_view" id="tab_access" style="display:none;">
 				<h2>Access</h2>
@@ -171,4 +195,16 @@ if (!isset($_SESSION['patient_id'])) {
 			</div>
 		</div>
 	<!-- HTML -->
-	<?php } ?>
+	<?php } 
+	
+	function user_list($name) {
+		?><select name="<?php echo $name; ?>"><?php
+		$query = "SELECT * FROM `users`";
+		$result = mysql_query($query) or die(mysql_error());
+		while($row = mysql_fetch_assoc($result)) {
+			?><option value="<?php echo $row['id']; ?>"><?php echo $row['email'];?></option><?php
+		}
+		?></select><?php
+	}
+	
+	?>

@@ -149,7 +149,7 @@ class logmein {
     $result = $this->qry("SELECT * FROM ".$this->user_table." WHERE ".$this->user_password." = '?';" , $logincode);
     $rownum = mysql_num_rows($result);
     //return true if logged in and false if not
-    if($row != "Error"){
+    if($rownum != "Error"){
       if($rownum > 0){
         return true;
       } else {
@@ -665,7 +665,7 @@ class logmein {
     $month_diff = date("m") - $birth_month;
     $day_diff = date("d") - $birth_day;
     // If the birthday has not occured this year
-    if ($day_diff < 0 || $month_diff < 0) $year_diff--;
+    if (($day_diff < 0 && $month_diff == 0) || $month_diff < 0) $year_diff--;
     return $year_diff;
   }
   

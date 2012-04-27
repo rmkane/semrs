@@ -4,7 +4,7 @@ include("class.login.php");
 $connections = mysql_connect("localhost", "root", "") or die ('Unabale to connect to the database'); 
 mysql_select_db("semrs") or die ('Unable to select database!');
 
-if ((($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/pjpeg")) && ($_FILES["file"]["size"] < 30000)) {
+if ((($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/pjpeg")) && ($_FILES["file"]["size"] < 60000)) {
   if ($_FILES["file"]["error"] > 0) {
     echo "Return Code: " . $_FILES["file"]["error"] . "<br />";
   } else {
