@@ -48,6 +48,7 @@ class logmein {
   var $patient_ethnicity = 'ethnicity';
   var $patient_street = 'street';
   var $patient_city = 'city';
+	var $patient_state = 'state';
   var $patient_postal_code = 'postal_code';
   var $patient_country = 'country';
   var $patient_phone_home = 'phone_home';
@@ -273,7 +274,7 @@ class logmein {
   }
   
     // I added this
-  function createpatient($title, $fname, $mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $postal_code, $country, $phone_home, $phone_cell, $regdate) {
+  function createpatient($title, $fname, $mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $state, $postal_code, $country, $phone_home, $phone_cell) {
     //conect to DB
     $this->dbconnect();
 		
@@ -283,23 +284,24 @@ class logmein {
 		$fname = $this->encrypt($fname, $pubKey);
 		$mname = $this->encrypt($mname, $pubKey);
 		$lname = $this->encrypt($lname, $pubKey);
-		$dob = $dob;
+		$dob = $this->encrypt($dob, $pubKey);
 		$sex = $this->encrypt($sex, $pubKey);
 		$race = $this->encrypt($race, $pubKey);
 		$ethnicity = $this->encrypt($ethnicity, $pubKey);
 		$street = $this->encrypt($street, $pubKey);
 		$city = $this->encrypt($city, $pubKey);
+		$state = $this->encrypt($state, $pubKey);
 		$postal_code = $this->encrypt($postal_code, $pubKey);
 		$country = $this->encrypt($country, $pubKey);
 		$phone_home = $this->encrypt($phone_home, $pubKey);
 		$phone_cell = $this->encrypt($phone_cell, $pubKey);
+		$regdate = $this->encrypt(time(), $pubKey);
 		
-
-		$qry = $this->qry("INSERT INTO ".$this->patient_table." (".$this->patient_title.",".$this->patient_fname.",".$this->patient_mname.",".$this->patient_lname.",".$this->patient_dob.",".$this->patient_sex.",".$this->patient_race.",".$this->patient_ethnicity.",".$this->patient_street.",".$this->patient_city.",".$this->patient_postal_code.",".$this->patient_country.",".$this->patient_phone_home.",".$this->patient_phone_cell.",".$this->patient_regdate.") VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');", $title, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $postal_code, $country, $phone_home, $phone_cell, $regdate);
+		$qry = $this->qry("INSERT INTO ".$this->patient_table." (".$this->patient_title.",".$this->patient_fname.",".$this->patient_mname.",".$this->patient_lname.",".$this->patient_dob.",".$this->patient_sex.",".$this->patient_race.",".$this->patient_ethnicity.",".$this->patient_street.",".$this->patient_city.",".$this->patient_state.",".$this->patient_postal_code.",".$this->patient_country.",".$this->patient_phone_home.",".$this->patient_phone_cell.",".$this->patient_regdate.") VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');", $title, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $state, $postal_code, $country, $phone_home, $phone_cell, $regdate);
 		echo "New Patient: ".$lname." ".$mname.", ".$fname." was created!";
 		return true;
   }
- 
+
   //login form
   function loginform($action_login){
     //conect to DB
@@ -569,15 +571,38 @@ class logmein {
 		
 		$privKey = $this->getPrivateKey('../../', 'common');
 		
-		$qry = "SELECT * FROM `patient_data` ORDER BY `lname`";
+		$qry = "SELECT * FROM `patient_data` ORDER BY 'lname'";
 		$result = mysql_query($qry) or die(mysql_error());
-		?>		
+		
+		/*
+		$patient_list = Array();
+		while($row = mysql_fetch_assoc($result)) {
+			$patient_list[] = $row;
+		}
+		
+		for ($i = 0; $i < sizeof($patient_list); $i++) {
+			foreach($patient_list[$i] as $key => $value) {	
+				if ($key === "lname") $patient_list[$i]["$key"] = $this->decrypt($value, $privKey);
+			}
+		}
+		
+		for ($i = 0; $i < sizeof($patient_list); $i++) {
+			$p = $patient_list[$i];
+			
+			asort($p, $patient_list[$i]['lname']);
+		}	
+
+		*/	
+		?>
+		
+		<pre><?php print_r($patient_list); ?></pre>
 		
     <form enctype="application/x-www-form-urlencoded" method="post" action="../../form_action.php">
       <label for="search_input">Patient</label>
       <select name="selectedpatient" id="selectedpatient"/>
         <?php while($row = mysql_fetch_assoc($result)) { ?>
-            <option value="<?php echo $row[$this->patient_id]; ?>"><?php echo $this->decrypt($row[$this->patient_lname], $privKey); ?> <?php echo $this->decrypt($row[$this->patient_mname], $privKey); ?>, <?php echo $this->decrypt($row[$this->patient_fname], $privKey); ?> 	<?php echo "Age:".$this->getAge($row[$this->patient_dob]); ?></option>				
+						<?php $dob = $this->decrypt($row[$this->patient_dob], $privKey); echo dob;  ?>
+            <option value="<?php echo $row[$this->patient_id]; ?>"><?php echo $this->decrypt($row[$this->patient_lname], $privKey); ?> <?php echo $this->decrypt($row[$this->patient_mname], $privKey); ?>, <?php echo $this->decrypt($row[$this->patient_fname], $privKey); ?> 	<?php echo "Age:".$this->getAge($dob); ?></option>				
         <?php } ?>
       </select>
 			<script type="text/javascript">document.getElementById('selectedpatient').selectedIndex = -1;</script>

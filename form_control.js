@@ -136,13 +136,13 @@ function addpatient(form_id) {
 	var ethnicity = form_id.elements['ethnicity'].value;
 	var street = form_id.elements['street'].value;
 	var city = form_id.elements['city'].value;
+	var state = form_id.elements['state'].value;
 	var postal_code = form_id.elements['postal_code'].value;
 	var country = form_id.elements['geo_country_reference'].value;
 	var phone_home = form_id.elements['home'].value;
 	var phone_cell = form_id.elements['cell'].value;
-	var regdate = getDate();	
 	// Send data to the form action
-	var s = "action=addpatient&title=" + title + "&fname=" + fname + "&mname=" + mname + "&lname=" + lname + "&dob=" + dob + "&sex=" + sex + "&race=" + race + "&ethnicity=" + ethnicity + "&street=" + street + "&city=" + city + "&postal_code=" + postal_code + "&country=" + country + "&phone_home=" + phone_home + "&phone_cell=" + phone_cell + "&regdate=" + regdate;
+	var s = "action=addpatient&title=" + title + "&fname=" + fname + "&mname=" + mname + "&lname=" + lname + "&dob=" + dob + "&sex=" + sex + "&race=" + race + "&ethnicity=" + ethnicity + "&street=" + street + "&city=" + city + "&state=" + state + "&postal_code=" + postal_code + "&country=" + country + "&phone_home=" + phone_home + "&phone_cell=" + phone_cell;
 	requestForm(s, form_id, true);
 }
 
