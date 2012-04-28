@@ -27,7 +27,11 @@ if (!isset($_SESSION['patient_id'])) {
 	$state = $log->decrypt($row['state'], $privKey);
 	$postal_code = $log->decrypt($row['postal_code'], $privKey);
 	$regdate = date("M d, Y", $log->decrypt($row['regdate'], $privKey));
-	
+	$phone_home = $log->decrypt($row['phone_home'], $privKey);
+	$phone_cell = $log->decrypt($row['phone_cell'], $privKey);
+	$sex = $log->decrypt($row['sex'], $privKey);
+	$ethnicity = $log->decrypt($row['ethnicity'], $privKey);
+	$race = $log->decrypt($row['race'], $privKey);
 	
 	$fname = $fname != "" ? $fname." " : "";
 	$mname = $mname != "" ? $mname." " : "";
@@ -46,7 +50,9 @@ if (!isset($_SESSION['patient_id'])) {
 	$country = $r['countries_iso_code_3'];
 	
 	$address = $street.$city.$state.$postal_code.$country;
-	// Add stuff here!!!
+	
+	$phone_home = $phone_home != "" ? $phone_home." (Home)" : "";
+	$phone_cell = $phone_cell != "" ? $phone_cell." (Cell)" : "";
 	
 	
 	?> <!-- HTML / PASS-->
@@ -58,10 +64,7 @@ if (!isset($_SESSION['patient_id'])) {
 			.tab_view {background:#ddd; border:#444 thin solid;}
 			
 			#patient_info_bar {padding:2px; background:#ccc;}
-			.patient_info {margin-right:1em;}
-			
-			table, tr, th, td {border:#555 thick solid; padding:4px;}
-			
+			.patient_info {margin-right:1em;}		
 		</style>
 		<script type="text/javascript">
 		function showTab(id) {
@@ -88,6 +91,7 @@ if (!isset($_SESSION['patient_id'])) {
 				<span class="patient_info"><strong>Name:</strong> <?php echo $name; ?></span>
 				<span class="patient_info"><strong>Age:</strong> <?php echo $log->getAge($dob)." yrs"; ?></span>
 				<span class="patient_info"><strong>DOB:</strong> <?php echo $dob; ?></span>
+				<span class="patient_info"><strong>Sex:</strong> <?php echo $sex; ?></span>
 				<span class="patient_info"><strong>Registration Date:</strong> <?php echo $regdate; ?></span>
 			</div>
 			<div id="patient_tabs">
@@ -101,8 +105,8 @@ if (!isset($_SESSION['patient_id'])) {
 				<h2>Patient ID = <?php echo $_SESSION['patient_id'] ?></h2>
 				
 				<?php
-				$connections = mysql_connect("localhost", "root", "") or die ('Unabale to connect to the database');
-				mysql_select_db("semrs") or die ('Unable to select database!');
+				//$connections = mysql_connect("localhost", "root", "") or die ('Unabale to connect to the database');
+				//mysql_select_db("semrs") or die ('Unable to select database!');
 				$query = "SELECT data FROM photo where patient_id = '".$_SESSION['patient_id']."'";
 				$result = mysql_query($query) or die(mysql_error());
 				if (mysql_num_rows($result) == 0) {
@@ -126,6 +130,9 @@ if (!isset($_SESSION['patient_id'])) {
 				</div>
 				<br />		
 				<label>Address:</label> <?php echo $address ?><br />
+				<label>Race:</label> <?php echo $race; ?>/<?php echo $ethnicity; ?><br /> 
+				<label>Phone:</label> <?php echo $phone_home; ?> <?php echo $phone_cell; ?><br />
+				
 			</div>
 			<div class="tab_view" id="tab_appointments" style="display:none;">
 				<h2>Appointments</h2>
@@ -137,27 +144,25 @@ if (!isset($_SESSION['patient_id'])) {
 				<h2>Messages</h2>
 				<input type="button" value="New Message" onclick="document.getElementById('new_message').style.display = 'block'" />
 				<div id="new_message" style="display:none">
-					<form method="post">
-						<label>To</label><?php user_list('sender') ?>
-						<label>Subject</label><input type="text" name="subject" /><br />
-						<label>Message</label><br /><textarea rows="12" cols="60"></textarea><br />
-						<input type="submit" name="send" value="Send Message" />
-					</form>
 					<?php
-					// Does not actually work
-					if(isset($_POST['send']) && isset($_POST['sender']) && isset($_POST['subject']) && isset($_POST['message'])){
-						$query = "INSERT INTO `message`(`author`, `recipient`, `subject`, `message`) VALUES ('".$_SESSION['userid']."','".$_POST['subject']."','".$_POST['message']."')";
-						mysql_query($query) or die(mysql_error());
-					}
+					$log->message_form();
 					?>
 				</div>
 				<table>
 					<tr><th>From</th><th>Subject</th><th>Message</th><th>Date</th></tr>
-					<tr>
-						<?php
-						
-						?>
-					</tr>
+					<?php
+						$_qry = "SELECT * FROM `message` WHERE `recipient` = '".$_SESSION['userid']."' ORDER BY `timestamp` DESC";
+						$_res = mysql_query($_qry) or die(mysql_error());
+						while ($_row = mysql_fetch_assoc($_res)) {
+							$e_q = "SELECT `email` FROM `users` WHERE `id` = '".$_row['author']."'";
+							$e_r = mysql_query($e_q) or die(mysql_error());
+							$e_a = mysql_fetch_row($e_r);
+							$author = $e_a[0];
+							?>
+							<tr><td><?php echo $author; ?></td><td><?php echo $_row['subject']; ?></td><td><?php echo $_row['message']; ?></td><td><?php echo $_row['timestamp']; ?></td></tr>
+							<?php
+						}
+					?>
 				</table>
 			</div>
 			<div class="tab_view" id="tab_access" style="display:none;">
@@ -195,16 +200,4 @@ if (!isset($_SESSION['patient_id'])) {
 			</div>
 		</div>
 	<!-- HTML -->
-	<?php } 
-	
-	function user_list($name) {
-		?><select name="<?php echo $name; ?>"><?php
-		$query = "SELECT * FROM `users`";
-		$result = mysql_query($query) or die(mysql_error());
-		while($row = mysql_fetch_assoc($result)) {
-			?><option value="<?php echo $row['id']; ?>"><?php echo $row['email'];?></option><?php
-		}
-		?></select><?php
-	}
-	
-	?>
+	<?php }	?>

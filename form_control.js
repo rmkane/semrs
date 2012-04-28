@@ -161,6 +161,14 @@ function selectpatient(form_id) {
 	requestForm(s, form_id, true);
 }
 
+function send_message(form_id) {
+	var recipient = form_id.elements['recipient'].value;
+	var subject = form_id.elements['subject'].value;
+	var message = form_id.elements['message'].value;
+	var s = "action=sendmessage&recipient=" + recipient + "&subject=" + subject + "&message=" + message;
+	requestForm(s, form_id, true);
+}
+
 function getDate() {
   var currentTime = new Date()
   var month = currentTime.getMonth() + 1

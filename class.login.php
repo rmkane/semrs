@@ -1,6 +1,6 @@
 <?php
 //For security reasons, don't display any errors or warnings. Comment out in DEV.
-error_reporting(0);
+//error_reporting(0);
 
 include('globals.php');	
 
@@ -278,6 +278,8 @@ class logmein {
     //conect to DB
     $this->dbconnect();
 		
+		$mssg = "New Patient: ".$lname." ".$mname.", ".$fname." was created!"; 
+		
 		$pubKey = $this->getPublicKey('', 'common');
 		
 		$title = $this->encrypt($title, $pubKey);
@@ -298,9 +300,18 @@ class logmein {
 		$regdate = $this->encrypt(time(), $pubKey);
 		
 		$qry = $this->qry("INSERT INTO ".$this->patient_table." (".$this->patient_title.",".$this->patient_fname.",".$this->patient_mname.",".$this->patient_lname.",".$this->patient_dob.",".$this->patient_sex.",".$this->patient_race.",".$this->patient_ethnicity.",".$this->patient_street.",".$this->patient_city.",".$this->patient_state.",".$this->patient_postal_code.",".$this->patient_country.",".$this->patient_phone_home.",".$this->patient_phone_cell.",".$this->patient_regdate.") VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');", $title, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $state, $postal_code, $country, $phone_home, $phone_cell, $regdate);
-		echo "New Patient: ".$lname." ".$mname.", ".$fname." was created!";
+		echo $mssg;
 		return true;
   }
+	
+	function sendmessage($recipient, $subject, $message) {
+		//conect to DB
+    $this->dbconnect();
+		if ($recipient != "" && $message != "") {
+			$qry = $this->qry("INSERT INTO `message` (`author`, `recipient`, `subject`, `message`) VALUES ('?', '?', '?', '?');", $_SESSION['userid'], $recipient, $subject, $message);
+			return true;
+		} else return false;
+	}
 
   //login form
   function loginform($action_login){
@@ -333,7 +344,7 @@ class logmein {
   }
   
     //new user form
-  function newuserform($formaction){
+  function newuserform(){
     //conect to DB
     $this->dbconnect();
     ?>
@@ -592,10 +603,11 @@ class logmein {
 			asort($p, $patient_list[$i]['lname']);
 		}	
 
+		echo "<pre>";
+		print_r($patient_list);
+		echo "</pre>";
 		*/	
 		?>
-		
-		<pre><?php print_r($patient_list); ?></pre>
 		
     <form enctype="application/x-www-form-urlencoded" method="post" action="../../form_action.php">
       <label for="search_input">Patient</label>
@@ -611,6 +623,21 @@ class logmein {
     </form>
   <?php
   }
+	
+	function message_form() {
+    //conect to DB
+    $this->dbconnect();
+	  ?>
+		<script type="text/javascript" src="../../form_control.js"></script>
+		<form method="post" action="">
+			<label>To</label><?php $this->user_list('recipient') ?>
+			<label>Subject</label><input type="text" name="subject" /><br />
+			<label>Message</label><br /><textarea name="message" rows="12" cols="60"></textarea><br />
+			<input type="submit" name="send" value="Send Message" onclick="send_message(this.form);"/>
+		</form>
+
+		<?php
+	}
 	
 	function encrypt($data, $pubKey) {			
 		openssl_public_encrypt($data, $encrypted, $pubKey);
@@ -656,6 +683,16 @@ class logmein {
     $dropdown_list .= '</select></td>';
     echo $dropdown_list;
   }
+	
+	function user_list($name) {
+		?><select name="<?php echo $name; ?>"><?php
+		$query = "SELECT * FROM `users`";
+		$result = mysql_query($query) or die(mysql_error());
+		while($row = mysql_fetch_assoc($result)) {
+			?><option value="<?php echo $row['id']; ?>"><?php echo $row['email'];?></option><?php
+		}
+		?></select><?php
+	}
   
   function getAge($birthdate) {
     // Explode the date (YYYY-MM-DD)

@@ -90,6 +90,15 @@ if($_POST['action'] == "selectpatient"){
 	header("location:interface/physician/main.php?viewpatient");
 }
 
+if($_POST['action'] == "sendmessage"){
+    if($log->sendmessage($_POST['recipient'], $_POST['subject'], $_POST['message']) == true){
+        echo "Message Sent!";
+    } else {
+        //do something on failed patient search...
+				echo "Failed to send message!";
+    }
+}
+
 if($_POST['action'] == "logout"){
   $log->logout();
 	//echo "Redirecting...";
