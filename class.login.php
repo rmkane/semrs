@@ -184,7 +184,7 @@ class logmein {
     $this->dbconnect();
     $username = $_SESSION['useremail'];
     $result = $this->qry("SELECT ".$this->user_password." FROM ".$this->user_table." WHERE ".$this->user_email." = '?';", $username);
-    $row=mysql_fetch_assoc($result);
+    $row = mysql_fetch_assoc($result);
     if(row != "Error") {
       $oldpassword = md5($oldpassword);
       if ($oldpassword == $row[$this->user_password]) {
@@ -310,7 +310,10 @@ class logmein {
 		if ($recipient != "" && $message != "") {
 			$qry = $this->qry("INSERT INTO `message` (`author`, `recipient`, `subject`, `message`) VALUES ('?', '?', '?', '?');", $_SESSION['userid'], $recipient, $subject, $message);
 			return true;
-		} else return false;
+		} else {
+			echo "ERROR";
+			return false;
+		}
 	}
 
   //login form
@@ -348,7 +351,7 @@ class logmein {
     //conect to DB
     $this->dbconnect();
     ?>
-    <form name="newuser_form" id="newuser_form" method="post" action="">
+    <form id="newuser_form" method="post" action="">
       <script type="text/javascript" src="../../form_control.js"></script>
       <fieldset>
         <legend>Create User</legend>
@@ -392,7 +395,7 @@ class logmein {
     //conect to DB
     $this->dbconnect();
     ?>
-    <form name="changepass_form" id="changepass_form" method="post" action="">
+    <form id="changepass_form" method="post" action="">
       <script type="text/javascript" src="../../form_control.js"></script>
       <fieldset>
         <legend>Change Password</legend>
@@ -628,12 +631,12 @@ class logmein {
     //conect to DB
     $this->dbconnect();
 	  ?>
-		<script type="text/javascript" src="../../form_control.js"></script>
 		<form method="post" action="">
+			<script type="text/javascript" src="../../form_control.js"></script>
 			<label>To</label><?php $this->user_list('recipient') ?>
 			<label>Subject</label><input type="text" name="subject" /><br />
 			<label>Message</label><br /><textarea name="message" rows="12" cols="60"></textarea><br />
-			<input type="submit" name="send" value="Send Message" onclick="send_message(this.form);"/>
+			<input type="button" name="send" value="Send Message" onclick="send_message(this.form);"/>
 		</form>
 
 		<?php

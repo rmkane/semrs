@@ -82,8 +82,6 @@ if($_POST['action'] == "searchpatient"){
     }
 }
 
-
-
 if($_POST['action'] == "selectpatient"){
   $_SESSION['patient_id'] = $_POST['selectedpatient'];
 	echo "Selected patient id = ".$_SESSION['patient_id'];
@@ -94,7 +92,6 @@ if($_POST['action'] == "sendmessage"){
     if($log->sendmessage($_POST['recipient'], $_POST['subject'], $_POST['message']) == true){
         echo "Message Sent!";
     } else {
-        //do something on failed patient search...
 				echo "Failed to send message!";
     }
 }
