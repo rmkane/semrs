@@ -1,5 +1,5 @@
 <?php
-	$pagearray = array("home", "help", "about", "newpatient", "viewpatient", "account", "select");
+	$pagearray = array("home", "help", "about", "newpatient", "viewpatient", "account", "select", "messages");
 	$which =  $_SERVER["QUERY_STRING"];
 	include("../../class.login.php");
   $log = new logmein();		//Instentiate the class

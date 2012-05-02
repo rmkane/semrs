@@ -142,7 +142,7 @@ if (!isset($_SESSION['patient_id'])) {
 			</div>
 			<div class="tab_view" id="tab_messages" style="display:none;">
 				<h2>Messages</h2>
-				<input type="button" value="New Message" onclick="document.getElementById('new_message').style.display = 'block'" />
+				<input type="button" id="btn_newmssg" value="New Message" onclick="document.getElementById('new_message').style.display = 'block'; this.style.display = 'none';" />
 				<div id="new_message" style="display:none">
 					<?php
 					$log->message_form();

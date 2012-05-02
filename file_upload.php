@@ -14,19 +14,27 @@ if ((($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "im
     echo "Size: " . round(($_FILES["file"]["size"] / 1024), 2) . " Kb<br />";
     echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br />";
 		$pid = $_SESSION['patient_id'];
-		$timestamp = time();
+		// Check for update
+		$query = "SELECT * FROM photo WHERE patient_id = '$pid'";
+		$result = mysql_query($query) or die(mysql_error());
+		if (mysql_num_rows($result) == 0) {
+			$timestamp = time();
+		} else {
+			$row = mysql_fetch_assoc($result);
+			$timestamp = $row['timestamp'];
+		}		
 		$filename = $pid."_".$timestamp.".jpg";
 		$dir = "patient_photos/";
 		$_FILES["file"]["name"] = $filename; // Rename file
 		
-    // Check if file exists (this will not matter)
-		if (file_exists($dir . $_FILES["file"]["name"])) {
-      echo $_FILES["file"]["name"] . " already exists. ";
-    } else {
+    // Check if file exists
+		//if (file_exists($dir . $_FILES["file"]["name"])) {
+      //echo $_FILES["file"]["name"] . " already exists. ";
+    //} else {
 			// Move photo to the patient_photos directory  so it can be accessed
       move_uploaded_file($_FILES["file"]["tmp_name"], $dir . $_FILES["file"]["name"]);
       echo "Stored in: " . $dir . $_FILES["file"]["name"] . "<br />";
-    }		
+    //}		
 		
 		// Check if patient has a photo
 		$query = "SELECT * FROM photo WHERE patient_id = '$pid'";
@@ -34,7 +42,7 @@ if ((($_FILES["file"]["type"] == "image/gif") || ($_FILES["file"]["type"] == "im
 		if (mysql_num_rows($result) == 0) {
 			$query = "INSERT INTO photo (patient_id, data, timestamp) VALUES ('$pid', '$filename', '$timestamp')";
 		} else {
-			$query = "UPDATE photo SET data ='$filename', timestamp='$timestamp' WHERE patient_id='$pid'";
+			$query = "UPDATE photo SET data ='$filename' WHERE patient_id='$pid'";
 		}		
 		echo $query."<br />";
 		$result = mysql_query($query) or die(mysql_error()); // Insert or update photo
