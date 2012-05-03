@@ -473,8 +473,8 @@ class logmein {
 		function checkForm(f) {
 			var errors = new Array();
 			
-			var lname = f.elements["lname"].value;
-			var dob = f.elements["dob"].value;
+			var lname = f.elements['lname'].value;
+			var dob = f.elements['dob'].value;
 			
 			if (lname < 1) errors.push("Please enter a last name.\n");			
 			if (dob < 1) errors.push("Please enter a date of birth.\n");
@@ -486,94 +486,339 @@ class logmein {
 				alert(error_string);
 				return false;
 			} else {
+				alert("Submitted!");
 				addpatient(f);
 			}
 		}
 		</script>
-    <form method="post" action="" id="newPatient_form">
+    <form method="post" action="">
       <script type="text/javascript" src="../../form_control.js"></script>
+			<style type="text/css">
+				label {font-weight:bold;}
+				.lbl {text-align:center; font-size:smaller;}
+				.ele {text-align:center;float:left;}
+				.type_head {padding:4px; font-weight:bold; font-size:150%;}
+			</style>
       <fieldset>
-        <legend>New Patient</legend>
-				<style type="text/css">
-					tr {border:#00f thin solid; margin:2px; padding:2px;}
-					td {border:#f00 thin solid; margin:12px;}
-				</style>
-        <table>
-          <tr>
-            <td><label>Name</label></td>
-            <td>
-              <select name="title" id="title" title="Title">
-                <option>Unassigned</option>
-                <option>Mr.</option>
-                <option>Mrs.</option>
-                <option>Ms.</option>
-                <option>Dr.</option>
-              </select>
-              <input type="text" name="fname" id="fname" value="" size="10" title="First Name" />
-              <input type="text" name="mname" id="mname" value="" size="5"  title="Middle Name" />
-              <input type="text" name="lname" id="lname" value=""  size="10" title="Last Name" />
-            </td>
-          </tr>
-          <tr>
-            <td><label>DOB</label></td>
-            <td><input name="dob" id="dob" type="text" value="" size="10" title="Date of Birth" /><span style="font-size:smaller" >YYYY-MM-DD</span></td>
-            <td><label>Sex</label></td>
-            <td>
-              <select name="sex" id="sex" title="Gender">
-                <option value="M">Male</option>
-                <option value="F">Female</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td><label>Race</label></td>
-            <td>
-              <select name="race" id="race" title="Race">
-                <option value="Unknown">Unknown</option>
-                <option value="American Indian">American Indian or Alaska Native</option>
-                <option value="Asian">Asian</option>
-                <option value="Black">Black or African American</option>
-                <option value="Pacific Islander">Native Hawaiian or Other Pacific Islander</option>
-                <option value="White">White</option>
-                <option value="Other">Other</option>
-              </select>
-            </td>
-						<td><label>Ethnicity</label></td>
-            <td>
-              <select name="ethnicity" id="ethnicity" title="Ethnicity">
-                <option value="Unknown">Unknown</option>
-                <option value="Hispanic">Hispanic</option>
-                <option value="Non-Hispanic">Non-Hispanic</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td><label>Street</label></td>
-            <td><input name="street" id="street" type="text" value="" size="27" title="Street" /></td>
-          </tr>
-          <tr>
-            <td></td>
-						<td>
-            <input name="city" id="city" type="text" value="" size="10" title="City" />
-            <input name="state" id="state" type="text" value="" size="10" title="State" />
-            <input name="postal_code" id="postal_code" type="text" value="" size="5" title="Postal Code" />
+        <legend>Patient Information</legend>
+				<table>
+					<tr>
+						<td><Label>Patient Name</Label></td>
+						<td colspan="2">
+							<div class="ele">
+								<select name="title" title="Title">
+									<option value="Mr">Mr</option>
+									<option value="Mrs">Mrs</option>
+									<option value="Ms">Ms</option>
+								</select><br />
+								<span class="lbl">Title</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="fname" size="15" title="First Name" /><br />
+								<span class="lbl">First</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="mname" size="10" title="Middle Name" /><br />
+								<span class="lbl">Middle</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="lname" size="15" title="Last Name" /><br />
+								<span class="lbl">Last</span>
+							</div>
 						</td>
 					</tr>
 					<tr>
-            <?php $this->dropdown('Country','Country','geo_country_reference', 'countries_id', 'countries_name', 223); ?>
-          </tr>
-          <tr>
-            <td><label>Phone</label></td>
-            <td>
-							<input name="home" id="home" type="text" value="" size="10" title="Home Phone" />(Home)
-							<input name="cell" id="cell" type="text" value="" size="10" title="Cell Phone" />(Cell)
+						<td><label>Date of Birth</label></td>
+						<td><input type="text" name="dob" title="Date of Birth" /> <span class="lbl">YYYY-MM-DD</span></td>
+						<td>
+							<label>Sex</label>
+							<input type="radio" name="sex" value="M" /> Male 
+							<input type="radio" name="sex" value="F" /> Female  
 						</td>
-          </tr>
-          <tr>
-            <td colspan="4" align="center"><div style="text-align:center;"><input class="submit" value="Create Patient" type="button" onclick="return checkForm(this.form); return false;" /> <input type="reset" /></div></td>
-          </tr>
-        </table>
+					</tr>
+					<tr>
+						<td><label>Language</label></td>
+						<td><input type="text" name="language" title="Language" /></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<label>Race</label>
+							<select name="race" id="race" title="Race">
+								<option value="Unknown">Unknown</option>
+								<option value="American Indian">American Indian or Alaska Native</option>
+								<option value="Asian">Asian</option>
+								<option value="Black">Black or African American</option>
+								<option value="Pacific Islander">Native Hawaiian or Other Pacific Islander</option>
+								<option value="White">White</option>
+								<option value="Other">Other</option>
+							</select>
+						</td>
+						<td colspan="2">
+							<label>Ethnicity</label>
+							<select name="ethnicity" id="ethnicity" title="Ethnicity">
+								<option value="Unknown">Unknown</option>
+								<option value="Hispanic">Hispanic</option>
+								<option value="Non-Hispanic">Non-Hispanic</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<label>Driver's License</label>
+							<input type="text" name="dl" title="Driver's License" />
+						</td>
+						<td colspan="2">
+							<label>National ID</label>
+							<input type="text" name="nid" title="National Identification Number" />
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+			<fieldset>
+				<legend>Contact Information</legend>
+				<table>
+					<tr>
+						<td><label>Address</label></td>
+						<td colspan="3">
+							<div class="ele">
+								<input type="text" name="street" title="Street" /><br />
+								<span class="lbl">Street</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="city" size="10" title="City" /><br />
+								<span class="lbl">City</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="state" size="10" title="State" /><br />
+								<span class="lbl">State</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="postal_code" size="5" title="Postal Code" /><br />
+								<span class="lbl">Postal Code</span>
+							</div>
+							<div class="ele">
+								<?php $this->dropdown('patient_country', 'Country','geo_country_reference', 'countries_id', 'countries_name', 223); ?><br />
+								<span class="lbl">Country</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><label>Phone</label></td>
+						<td colspan="2">
+							<div class="ele">
+								<input type="text" name="phone_home" size="15" title="Home Phone" /><br />
+								<span class="lbl">Home</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="phone_cell" size="15" title="Cell Phone" /><br />
+								<span class="lbl">Cell</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="phone_business" size="15" title="Business Phone" /><br />
+								<span class="lbl">Business</span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+			<fieldset>
+				<legend>Insurance Information</legend>
+				<table>
+					<tr>
+						<td colspan="2">
+							<label>Primary Insurance Provider</label>
+							<select name="i1provider">
+								<option value="">Unassigned</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+					<td valign="top">
+						<table border="0">
+							<tr>
+								<td><label>Plan Name</label></td>
+								<td><input type="text" size="20" name="i1plan_name" />
+							</tr>
+							<tr>
+								<td><label>Effective Date</label></td>
+								<td><input type="text" name="i1effective_date" size="11" /></td>
+							</tr>
+							<tr>
+								<td><label>Policy Number</label></td>
+								<td><input type="text" name="i1policy_number" size="16" /></td>
+							</tr>
+							<tr>
+								<td><label>Group Number</label></td>
+								<td><input type="text"  name="i1group_number" size="16" /></td>
+							</tr>
+							<tr>
+								<td>
+									<label>Subscriber Employer (SE)</label>
+								</td>
+								<td><input type="text"  name="i1subscriber_employer" size="25"/></td>
+							</tr>
+							<tr>
+								<td><label>SE Address<label></td>
+								<td><input type="text" name="i1subscriber_employer_street" size="25" /></td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<table>
+										<tr>
+											<td><label>SE City</label></td>
+											<td><input type="text" name="i1subscriber_employer_city" size="15"/></td>
+											<td><label>SE State:</label></td>
+											<td><input type="text" name="form_i1subscriber_employer_state" title="" /></td>
+										</tr>
+										<tr>
+											<td><label>SE Zip Code</label></td>
+											<td><input type="text" name="i1subscriber_employer_postal_code" size="10"></td>
+											<td><label>SE Country</label></td>
+											<td><?php $this->dropdown('form_i1subscriber_employer_country', 'Country','geo_country_reference', 'countries_id', 'countries_name', 223); ?></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td valign="top">
+						<label>Subscriber</label>
+						<input type="text" name="i1subscriber_fname" size="10" />
+						<input type="text" name="i1subscriber_mname" size="3" />
+						<input type="text" name="i1subscriber_lname" size="10" />
+						<br />
+						<label>Relationship</label>
+						<select name="form_i1subscriber_relationship" title="">
+							<option value=""> </option>
+							<option value="self">Self</option>
+							<option value="spouse">Spouse</option>
+							<option value="child">Child</option>
+						</select>
+						<label>DOB</label>
+						<input type="text" name="i1subscriber_DOB" size="11" /><br />
+						<label>SSN</label>
+						<input type="text" size="11" name="i1subscriber_ss" value="" />
+						<label>Sex</label>
+						<select name="form_i1subscriber_sex" id="form_i1subscriber_sex" title="" /><br />
+							<option value="">Unassigned</option>
+							<option value="Female">Female</option>
+							<option value="Male">Male</option>
+						</select>	
+						<br />
+						<label>Subscriber Address</label>
+						<input type="text" name="i1subscriber_street" size="25" /><br />
+						<label>City</label>
+						<input type="text" name="i1subscriber_city" size="15" />
+						<label>State</label>
+						<input type="text" name="form_i1subscriber_state" title="" /><br />
+						<label>Zip Code</label>
+						<input type="text" size="10" name="i1subscriber_postal_code" value="">
+						<label>Country</label>
+						<input type="text" name="form_i1subscriber_country" /><br />
+						<label>Subscriber Phone</label>
+						<input type="text" size="20" name="i1subscriber_phone" /><br />
+						<label>CoPay: <input type="text" size="6" name="i1copay" value="">
+					</td>
+				 </tr>
+				 <tr>
+						<td colspan="2">
+							<label>Secondary Insurance Provider</label>
+							<select name="i2provider">
+								<option value="">Unassigned</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+					<td valign="top">
+						<table border="0">
+							<tr>
+								<td><label>Plan Name</label></td>
+								<td><input type="text" size="20" name="i2plan_name" />
+							</tr>
+							<tr>
+								<td><label>Effective Date</label></td>
+								<td><input type="text" name="i2effective_date" size="11" /></td>
+							</tr>
+							<tr>
+								<td><label>Policy Number</label></td>
+								<td><input type="text" name="i2policy_number" size="16" /></td>
+							</tr>
+							<tr>
+								<td><label>Group Number</label></td>
+								<td><input type="text"  name="i2group_number" size="16" /></td>
+							</tr>
+							<tr>
+								<td>
+									<label>Subscriber Employer (SE)</label>
+								</td>
+								<td><input type="text"  name="i2subscriber_employer" size="25"/></td>
+							</tr>
+							<tr>
+								<td><label>SE Address<label></td>
+								<td><input type="text" name="i2subscriber_employer_street" size="25" /></td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<table>
+										<tr>
+											<td><label>SE City</label></td>
+											<td><input type="text" name="i2subscriber_employer_city" size="15"/></td>
+											<td><label>SE State:</label></td>
+											<td><input type="text" name="form_i2subscriber_employer_state" title="" /></td>
+										</tr>
+										<tr>
+											<td><label>SE Zip Code</label></td>
+											<td><input type="text" name="i2subscriber_employer_postal_code" size="10"></td>
+											<td><label>SE Country</label></td>
+											<td><?php $this->dropdown('form_i2subscriber_employer_country', '','geo_country_reference', 'countries_id', 'countries_name', 223); ?></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td valign="top">
+						<label>Subscriber</label>
+						<input type="text" name="i2subscriber_fname" size="10" />
+						<input type="text" name="i2subscriber_mname" size="3" />
+						<input type="text" name="i2subscriber_lname" size="10" />
+						<br />
+						<label>Relationship</label>
+						<select name="form_i2subscriber_relationship" title="">
+							<option value=""> </option>
+							<option value="self">Self</option>
+							<option value="spouse">Spouse</option>
+							<option value="child">Child</option>
+						</select>
+						<label>DOB</label>
+						<input type="text" name="i2subscriber_DOB" size="11" /><br />
+						<label>SSN</label>
+						<input type="text" size="11" name="i2subscriber_ss" value="" />
+						<label>Sex</label>
+						<select name="form_i2subscriber_sex" id="form_i2subscriber_sex" title="" /><br />
+							<option value="">Unassigned</option>
+							<option value="Female">Female</option>
+							<option value="Male">Male</option>
+						</select>	
+						<br />
+						<label>Subscriber Address</label>
+						<input type="text" name="i2subscriber_street" size="25" /><br />
+						<label>City</label>
+						<input type="text" name="i2subscriber_city" size="15" />
+						<label>State</label>
+						<input type="text" name="form_i2subscriber_state" title="" /><br />
+						<label>Zip Code</label>
+						<input type="text" size="10" name="i2subscriber_postal_code" value="">
+						<label>Country</label>
+						<input type="text" name="form_i2subscriber_country" /><br />
+						<label>Subscriber Phone</label>
+						<input type="text" size="20" name="i2subscriber_phone" /><br />
+						<label>CoPay: <input type="text" size="6" name="i2copay" value="">
+					</td>
+				 </tr>
+				</table>
       </fieldset>
+			<div style="text-align:center;"><input class="submit" value="Create Patient" type="button" onclick="return checkForm(this.form); return false;" /> <input type="reset" /></div>
     </form>
     <?php
   }
@@ -671,11 +916,10 @@ class logmein {
 	}
 	
   // Creates a dropdown menu for a specific table
-  function dropdown($label, $title, $table, $value, $option, $selected) {
+  function dropdown($name, $title, $table, $value, $option, $selected) {
     $this->dbconnect();
     $dropdown_list = '';
-    $dropdown_list .= $label == '' ? '' : '<td><label for="'.$table.'">'.$label.'</label></td>';
-    $dropdown_list .= '<td><select title="'.$title.'" name="'.$table.'" id="'.$table.'">';
+    $dropdown_list .= '<select title="'.$title.'" name="'.$name.'">';
     $qry = "SELECT * FROM ".$table.";";
     $result = mysql_query($qry) or die(mysql_error());
     while($row = mysql_fetch_assoc($result)) {
@@ -683,7 +927,7 @@ class logmein {
 			$dropdown_list .= $row[$value] == $selected ? "SELECTED" : "";
 			$dropdown_list .= " value ='".$row[$value]."'>".$row[$option]."</option>";
 		}
-    $dropdown_list .= '</select></td>';
+    $dropdown_list .= '</select>';
     echo $dropdown_list;
   }
 	

@@ -126,6 +126,7 @@ function changepassword(form_id) {
 
 function addpatient(form_id) {
 	// Get form information
+	alert("Checking Form");
 	var title = form_id.elements['title'].value;
 	var fname = form_id.elements['fname'].value;
 	var mname = form_id.elements['mname'].value;
@@ -138,11 +139,12 @@ function addpatient(form_id) {
 	var city = form_id.elements['city'].value;
 	var state = form_id.elements['state'].value;
 	var postal_code = form_id.elements['postal_code'].value;
-	var country = form_id.elements['geo_country_reference'].value;
-	var phone_home = form_id.elements['home'].value;
-	var phone_cell = form_id.elements['cell'].value;
+	var country = form_id.elements['patient_country'].value;
+	var phone_home = form_id.elements['phone_home'].value;
+	var phone_cell = form_id.elements['phone_cell'].value;
 	// Send data to the form action
 	var s = "action=addpatient&title=" + title + "&fname=" + fname + "&mname=" + mname + "&lname=" + lname + "&dob=" + dob + "&sex=" + sex + "&race=" + race + "&ethnicity=" + ethnicity + "&street=" + street + "&city=" + city + "&state=" + state + "&postal_code=" + postal_code + "&country=" + country + "&phone_home=" + phone_home + "&phone_cell=" + phone_cell;
+	alert("Query: "+s);
 	requestForm(s, form_id, true);
 }
 
