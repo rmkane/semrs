@@ -274,15 +274,16 @@ class logmein {
   }
   
     // I added this
-  function createpatient($title, $fname, $mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $state, $postal_code, $country, $phone_home, $phone_cell) {
+  function createpatient($title, $language, $fname, $mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $state, $postal_code, $country, $phone_home, $phone_cell, $dl, $nid, $occupation, $mothers_name, $guardians_name) {
     //conect to DB
     $this->dbconnect();
 		
-		$mssg = "New Patient: ".$lname." ".$mname.", ".$fname." was created!"; 
+		$mssg = "New Patient: ".$lname." ".$mname.", ".$fname." was created! "; 
 		
 		$pubKey = $this->getPublicKey('', 'common');
 		
 		$title = $this->encrypt($title, $pubKey);
+		$language = $this->encrypt($language, $pubKey);
 		$fname = $this->encrypt($fname, $pubKey);
 		$mname = $this->encrypt($mname, $pubKey);
 		$lname = $this->encrypt($lname, $pubKey);
@@ -297,9 +298,14 @@ class logmein {
 		$country = $this->encrypt($country, $pubKey);
 		$phone_home = $this->encrypt($phone_home, $pubKey);
 		$phone_cell = $this->encrypt($phone_cell, $pubKey);
+		$dl = $this->encrypt($dl, $pubKey);
+		$nid = $this->encrypt($nid, $pubKey);
+		$occupation = $this->encrypt($occupation, $pubKey);
+		$mothers_name = $this->encrypt($mothers_name, $pubKey);
+		$guardians_name = $this->encrypt($guardians_name, $pubKey);
 		$regdate = $this->encrypt(time(), $pubKey);
 		
-		$qry = $this->qry("INSERT INTO ".$this->patient_table." (".$this->patient_title.",".$this->patient_fname.",".$this->patient_mname.",".$this->patient_lname.",".$this->patient_dob.",".$this->patient_sex.",".$this->patient_race.",".$this->patient_ethnicity.",".$this->patient_street.",".$this->patient_city.",".$this->patient_state.",".$this->patient_postal_code.",".$this->patient_country.",".$this->patient_phone_home.",".$this->patient_phone_cell.",".$this->patient_regdate.") VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');", $title, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $state, $postal_code, $country, $phone_home, $phone_cell, $regdate);
+		$qry = $this->qry("INSERT INTO `patient_data` (`title`,`language`,`fname`,`mname`,`lname`,`DOB`,`sex`,`race`,`ethnicity`,`street`,`city`,`state`,`postal_code`,`country`,`phone_home`,`phone_cell`,`drivers_license`, `national_id`, `occupation`, `mothers_name`, `guardians_name`,`regdate`) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');", $title, $language, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $state, $postal_code, $country, $phone_home, $phone_cell, $dl, $nid, $occupation, $mothers_name, $guardians_name, $regdate);
 		echo $mssg;
 		return true;
   }
@@ -507,9 +513,9 @@ class logmein {
 						<td colspan="2">
 							<div class="ele">
 								<select name="title" title="Title">
-									<option value="Mr">Mr</option>
-									<option value="Mrs">Mrs</option>
-									<option value="Ms">Ms</option>
+									<option value="Mr.">Mr</option>
+									<option value="Mrs.">Mrs</option>
+									<option value="Ms.">Ms</option>
 								</select><br />
 								<span class="lbl">Title</span>
 							</div>
@@ -529,11 +535,18 @@ class logmein {
 					</tr>
 					<tr>
 						<td><label>Date of Birth</label></td>
-						<td><input type="text" name="dob" title="Date of Birth" /> <span class="lbl">YYYY-MM-DD</span></td>
+						<td>
+							<div class="ele">
+								<input type="text" name="dob" title="Date of Birth" /><br />
+								<span class="lbl">YYYY-MM-DD</span>
+							</div>
 						<td>
 							<label>Sex</label>
-							<input type="radio" name="sex" value="M" /> Male 
-							<input type="radio" name="sex" value="F" /> Female  
+							<select name="sex" title="Sex" /><br />
+								<option value="">Unassigned</option>
+								<option value="Female">Female</option>
+								<option value="Male">Male</option>
+							</select>	
 						</td>
 					</tr>
 					<tr>
@@ -541,8 +554,10 @@ class logmein {
 						<td><input type="text" name="language" title="Language" /></td>
 					</tr>
 					<tr>
-						<td colspan="2">
+						<td>
 							<label>Race</label>
+						</td>
+						<td>
 							<select name="race" id="race" title="Race">
 								<option value="Unknown">Unknown</option>
 								<option value="American Indian">American Indian or Alaska Native</option>
@@ -572,6 +587,12 @@ class logmein {
 							<input type="text" name="nid" title="National Identification Number" />
 						</td>
 					</tr>
+					<tr>
+						<td colspan="3">
+							<label>Occupation</label><br />
+							<textarea name="occupation" title="Employment Information" rows="8" cols="72"></textarea>
+						</td>
+					</tr>
 				</table>
 			</fieldset>
 			<fieldset>
@@ -579,7 +600,7 @@ class logmein {
 				<table>
 					<tr>
 						<td><label>Address</label></td>
-						<td colspan="3">
+						<td colspan="4">
 							<div class="ele">
 								<input type="text" name="street" title="Street" /><br />
 								<span class="lbl">Street</span>
@@ -604,7 +625,7 @@ class logmein {
 					</tr>
 					<tr>
 						<td><label>Phone</label></td>
-						<td colspan="2">
+						<td colspan="4">
 							<div class="ele">
 								<input type="text" name="phone_home" size="15" title="Home Phone" /><br />
 								<span class="lbl">Home</span>
@@ -613,11 +634,13 @@ class logmein {
 								<input type="text" name="phone_cell" size="15" title="Cell Phone" /><br />
 								<span class="lbl">Cell</span>
 							</div>
-							<div class="ele">
-								<input type="text" name="phone_business" size="15" title="Business Phone" /><br />
-								<span class="lbl">Business</span>
-							</div>
 						</td>
+					</tr>
+					<tr>
+						<td><label>Mother's<br />Name</label></td>
+						<td><input type="text" name="mothers_name" size="30" title="Mother's Name" /></td>
+						<td><label>Guardians's<br />Name</label></td>	
+						<td><input type="text" name="guardians_name" size="30" title="Guardians's Name" /></td>
 					</tr>
 				</table>
 			</fieldset>
@@ -872,6 +895,22 @@ class logmein {
   <?php
   }
 	
+	// Need to add address???
+	function add_insurer_form() {
+		//conect to DB
+    $this->dbconnect();
+	  ?>
+		<form method="post" action="">
+			<script type="text/javascript" src="../../form_control.js"></script>
+			<label>Insurer Name</label>
+			<input type="text" name="i_name" /><br />
+			<label>Message</label>
+			<input type="text" name="i_name" /><br />
+			<input type="button" name="send" value="Send Message" onclick="send_message(this.form);"/>
+		</form>
+		<?php
+	}
+	
 	function message_form() {
     //conect to DB
     $this->dbconnect();
@@ -883,7 +922,6 @@ class logmein {
 			<label>Message</label><br /><textarea name="message" rows="12" cols="60"></textarea><br />
 			<input type="button" name="send" value="Send Message" onclick="send_message(this.form);"/>
 		</form>
-
 		<?php
 	}
 	

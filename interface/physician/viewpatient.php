@@ -1,6 +1,8 @@
 <?php
 $log->dbconnect();
 
+
+
 if (!isset($_SESSION['patient_id'])) {
 	
 	?> <!-- HTML / FAIL-->
@@ -17,7 +19,9 @@ if (!isset($_SESSION['patient_id'])) {
 	$query = "SELECT * FROM `patient_data` WHERE `id` = '".$_SESSION['patient_id']."';";
 	$result = mysql_query($query) or die(mysql_error());
 	$row = mysql_fetch_assoc($result);
-		
+	
+	$title = $log->decrypt($row['title'], $privKey);
+	$language = $log->decrypt($row['language'], $privKey);
 	$fname = $log->decrypt($row['fname'], $privKey);
 	$mname = $log->decrypt($row['mname'], $privKey);
 	$lname = $log->decrypt($row['lname'], $privKey);
@@ -32,12 +36,19 @@ if (!isset($_SESSION['patient_id'])) {
 	$sex = $log->decrypt($row['sex'], $privKey);
 	$ethnicity = $log->decrypt($row['ethnicity'], $privKey);
 	$race = $log->decrypt($row['race'], $privKey);
+	$dl = $log->decrypt($row['drivers_license'], $privKey);
+	$nid = $log->decrypt($row['national_id'], $privKey);
+	$occupation = $log->decrypt($row['occupation'], $privKey);
+	$mothers_name = $log->decrypt($row['mothers_name'], $privKey);
+	$guardians_name = $log->decrypt($row['guardians_name'], $privKey);
 	
+	$title = $title != "" ? $title." " : "";
 	$fname = $fname != "" ? $fname." " : "";
 	$mname = $mname != "" ? $mname." " : "";
 	$lname = $lname != "" ? $lname.", " : "";
+	$name = $title.$lname.$fname.$mname;
 	
-	$name = $lname.$fname.$mname;
+	$language = $language != "" ? $language : "N/A";
 	
 	$street = $street != "" ? $street.", " : "";
 	$city = $city != "" ? $city.", " : "";
@@ -51,8 +62,8 @@ if (!isset($_SESSION['patient_id'])) {
 	
 	$address = $street.$city.$state.$postal_code.$country;
 	
-	$phone_home = $phone_home != "" ? $phone_home." (Home)" : "";
-	$phone_cell = $phone_cell != "" ? $phone_cell." (Cell)" : "";
+	$phone_home = $phone_home != "" ? $phone_home." <em>(Home)</em>" : "";
+	$phone_cell = $phone_cell != "" ? $phone_cell." <em>(Cell)</em>" : "";
 	
 	
 	?> <!-- HTML / PASS-->
@@ -128,11 +139,16 @@ if (!isset($_SESSION['patient_id'])) {
 						<input name="action" class="action" value="upload" type="hidden" />
 					</form>
 				</div>
-				<br />		
+				<br />
+				<label>Language:</label> <?php echo $language ?><br />
 				<label>Address:</label> <?php echo $address ?><br />
 				<label>Race:</label> <?php echo $race; ?>/<?php echo $ethnicity; ?><br /> 
 				<label>Phone:</label> <?php echo $phone_home; ?> <?php echo $phone_cell; ?><br />
-				
+				<label>Mother's Name:</label> <?php echo $mothers_name; ?><br />
+				<label>Guardian's Name:</label> <?php echo $guardians_name; ?><br />
+				<label>Driver's License:</label> <?php echo $dl; ?><br />
+				<label>National ID: </label> <?php echo $nid; ?><br />
+				<label>Occupation: </label> <?php echo $occupation; ?><br />				
 			</div>
 			<div class="tab_view" id="tab_appointments" style="display:none;">
 				<h2>Appointments</h2>

@@ -64,7 +64,7 @@ if($_POST['action'] == "changepassword"){
 }
 
 if($_POST['action'] == "addpatient"){
-    if($log->createpatient($_POST['title'], $_POST['fname'],	$_POST['mname'], $_POST['lname'], $_POST['dob'], $_POST['sex'], $_POST['race'], $_POST['ethnicity'], $_POST['street'], $_POST['city'], $_POST['state'], $_POST['postal_code'], $_POST['country'], $_POST['phone_home'], $_POST['phone_cell']) == true){
+    if($log->createpatient($_POST['title'], $_POST['language'], $_POST['fname'],	$_POST['mname'], $_POST['lname'], $_POST['dob'], $_POST['sex'], $_POST['race'], $_POST['ethnicity'], $_POST['street'], $_POST['city'], $_POST['state'], $_POST['postal_code'], $_POST['country'], $_POST['phone_home'], $_POST['phone_cell'], $_POST['dl'], $_POST['nid'], $_POST['occupation'], $_POST['mothers_name'], $_POST['guardians_name']) == true){
         //do something on successful password reset
 				echo "Successfully Added Patient!";
     } else {
