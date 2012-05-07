@@ -1048,7 +1048,7 @@ class logmein {
 		?>
 			<select name="<?php echo $name; ?>" id="<?php echo $name; ?>"/>
         <?php while($row = mysql_fetch_assoc($result)) { ?>
-						<?php $dob = $this->decrypt($row[$this->patient_dob], $privKey); echo dob;  ?>
+						<?php $dob = $this->decrypt($row[$this->patient_dob], $privKey); ?>
             <option value="<?php echo $row[$this->patient_id]; ?>"><?php echo $this->decrypt($row[$this->patient_lname], $privKey); ?> <?php echo $this->decrypt($row[$this->patient_mname], $privKey); ?>, <?php echo $this->decrypt($row[$this->patient_fname], $privKey); ?><?php echo "; ".$dob; ?></option>				
         <?php } ?>
       </select>
