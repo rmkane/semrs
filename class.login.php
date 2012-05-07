@@ -1,6 +1,6 @@
 <?php
 //For security reasons, don't display any errors or warnings. Comment out in DEV.
-error_reporting(0);
+//error_reporting(0);
 
 include('globals.php');	
 
@@ -330,6 +330,18 @@ class logmein {
 			return false;
 		}
 	}
+	
+	function addvisit($type, $date, $time, $physician, $patient, $facility, $notes) {
+		$this->dbconnect();
+		if ($type != "" && $date != "" && $time != "" && $physician != "" && $patient != "" && $facility != "") {
+			$qry = $this->qry("INSERT INTO `visit` (`type`, `scheduled_date`, `scheduled_time`, `physician_id`, `patient_id`, `facility_id`, `notes`) VALUES ('?', '?', '?', '?', '?', '?', '?');", $type, $date, $time, $physician, $patient, $facility, $notes);
+			return true;
+		} else {
+			echo "ERROR";
+			return false;
+		}
+		return true;
+	}
 
   //login form
   function loginform($action_login){
@@ -385,11 +397,11 @@ class logmein {
           </tr>
           <tr>
 						<td><label>Choose Facility</label></td>
-						<td><?php $this->dropdown('facility', 'Facility', $this->facility_table, $this->facility_id, $this->facility_name, 0); ?></td>
+						<td><?php $this->dropdown('facility', 'Facility', $this->facility_table, $this->facility_id, $this->facility_name, 0, ''); ?></td>
           </tr>
           <tr>
 						<td><label>Choose User Level</label></td>
-						<td><?php $this->dropdown('level', 'User Level', $this->level_table, $this->level_id, $this->level_type, 0); ?></td>    
+						<td><?php $this->dropdown('level', 'User Level', $this->level_table, $this->level_id, $this->level_type, 0, ''); ?></td>    
           </tr>
           <tr>
             <td><label>Enter Your Last Name</label></td>
@@ -629,7 +641,7 @@ class logmein {
 								<span class="lbl">Postal Code</span>
 							</div>
 							<div class="ele">
-								<?php $this->dropdown('patient_country', 'Country','geo_country_reference', 'countries_id', 'countries_name', 223); ?><br />
+								<?php $this->dropdown('patient_country', 'Country','geo_country_reference', 'countries_id', 'countries_name', 222, ''); ?><br />
 								<span class="lbl">Country</span>
 							</div>
 						</td>
@@ -708,7 +720,7 @@ class logmein {
 											<td><label>SE Zip Code</label></td>
 											<td><input type="text" name="i1subscriber_employer_postal_code" size="10"></td>
 											<td><label>SE Country</label></td>
-											<td><?php $this->dropdown('form_i1subscriber_employer_country', 'Country','geo_country_reference', 'countries_id', 'countries_name', 223); ?></td>
+											<td><?php $this->dropdown('form_i1subscriber_employer_country', 'Country','geo_country_reference', 'countries_id', 'countries_name', 223, ''); ?></td>
 										</tr>
 									</table>
 								</td>
@@ -804,7 +816,7 @@ class logmein {
 											<td><label>SE Zip Code</label></td>
 											<td><input type="text" name="i2subscriber_employer_postal_code" size="10"></td>
 											<td><label>SE Country</label></td>
-											<td><?php $this->dropdown('form_i2subscriber_employer_country', '','geo_country_reference', 'countries_id', 'countries_name', 223); ?></td>
+											<td><?php $this->dropdown('form_i2subscriber_employer_country', '','geo_country_reference', 'countries_id', 'countries_name', 223, ''); ?></td>
 										</tr>
 									</table>
 								</td>
@@ -862,11 +874,6 @@ class logmein {
     //conect to DB
     $this->dbconnect();
 		
-		$privKey = $this->getPrivateKey('../../', 'common');
-		
-		$qry = "SELECT * FROM `patient_data` ORDER BY 'lname'";
-		$result = mysql_query($qry) or die(mysql_error());
-		
 		/*
 		$patient_list = Array();
 		while($row = mysql_fetch_assoc($result)) {
@@ -893,13 +900,7 @@ class logmein {
 		
     <form enctype="application/x-www-form-urlencoded" method="post" action="../../form_action.php">
       <label for="search_input">Patient</label>
-      <select name="selectedpatient" id="selectedpatient"/>
-        <?php while($row = mysql_fetch_assoc($result)) { ?>
-						<?php $dob = $this->decrypt($row[$this->patient_dob], $privKey); echo dob;  ?>
-            <option value="<?php echo $row[$this->patient_id]; ?>"><?php echo $this->decrypt($row[$this->patient_lname], $privKey); ?> <?php echo $this->decrypt($row[$this->patient_mname], $privKey); ?>, <?php echo $this->decrypt($row[$this->patient_fname], $privKey); ?> 	<?php echo "Age:".$this->getAge($dob); ?></option>				
-        <?php } ?>
-      </select>
-			<script type="text/javascript">document.getElementById('selectedpatient').selectedIndex = -1;</script>
+      <?php echo $this->patient_list('selectedpatient'); ?>
       <input name="action" class="action" value="selectpatient" type="hidden" />
       <input name="submit" class="submit" value="Select Patient" type="submit" />
     </form>
@@ -917,7 +918,7 @@ class logmein {
 			<input type="text" name="i_name" /><br />
 			<label>Message</label>
 			<input type="text" name="i_name" /><br />
-			<input type="button" name="send" value="Send Message" onclick="send_message(this.form);"/>
+			<input type="button" name="send" value="Send Message" onclick="xxx(this.form);"/>
 		</form>
 		<?php
 	}
@@ -932,6 +933,57 @@ class logmein {
 			<label>Subject</label><input type="text" name="subject" /><br />
 			<label>Message</label><br /><textarea name="message" rows="12" cols="60"></textarea><br />
 			<input type="button" name="send" value="Send Message" onclick="send_message(this.form);"/>
+		</form>
+		<?php
+	}
+	
+	
+	function visit_form() {
+    //conect to DB
+    $this->dbconnect();
+	  ?>
+		<form method="post" action="">
+			<script type="text/javascript" src="../../form_control.js"></script>
+			<script type="text/javascript" src="../../js/calendarDateInput/calendarDateInput.js"></script>
+			<script type="text/javascript" src="../../js/timeInput.js"></script>
+			<table>
+				<tr>
+					<td><label>Type</label></td>
+					<td>
+						<select name="type">
+							<option value="Appointment">Appointment</option>
+							<option value="Walk-In">Walk-In</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td><label>Date</label></td>
+					<td><script>DateInput('date', true, 'YYYY-MM-DD')</script></td>
+				</tr>
+				<tr>
+					<td><label>Time</label></td>
+					<td><script>TimeInput('time')</script></td>
+				</tr>
+				<tr>
+					<td><label>Patient</label></td>
+					<td><?php echo $this->patient_list('patient'); ?></td>
+				</tr>
+				<tr>
+					<td><label>Physician</label></td>
+					<td><?php echo $this->dropdown('physician', 'Physician', 'users', 'id', 'lname', -1, 'WHERE `userlevel` = 1 ORDER BY lname ASC'); ?></td>
+				</tr>
+				<tr>
+					<td><label>Facility</label></td>
+					<td><?php echo $this->dropdown('facility', 'Facility', 'facility', 'id', 'name', -1, ''); ?></td>
+				</tr>
+				<tr>
+					<td><label>Notes</label></td>
+				</tr>
+				<tr>
+					<td colspan="2"><textarea name="notes" rows="6" cols="45"></textarea></td>
+				</tr>
+			</table>
+			<input type="button" name="send" value="Add Visit" onclick="add_visit(this.form);"/>
 		</form>
 		<?php
 	}
@@ -965,18 +1017,16 @@ class logmein {
 	}
 	
   // Creates a dropdown menu for a specific table
-  function dropdown($name, $title, $table, $value, $option, $selected) {
+  function dropdown($name, $title, $table, $value, $option, $selected, $where) {
     $this->dbconnect();
     $dropdown_list = '';
-    $dropdown_list .= '<select title="'.$title.'" name="'.$name.'">';
-    $qry = "SELECT * FROM ".$table.";";
+    $dropdown_list .= '<select title="'.$title.'" name="'.$name.'" id="'.$name.'">';
+    $qry = "SELECT * FROM ".$table." ".$where.";";
     $result = mysql_query($qry) or die(mysql_error());
     while($row = mysql_fetch_assoc($result)) {
-			$dropdown_list .= "<option ";
-			$dropdown_list .= $row[$value] == $selected ? "SELECTED" : "";
-			$dropdown_list .= " value ='".$row[$value]."'>".$row[$option]."</option>";
+			$dropdown_list .= "<option value ='".$row[$value]."'>".$row[$option]."</option>";
 		}
-    $dropdown_list .= '</select>';
+    $dropdown_list .= '</select><script type="text/javascript">document.getElementById("'.$name.'").selectedIndex = '.$selected.';</script>';
     echo $dropdown_list;
   }
 	
@@ -988,6 +1038,22 @@ class logmein {
 			?><option value="<?php echo $row['id']; ?>"><?php echo $row['email'];?></option><?php
 		}
 		?></select><?php
+	}
+	
+	function patient_list($name) {
+		$this->dbconnect();
+		$privKey = $this->getPrivateKey('../../', 'common');
+		$qry = "SELECT * FROM `patient_data` ORDER BY 'lname'";
+		$result = mysql_query($qry) or die(mysql_error());
+		?>
+			<select name="<?php echo $name; ?>" id="<?php echo $name; ?>"/>
+        <?php while($row = mysql_fetch_assoc($result)) { ?>
+						<?php $dob = $this->decrypt($row[$this->patient_dob], $privKey); echo dob;  ?>
+            <option value="<?php echo $row[$this->patient_id]; ?>"><?php echo $this->decrypt($row[$this->patient_lname], $privKey); ?> <?php echo $this->decrypt($row[$this->patient_mname], $privKey); ?>, <?php echo $this->decrypt($row[$this->patient_fname], $privKey); ?><?php echo "; ".$dob; ?></option>				
+        <?php } ?>
+      </select>
+			<script type="text/javascript">document.getElementById('<?php echo $name; ?>').selectedIndex = -1;</script>
+		<?php
 	}
   
   function getAge($birthdate) {

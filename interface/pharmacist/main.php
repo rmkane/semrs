@@ -1,5 +1,5 @@
 <?php
-	$pagearray = array("home", "help", "about", "prescriptions", "updatepatient", "newvisit", "account");
+	$pagearray = array("home", "help", "about", "prescriptions", "updatepatient", "account");
 	$which =  $_SERVER["QUERY_STRING"];
 	include("../../class.login.php");
   $log = new logmein();		//Instentiate the class
@@ -14,7 +14,7 @@ if($log->logincheck($_SESSION['loggedin']) == false || $_SESSION['userlevel'] !=
 	if(isset($_SESSION['start'])) {
 		$session_life = time() - $_SESSION['start'];
 		if($session_life > $inactive){
-			header("Location:../login/logout.php");
+			$log->timeout();
 		}
 	}
 	$_SESSION['start'] = time();

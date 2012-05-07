@@ -96,6 +96,14 @@ if($_POST['action'] == "sendmessage"){
     }
 }
 
+if($_POST['action'] == "addvisit"){
+    if($log->addvisit($_POST['type'], $_POST['date'], $_POST['time'], $_POST['physician'], $_POST['patient'], $_POST['facility'], $_POST['notes']) == true){
+        echo "Appointment Added!";
+    } else {
+				echo "Failed to create appointment!";
+    }
+}
+
 if($_POST['action'] == "logout"){
   $log->logout();
 	//echo "Redirecting...";

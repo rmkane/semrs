@@ -152,6 +152,38 @@ if (!isset($_SESSION['patient_id'])) {
 			</div>
 			<div class="tab_view" id="tab_appointments" style="display:none;">
 				<h2>Appointments</h2>
+				<?php
+					$query = "SELECT * FROM `visit` WHERE patient_id = '".$_SESSION['patient_id']."' ORDER BY `scheduled_date` DESC;";
+					$result = mysql_query($query) or die(mysql_error());
+					?>
+				<table>
+					<thead>
+						<tr>
+							<th>Date</th><th>Time</th><th>Type</th><th>Physician</th><th>Facility</th>
+						</tr>
+					</thead>
+				<?php
+				while ($row = mysql_fetch_assoc($result)) {
+					$qry = "SELECT `lname` from `users` WHERE `id` = '".$row['physician_id']."';";
+					$res = mysql_query($qry) or die(mysql_error());
+					$r = mysql_fetch_row($res);
+					$physician = $r[0];
+					
+					$qry = "SELECT `name` from `facility` WHERE `id` = '".$row['facility_id']."';";
+					$res = mysql_query($qry) or die(mysql_error());
+					$r = mysql_fetch_row($res);
+					$facility = $r[0];
+				?>
+					<tr>
+						<td><?php echo $row['scheduled_date']; ?></td>
+						<td><?php echo $row['scheduled_time']; ?></td>
+						<td><?php echo $row['type']; ?></td>
+						<td>Dr. <?php echo $physician; ?></td>
+						<td><?php echo $facility; ?></td>
+					</tr>
+				<?php
+				} ?>
+				</table>
 			</div>
 			<div class="tab_view" id="tab_prescriptions" style="display:none;">
 				<h2>Prescriptions</h2>
@@ -165,7 +197,8 @@ if (!isset($_SESSION['patient_id'])) {
 					?>
 				</div>
 				<table>
-					<tr><th>From</th><th>Subject</th><th>Message</th><th>Date</th></tr>
+					<thead>
+					<tr><th>From</th><th>Subject</th><th>Message</th><th>Date</th></tr></thead>
 					<?php
 						$_qry = "SELECT * FROM `message` WHERE `recipient` = '".$_SESSION['userid']."' ORDER BY `timestamp` DESC";
 						$_res = mysql_query($_qry) or die(mysql_error());
