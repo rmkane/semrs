@@ -103,12 +103,12 @@ function requestForm(s, form_id, alert_mssg) {
 
 function newuser(form_id) {
 	// Get form information
-	var username = document.getElementById('usernameCreate').value;
-	var pass1 = document.getElementById('password1').value;
-	var pass2 = document.getElementById('password2').value;
-	var facility = document.getElementById('facility').value;
-	var level = document.getElementById('level').value;
-	var lname = document.getElementById('lname').value;
+	var username = form_id.elements['username'].value;
+	var pass1 = form_id.elements['password1'].value;
+	var pass2 = form_id.elements['password2'].value;
+	var facility = form_id.elements['facility'].value;
+	var level = form_id.elements['level'].value;
+	var lname = form_id.elements['lname'].value;
 	// Send data to the form action
 	var s = "action=register&username=" + username + "&password1=" + pass1 + "&password2=" + pass2 + "&facility=" + facility + "&level=" + level + "&lname=" + lname;
 	requestForm(s, form_id, true);

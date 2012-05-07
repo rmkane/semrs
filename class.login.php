@@ -1,6 +1,6 @@
 <?php
 //For security reasons, don't display any errors or warnings. Comment out in DEV.
-//error_reporting(0);
+error_reporting(0);
 
 include('globals.php');	
 
@@ -163,20 +163,29 @@ class logmein {
     //conect to DB
     $this->dbconnect();
     //if both passwords match
-    if ($password1 == $password2) {
-      $password1 = md5($password1); // Encrypt Password
-      // Insert New User into Users table
-      $qry = $this->qry("INSERT INTO ".$this->user_table." (".$this->user_email.",".$this->user_password.",".$this->user_level.",".$this->user_facility_id.",".$this->user_lname.") VALUES ('?', '?', '?', '?', '?');", $username, $password1, $level, $facility_option, $lname);
-      // Get the associated user type from the id			
-      $result = $this->qry("SELECT ".$this->level_type." FROM ".$this->level_table." WHERE ".$this->level_id." = '?';", $level);
-      $row=mysql_fetch_assoc($result);
-      if(row != "Error") { $type = $row[$this->level_type]; }
-      echo "New User: ".$username."(".$type.") was created!";
-      return true;
-    } else {
-      echo "Failed to create user";
-      return false;
-    }
+    
+		$query = "SELECT * FROM `users` WHERE `email` = '".$username."'";
+		$result = mysql_query($query) or die(mysql_error());
+		
+		if (mysql_num_rows($result) == 0) {
+			if ($password1 == $password2) {
+				$password1 = md5($password1); // Encrypt Password
+				// Insert New User into Users table
+				$qry = $this->qry("INSERT INTO ".$this->user_table." (".$this->user_email.",".$this->user_password.",".$this->user_level.",".$this->user_facility_id.",".$this->user_lname.") VALUES ('?', '?', '?', '?', '?');", $username, $password1, $level, $facility_option, $lname);
+				// Get the associated user type from the id			
+				$result = $this->qry("SELECT ".$this->level_type." FROM ".$this->level_table." WHERE ".$this->level_id." = '?';", $level);
+				$row=mysql_fetch_assoc($result);
+				if(row != "Error") { $type = $row[$this->level_type]; }
+				echo "New User: ".$username."(".$type.") was created!";
+				return true;
+			} else {
+				echo "Failed to create user! ";
+				return false;
+			}
+		} else {
+			echo "Username already taken! ";
+			return false;
+		}
   }
   
   function changepassword($oldpassword, $newpassword1, $newpassword2) {
@@ -363,31 +372,33 @@ class logmein {
         <legend>Create User</legend>
         <table>
           <tr>
-            <td><label for="usernameCreate">Choose A Username</label></td>
-            <td><input name="username" id="usernameCreate" type="text" /></td>
+            <td><label>Choose A Username</label></td>
+            <td><input name="username" type="text" /></td>
           </tr>
           <tr>
-            <td><label for="password1">Choose Your Password</label></td>
+            <td><label>Choose Your Password</label></td>
             <td><input name="password1" id="password1" type="password" onblur="checkpass('password1', 'password2', 'mssg_newuser');" /></td>
           </tr>
           <tr>
-            <td><label for="password2">Re-Enter Your Password</label></td>
+            <td><label>Re-Enter Your Password</label></td>
             <td><input name="password2" id="password2" type="password" onblur="checkpass('password1', 'password2', 'mssg_newuser');" /><span id="mssg_newuser" /></span></td>
           </tr>
           <tr>
-            <?php $this->dropdown('Choose Facility', 'Facility', $this->facility_table, $this->facility_id, $this->facility_name, 0); ?>
+						<td><label>Choose Facility</label></td>
+						<td><?php $this->dropdown('facility', 'Facility', $this->facility_table, $this->facility_id, $this->facility_name, 0); ?></td>
           </tr>
           <tr>
-            <?php $this->dropdown('Choose User Level', 'User Level', $this->level_table, $this->level_id, $this->level_type, 0); ?>
+						<td><label>Choose User Level</label></td>
+						<td><?php $this->dropdown('level', 'User Level', $this->level_table, $this->level_id, $this->level_type, 0); ?></td>    
           </tr>
           <tr>
-            <td><label for="lname">Enter Your Last Name</label></td>
-            <td><input name="lname" id="lname" type="text"></td>
+            <td><label>Enter Your Last Name</label></td>
+            <td><input name="lname" type="text"></td>
           </tr>
           <tr>
             <td></td>
             <td align="left">
-              <input class="submit" value="Register" type="button" onclick="newuser('newuser_form');">
+              <input class="submit" value="Register" type="button" onclick="newuser(this.form);">
             </td>
           </tr>
         </table>
