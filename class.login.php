@@ -314,7 +314,48 @@ class logmein {
 		$guardians_name = $this->encrypt($guardians_name, $pubKey);
 		$regdate = $this->encrypt(time(), $pubKey);
 		
-		$qry = $this->qry("INSERT INTO `patient_data` (`title`,`language`,`fname`,`mname`,`lname`,`DOB`,`sex`,`race`,`ethnicity`,`street`,`city`,`state`,`postal_code`,`country`,`phone_home`,`phone_cell`,`drivers_license`, `national_id`, `occupation`, `mothers_name`, `guardians_name`,`regdate`) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');", $title, $language, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $state, $postal_code, $country, $phone_home, $phone_cell, $dl, $nid, $occupation, $mothers_name, $guardians_name, $regdate);
+		// Insert new patient
+		$qry = $this->qry("INSERT INTO `patient_data` (`title`,`language`,`fname`,`mname`,`lname`,`DOB`,`sex`,`race`,`ethnicity`,`street`,`city`,`state`,`postal_code`,`country`,`phone_home`,`phone_cell`,`drivers_license`, `national_id`, `occupation`, `mothers_name`, `guardians_name`,`regdate`) VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');", $title, $language, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $state, $postal_code, $country, $phone_home, $phone_cell, $dl, $nid, $occupation, $mothers_name, $guardians_name, $regdate);		
+		
+		echo $mssg;
+		return true;
+  }
+	
+	function updatepatient($title, $language, $fname, $mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $state, $postal_code, $country, $phone_home, $phone_cell, $dl, $nid, $occupation, $mothers_name, $guardians_name) {
+    //conect to DB
+    $this->dbconnect();
+
+		$pubKey = $this->getPublicKey('', 'common');
+		
+		$title = $this->encrypt($title, $pubKey);
+		$language = $this->encrypt($language, $pubKey);
+		$fname = $this->encrypt($fname, $pubKey);
+		$mname = $this->encrypt($mname, $pubKey);
+		$lname = $this->encrypt($lname, $pubKey);
+		$dob = $this->encrypt($dob, $pubKey);
+		$sex = $this->encrypt($sex, $pubKey);
+		$race = $this->encrypt($race, $pubKey);
+		$ethnicity = $this->encrypt($ethnicity, $pubKey);
+		$street = $this->encrypt($street, $pubKey);
+		$city = $this->encrypt($city, $pubKey);
+		$state = $this->encrypt($state, $pubKey);
+		$postal_code = $this->encrypt($postal_code, $pubKey);
+		$country = $this->encrypt($country, $pubKey);
+		$phone_home = $this->encrypt($phone_home, $pubKey);
+		$phone_cell = $this->encrypt($phone_cell, $pubKey);
+		$dl = $this->encrypt($dl, $pubKey);
+		$nid = $this->encrypt($nid, $pubKey);
+		$occupation = $this->encrypt($occupation, $pubKey);
+		$mothers_name = $this->encrypt($mothers_name, $pubKey);
+		$guardians_name = $this->encrypt($guardians_name, $pubKey);
+		$regdate = $this->encrypt(time(), $pubKey);
+		
+		// Update patient
+		$qry = $this->qry("UPDATE `patient_data` SET `title` = '?',`language` = '?',`fname` = '?',`mname` = '?',`lname` = '?',`DOB` = '?',`sex` = '?',`race` = '?',`ethnicity` = '?',`street` = '?',`city` = '?',`state` = '?',`postal_code` = '?',`country` = '?',`phone_home` = '?',`phone_cell` = '?',`drivers_license` = '?', `national_id` = '?', `occupation` = '?', `mothers_name` = '?', `guardians_name` = '?' WHERE `id` = '?';", $title, $language, $fname,	$mname, $lname, $dob, $sex, $race, $ethnicity, $street, $city, $state, $postal_code, $country, $phone_home, $phone_cell, $dl, $nid, $occupation, $mothers_name, $guardians_name, $_SESSION['patient_id']);
+		// Log activity
+		$datetime = gmdate("Y-m-d H:i:s", time());
+    $qry = $this->qry("INSERT INTO `log`(`date`, `event`, `user_id`, `level_id`, `comments`, `patient_id`) VALUES ('?', '?', '?', '?', '?', '?');", $datetime, 'Update Patient Info', $_SESSION['userid'], $_SESSION['userlevel'], '', $_SESSION['patient_id']);
+        
 		echo $mssg;
 		return true;
   }
@@ -536,9 +577,9 @@ class logmein {
 						<td colspan="2">
 							<div class="ele">
 								<select name="title" title="Title">
-									<option value="Mr.">Mr</option>
-									<option value="Mrs.">Mrs</option>
-									<option value="Ms.">Ms</option>
+									<option value="Mr.">Mr.</option>
+									<option value="Mrs.">Mrs.</option>
+									<option value="Ms.">Ms.</option>
 								</select><br />
 								<span class="lbl">Title</span>
 							</div>
@@ -583,10 +624,10 @@ class logmein {
 						<td>
 							<select name="race" id="race" title="Race">
 								<option value="Unknown">Unknown</option>
-								<option value="American Indian">American Indian or Alaska Native</option>
+								<option value="American Indian">American Indian</option>
 								<option value="Asian">Asian</option>
 								<option value="Black">Black or African American</option>
-								<option value="Pacific Islander">Native Hawaiian or Other Pacific Islander</option>
+								<option value="Pacific Islander">Other Pacific Islander</option>
 								<option value="White">White</option>
 								<option value="Other">Other</option>
 							</select>
@@ -986,6 +1027,218 @@ class logmein {
 			<input type="button" name="send" value="Add Visit" onclick="add_visit(this.form);"/>
 		</form>
 		<?php
+	}
+	
+	function update_patient_form() {
+    //conect to DB
+    $this->dbconnect();
+		
+		if (!isset($_SESSION['patient_id'])) {
+			?> <!-- HTML / FAIL-->
+				<strong>No patient selected!</strong>
+			<!-- HTML --> <?php
+		} else {
+		$privKey = $this->getPrivateKey('../../', 'common');
+		$query = "SELECT * FROM `patient_data` WHERE `id` = '".$_SESSION['patient_id']."';";
+		$result = mysql_query($query) or die(mysql_error());		
+		$row = mysql_fetch_assoc($result);
+
+		$title = $this->decrypt($row['title'], $privKey);
+		$language = $this->decrypt($row['language'], $privKey);
+		$fname = $this->decrypt($row['fname'], $privKey);
+		$mname = $this->decrypt($row['mname'], $privKey);
+		$lname = $this->decrypt($row['lname'], $privKey);
+		$dob = $this->decrypt($row['DOB'], $privKey);
+		$street = $this->decrypt($row['street'], $privKey);
+		$city = $this->decrypt($row['city'], $privKey);
+		$state = $this->decrypt($row['state'], $privKey);
+		$postal_code = $this->decrypt($row['postal_code'], $privKey);
+		$regdate = date("M d, Y", $this->decrypt($row['regdate'], $privKey));
+		$phone_home = $this->decrypt($row['phone_home'], $privKey);
+		$phone_cell = $this->decrypt($row['phone_cell'], $privKey);
+		$sex = $this->decrypt($row['sex'], $privKey);
+		$ethnicity = $this->decrypt($row['ethnicity'], $privKey);
+		$race = $this->decrypt($row['race'], $privKey);
+		$dl = $this->decrypt($row['drivers_license'], $privKey);
+		$nid = $this->decrypt($row['national_id'], $privKey);
+		$occupation = $this->decrypt($row['occupation'], $privKey);
+		$mothers_name = $this->decrypt($row['mothers_name'], $privKey);
+		$guardians_name = $this->decrypt($row['guardians_name'], $privKey);
+		
+		$qry = "SELECT * FROM `geo_country_reference` WHERE `countries_id` = '".$this->decrypt($row['country'], $privKey)."'";
+		$rlt = mysql_query($qry) or die(mysql_error());
+		$r = mysql_fetch_assoc($rlt);
+		$country = $r['countries_name'];
+		$country_id = $r['countries_id'] - 1;
+		
+	  ?>
+		<form method="post" action="">
+			<script type="text/javascript" src="../../form_control.js"></script>
+			<style type="text/css">
+				label {font-weight:bold;}
+				.lbl {text-align:center; font-size:smaller;}
+				.ele {text-align:center;float:left;}
+				.type_head {padding:4px; font-weight:bold; font-size:150%;}
+			</style>
+      <fieldset>
+        <legend>Patient Information</legend>
+				<table>
+					<tr>
+						<td><Label>Patient Name</Label></td>
+						<td colspan="2">
+							<div class="ele">
+								<select name="title" title="Title">
+									<?php
+										$title_list = array("Unassigned","Mr.","Mrs.","Ms.");
+										for ($t = 0; $t < 4; $t++) {
+											$selected = $title_list[$t] == $title ? "SELECTED" : "";
+											?><option <?php echo $selected; ?> value="<?php echo $title_list[$t]; ?>"><?php echo $title_list[$t]; ?></option><?php
+										}
+									?>
+								</select><br />
+								<span class="lbl">Title</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="fname" size="15" title="First Name" value="<?php echo $fname; ?>" /><br />
+								<span class="lbl">First</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="mname" size="10" title="Middle Name" value="<?php echo $mname; ?>" /><br />
+								<span class="lbl">Middle</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="lname" size="15" title="Last Name" value="<?php echo $lname; ?>" /><br />
+								<span class="lbl">Last</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><label>Date of Birth</label></td>
+						<td>
+							<div class="ele">
+								<input type="text" name="dob" title="Date of Birth" value="<?php echo $dob; ?>" /><br />
+								<span class="lbl">YYYY-MM-DD</span>
+							</div>
+						<td>
+							<label>Sex</label>
+							<select name="sex" title="Sex" /><br />
+								<?php
+									$sex_list = array("Unassigned","Male","Female");
+									for ($t = 0; $t < count($sex_list); $t++) {
+										$selected = $sex_list[$t] == $sex ? "SELECTED" : "";
+										?><option <?php echo $selected; ?> value="<?php echo $sex_list[$t]; ?>"><?php echo $sex_list[$t]; ?></option><?php
+									}
+								?>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><label>Language</label></td>
+						<td><input type="text" name="language" title="Language" value="<?php echo $language; ?>" /></td>
+					</tr>
+					<tr>
+						<td>
+							<label>Race</label>
+						</td>
+						<td> <!-- FIX THESE -->
+							<select name="race" id="race" title="Race">
+							<?php
+								$race_list = array("Unknown","American Indian","Asian","Black","Pacific Islander","White","Other");
+								for ($t = 0; $t < count($race_list); $t++) {
+									$selected = $race_list[$t] == $race ? "SELECTED" : "";
+									?><option <?php echo $selected; ?> value="<?php echo $race_list[$t]; ?>"><?php echo $race_list[$t]; ?></option><?php
+								}
+								?>
+							</select>
+						</td>
+						<td colspan="2">
+							<label>Ethnicity</label>
+							<select name="ethnicity" id="ethnicity" title="Ethnicity">
+							<?php
+								$ethnicity_list = array("Unknown","Hispanic","Non-Hispanic");
+								for ($t = 0; $t < count($ethnicity_list); $t++) {
+									$selected = $ethnicity_list[$t] == $ethnicity ? "SELECTED" : "";
+									?><option <?php echo $selected; ?> value="<?php echo $ethnicity_list[$t]; ?>"><?php echo $ethnicity_list[$t]; ?></option><?php
+								}
+							?>
+								<option value="Unknown">Unknown</option>
+								<option value="Hispanic">Hispanic</option>
+								<option value="Non-Hispanic">Non-Hispanic</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<label>Driver's License</label>
+							<input type="text" name="dl" title="Driver's License" value="<?php echo $dl; ?>" />
+						</td>
+						<td colspan="2">
+							<label>National ID</label>
+							<input type="text" name="nid" title="National Identification Number" value="<?php echo $nid; ?>" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<label>Occupation</label><br />
+							<textarea name="occupation" title="Employment Information" rows="8" cols="72"><?php echo $occupation; ?></textarea>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+			<?php echo $country; ?>
+			<fieldset>
+				<legend>Contact Information</legend>
+				<table>
+					<tr>
+						<td><label>Address</label></td>
+						<td colspan="4">
+							<div class="ele">
+								<input type="text" name="street" title="Street" value="<?php echo $street; ?>" /><br />
+								<span class="lbl">Street</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="city" size="10" title="City" value="<?php echo $city; ?>" /><br />
+								<span class="lbl">City</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="state" size="10" title="State" value="<?php echo $state; ?>" /><br />
+								<span class="lbl">State</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="postal_code" size="5" title="Postal Code" value="<?php echo $postal_code; ?>" /><br />
+								<span class="lbl">Postal Code</span>
+							</div>
+							<div class="ele">
+								<?php $this->dropdown('patient_country', 'Country','geo_country_reference', 'countries_id', 'countries_name', $country_id, ''); ?><br />
+								<span class="lbl">Country</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><label>Phone</label></td>
+						<td colspan="4">
+							<div class="ele">
+								<input type="text" name="phone_home" size="15" title="Home Phone" value="<?php echo $phone_home; ?>" /><br />
+								<span class="lbl">Home</span>
+							</div>
+							<div class="ele">
+								<input type="text" name="phone_cell" size="15" title="Cell Phone" value="<?php echo $phone_cell; ?>" /><br />
+								<span class="lbl">Cell</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><label>Mother's<br />Name</label></td>
+						<td><input type="text" name="mothers_name" size="30" title="Mother's Name" value="<?php echo $mothers_name; ?>" /></td>
+						<td><label>Guardians's<br />Name</label></td>	
+						<td><input type="text" name="guardians_name" size="30" title="Guardians's Name" value="<?php echo $guardians_name; ?>" /></td>
+					</tr>
+				</table>
+			</fieldset>
+			<div style="text-align:center;"><input class="submit" value="Update Patient" type="button" onclick="updatepatient(this.form);" /></div>
+		</form>
+		<?php
+		}
 	}
 	
 	function encrypt($data, $pubKey) {			

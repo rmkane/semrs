@@ -73,6 +73,16 @@ if($_POST['action'] == "addpatient"){
     }
 }
 
+if($_POST['action'] == "updatepatient"){
+	if($log->updatepatient($_POST['title'], $_POST['language'], $_POST['fname'],	$_POST['mname'], $_POST['lname'], $_POST['dob'], $_POST['sex'], $_POST['race'], $_POST['ethnicity'], $_POST['street'], $_POST['city'], $_POST['state'], $_POST['postal_code'], $_POST['country'], $_POST['phone_home'], $_POST['phone_cell'], $_POST['dl'], $_POST['nid'], $_POST['occupation'], $_POST['mothers_name'], $_POST['guardians_name']) == true){
+		//do something on successful password reset
+		echo "Successfully Updated Patient!";
+	} else {
+			//do something on failed password reset
+			echo "Failed to Update Patient!";
+	}
+}
+
 if($_POST['action'] == "searchpatient"){
     if($log->displaypatientinfo($_POST['type'], $_POST['input']) == true){
         //do something after finding patients...
@@ -85,7 +95,22 @@ if($_POST['action'] == "searchpatient"){
 if($_POST['action'] == "selectpatient"){
   $_SESSION['patient_id'] = $_POST['selectedpatient'];
 	echo "Selected patient id = ".$_SESSION['patient_id'];
-	header("location:interface/physician/main.php?viewpatient");
+	$user = "";
+	switch($_SESSION['userlevel']) {
+		case 0: // Admin
+			$user = "admin/main.php";
+			break;
+		case 1: // Physician
+			$user = "physician/main.php?viewpatient";
+			break;
+		case 2: // Receptionist
+			$user = "receptionist/main.php";
+			break;
+		case 3: // Pharmacist
+			$user = "pharmacist/main.php";
+			break;
+	}
+	header("location:interface/$user");
 }
 
 if($_POST['action'] == "sendmessage"){

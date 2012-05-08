@@ -153,6 +153,34 @@ function addpatient(form_id) {
 	requestForm(s, form_id, true);
 }
 
+function updatepatient(form_id) {
+	// Get form information
+	var title = form_id.elements['title'].value;
+	var language = form_id.elements['language'].value;
+	var fname = form_id.elements['fname'].value;
+	var mname = form_id.elements['mname'].value;
+	var lname = form_id.elements['lname'].value;
+	var dob = form_id.elements['dob'].value;
+	var sex = form_id.elements['sex'].value;
+	var race = form_id.elements['race'].value;
+	var ethnicity = form_id.elements['ethnicity'].value;
+	var street = form_id.elements['street'].value;
+	var city = form_id.elements['city'].value;
+	var state = form_id.elements['state'].value;
+	var postal_code = form_id.elements['postal_code'].value;
+	var country = form_id.elements['patient_country'].value;
+	var phone_home = form_id.elements['phone_home'].value;
+	var phone_cell = form_id.elements['phone_cell'].value;
+	var dl = form_id.elements['dl'].value;
+	var nid = form_id.elements['nid'].value;
+	var occupation = form_id.elements['occupation'].value; 
+	var mothers_name = form_id.elements['mothers_name'].value;
+	var guardians_name = form_id.elements['guardians_name'].value;	
+	// Send data to the form action
+	var s = "action=updatepatient&title=" + title + "&language=" + language + "&fname=" + fname + "&mname=" + mname + "&lname=" + lname + "&dob=" + dob + "&sex=" + sex + "&race=" + race + "&ethnicity=" + ethnicity + "&street=" + street + "&city=" + city + "&state=" + state + "&postal_code=" + postal_code + "&country=" + country + "&phone_home=" + phone_home + "&phone_cell=" + phone_cell + "&dl=" + dl + "&nid=" + nid + "&occupation=" + occupation + "&mothers_name=" + mothers_name + "&guardians_name=" + guardians_name;
+	requestForm(s, form_id, true);
+}
+
 function searchpatient(form_id) {
 	// Get form information
 	var type = document.getElementById('search_type').value;
