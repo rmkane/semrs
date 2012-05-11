@@ -72,7 +72,7 @@ if (!isset($_SESSION['patient_id'])) {
 			#patient_tabs {background:#777; color:#000; padding:1px; overflow:hidden; }
 			.patient_tab {background:#999; border:#555 thin solid; color:#000; line-height:2em; padding:2px; width:8em; float:left; text-align:center;}
 			.patient_tab:hover {background:#bbb; cursor:pointer;}
-			.tab_view {background:#ddd; border:#444 thin solid;}
+			.tab_view {background:#ddd; border:#aaa thin solid; padding:12px;}
 			
 			#patient_info_bar {padding:2px; background:#ccc;}
 			.patient_info {margin-right:1em;}		
@@ -113,7 +113,7 @@ if (!isset($_SESSION['patient_id'])) {
 				<div class="patient_tab" id="tab_5" onclick="showTab('tab_access');">Access History</div>
 			</div>
 			<div class="tab_view" id="tab_home" style="display:block;">
-				<h2>Patient ID = <?php echo $_SESSION['patient_id'] ?></h2>
+				<h2>National ID: <?php echo $nid; ?></h2>
 				
 				<?php
 				//$connections = mysql_connect("localhost", "root", "") or die ('Unabale to connect to the database');
@@ -147,7 +147,6 @@ if (!isset($_SESSION['patient_id'])) {
 				<label>Mother's Name:</label> <?php echo $mothers_name; ?><br />
 				<label>Guardian's Name:</label> <?php echo $guardians_name; ?><br />
 				<label>Driver's License:</label> <?php echo $dl; ?><br />
-				<label>National ID: </label> <?php echo $nid; ?><br />
 				<label>Occupation: </label> <?php echo $occupation; ?><br />				
 			</div>
 			<div class="tab_view" id="tab_appointments" style="display:none;">
