@@ -761,7 +761,7 @@ class logmein {
 											<td><label>SE Zip Code</label></td>
 											<td><input type="text" name="i1subscriber_employer_postal_code" size="10"></td>
 											<td><label>SE Country</label></td>
-											<td><?php $this->dropdown('form_i1subscriber_employer_country', 'Country','geo_country_reference', 'countries_id', 'countries_name', 223, ''); ?></td>
+											<td><?php $this->dropdown('form_i1subscriber_employer_country', 'Country','geo_country_reference', 'countries_id', 'countries_name', 222, ''); ?></td>
 										</tr>
 									</table>
 								</td>
@@ -783,7 +783,7 @@ class logmein {
 						</select>
 						<label>DOB</label>
 						<input type="text" name="i1subscriber_DOB" size="11" /><br />
-						<label>SSN</label>
+						<label>ID</label>
 						<input type="text" size="11" name="i1subscriber_ss" value="" />
 						<label>Sex</label>
 						<select name="form_i1subscriber_sex" id="form_i1subscriber_sex" title="" /><br />
@@ -857,7 +857,7 @@ class logmein {
 											<td><label>SE Zip Code</label></td>
 											<td><input type="text" name="i2subscriber_employer_postal_code" size="10"></td>
 											<td><label>SE Country</label></td>
-											<td><?php $this->dropdown('form_i2subscriber_employer_country', '','geo_country_reference', 'countries_id', 'countries_name', 223, ''); ?></td>
+											<td><?php $this->dropdown('form_i2subscriber_employer_country', '','geo_country_reference', 'countries_id', 'countries_name', 222, ''); ?></td>
 										</tr>
 									</table>
 								</td>
@@ -879,7 +879,7 @@ class logmein {
 						</select>
 						<label>DOB</label>
 						<input type="text" name="i2subscriber_DOB" size="11" /><br />
-						<label>SSN</label>
+						<label>ID</label>
 						<input type="text" size="11" name="i2subscriber_ss" value="" />
 						<label>Sex</label>
 						<select name="form_i2subscriber_sex" id="form_i2subscriber_sex" title="" /><br />
