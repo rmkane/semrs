@@ -1,8 +1,6 @@
 <?php
 $log->dbconnect();
 
-
-
 if (!isset($_SESSION['patient_id'])) {
 	
 	?> <!-- HTML / FAIL-->
